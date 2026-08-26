@@ -1,0 +1,18 @@
+.font-chu {
+    font-family: "BukyVede", "Triodion", "Segoe UI Historic", "Noto Serif", serif;
+    line-height: 1.75;
+}
+.font-grc {
+    font-family: "SBL Greek", "Gentium Plus", "Noto Serif", serif;
+}
+.font-lat {
+    font-family: "Noto Serif", "Segoe UI Historic", "Segoe UI Symbol", "Times New Roman", serif;
+}
+
+@font-face {
+    font-family: "BukyVede";
+    src: url("./assets/chu/BukyVede-Regular.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+    size-adjust: 115%;
+}
