@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import toast, { Toaster, useToasterStore } from "react-hot-toast";
 import {BrowserRouter, Routes, Route} from "react-router";
-import EditorPage from "@/components/page/editorPage.tsx";
-import SearchPage from "@/components/page/searchPage.tsx";
-import VisualizeHighlights from "@/components/page/visualizeHighlights.tsx";
-import NavSidebar from "@/components/navBar.tsx";
-import PreviewDouble from "@/components/page/previewDouble.tsx";
-import PreviewSingle from "@/components/page/previewSingle.tsx";
+import EditorPage from "@/features/double-editor/page/editorPage.tsx";
+import SearchPage from "@/features/search/components/searchPage.tsx";
+import VisualizeHighlights from "@/features/view/components/visualizeHighlights.tsx";
+import NavSidebar from "@/components/layout/navBar.tsx";
+import PreviewDouble from "@/features/preview/previewDouble.tsx";
+import PreviewSingle from "@/features/preview/previewSingle.tsx";
 import {GlobalStateProvider} from "@/contexts/globalState.tsx";
 import ParamsProvider from "@/contexts/paramsProvider.tsx";
 
@@ -26,9 +26,9 @@ export default function App(){
         <BrowserRouter>
             <GlobalStateProvider>
                 <Toaster/>
-                <div className={"relative text-black bg-white grid grid-cols-9 h-screen"}>
+                <div className={"relative text-black bg-white grid grid-cols-[auto_1fr] h-screen"}>
                     <NavSidebar/>
-                    <div className={"col-span-8 border-r border-l  border-slate-500 h-full"}>
+                    <div className={"border-r border-l border-slate-500 h-full"}>
                         <ParamsProvider>
                             <Routes>
                                 <Route path="/"               element={<EditorPage/>} />

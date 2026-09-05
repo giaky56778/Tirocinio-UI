@@ -3,32 +3,31 @@ import {
   useContext,
   useMemo,
   useState,
+  useRef,
   useCallback,
   type Dispatch,
   type ReactNode,
   type SetStateAction,
-  useRef,
   type RefObject
 } from "react";
-import {TextSelectedType} from "@/hooks/useTextNameSelection.ts";
-import {SearchType} from "@/components/reducer/selectionReducer.ts";
-import {Side} from "@/utils/globalType.ts";
+import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import {TextType} from "@/utils/settings.ts";
 
-export type PageType = 'editor' | 'search' | 'view'
+export type PageType = 'editor' | 'search' | 'view';
 
 export type EditorPageType = {
-  biblical?: TextSelectedType
   historical?: TextSelectedType
+  biblical?: TextSelectedType
   linePos?: {
-    biblical: number
     historical: number
+    biblical: number
   }
 }
 
 export type SearchPageType = {
   text?: TextSelectedType
   linePos?: number
-  searchElement?: SearchType
   algoSelected?: string[]
   sourcesSelected?: string[]
   searchQuery?: string
@@ -51,18 +50,27 @@ export type GlobalStateType = {
 }
 
 export type GlobalStateContextType = {
-  state: GlobalStateType
-  setState: Dispatch<SetStateAction<GlobalStateType>>
-  getSelectedText: (page: PageType, side?: Side) => {
-    text?: TextSelectedType
-    linePos?: number
-  } | undefined
-  setSelectedText: (page: PageType, side: Side | undefined, newValue:TextSelectedType) => void
-  editorRef: RefObject<Partial<EditorPageType>>
-  searchRef: RefObject<Partial<SearchPageType>>
-  viewRef: RefObject<Partial<ViewPageType>>
-  confirmExit: () => void
+  swapPage: {
+    state: GlobalStateType
+    setState: Dispatch<SetStateAction<GlobalStateType>>
+    getSelectedText: (page: PageType, side?: TextType) => {
+      text?: TextSelectedType
+      linePos?: number
+    } | undefined
+    setSelectedText: (page: PageType, side: TextType | undefined, newValue:TextSelectedType) => void
+    editorRef: RefObject<Partial<EditorPageType>>
+    searchRef: RefObject<Partial<SearchPageType>>
+    viewRef: RefObject<Partial<ViewPageType>>
+    confirmExit: () => void
+  }
+  initPage: {
+    resetInitialMount: (page: InitialPage) => void
+    consumeInitialMount: (page: InitialPage) => void
+    getIsInitialMount: (page: InitialPage) => boolean
+  }
 }
+
+export type InitialPage = "editor" | "search" | "view" | "searchParams" | "readonly" | "doubleReadonly"
 
 const GlobalContext = createContext<GlobalStateContextType | undefined>(undefined);
 
@@ -77,12 +85,33 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
   const searchRef = useRef<Partial<SearchPageType>>({})
   const viewRef = useRef<Partial<ViewPageType>>({})
 
-  const getSelectedText = useCallback((page: PageType, side: Side = 'biblical') => {
+  const initialMountRef = useRef<Record<InitialPage, boolean>>({
+    editor: true,
+    search: true,
+    searchParams: true,
+    view: true,
+    readonly: true,
+    doubleReadonly: true
+  })
+
+  const consumeInitialMount = useCallback((page: InitialPage) => {
+    initialMountRef.current[page] = false
+  }, [])
+
+  const getIsInitialMount = useCallback((page: InitialPage) => {
+    return initialMountRef.current[page]
+  }, [])
+
+  const resetInitialMount = useCallback((page: InitialPage) => {
+    initialMountRef.current[page] = true
+  }, [])
+
+  const getSelectedText = useCallback((page: PageType, side: TextType = 'historical') => {
     switch (page) {
       case 'editor':
         return {
-          text: (side === 'biblical' ? editorRef.current.biblical : editorRef.current.historical) ?? state.editor?.[side],
-          linePos: state.editor?.linePos?.[side]
+          text: (side === 'historical' ? editorRef.current.historical : editorRef.current.biblical) ?? state.editor?.[side],
+          linePos: editorRef.current.linePos?.[side] ?? state.editor?.linePos?.[side]
         }
       case 'search':
         return {
@@ -100,21 +129,29 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 
   const setSelectedText = useCallback((
     page: PageType,
-    side: Side = 'biblical',
+    side: TextType = 'historical',
     newValue: TextSelectedType
   ) => {
     const nextSelected = newValue
 
     switch (page) {
       case 'editor':
-        if (side === 'biblical') {
-          editorRef.current.biblical = nextSelected
-        } else {
+        if (!editorRef.current.linePos)
+            editorRef.current.linePos = {
+              historical: 0,
+              biblical: 0
+            }
+        if (side === 'historical') {
           editorRef.current.historical = nextSelected
+          editorRef.current.linePos.historical = 0
+        } else {
+          editorRef.current.biblical = nextSelected
+          editorRef.current.linePos.biblical = 0
         }
         break
       case 'search':
         searchRef.current.text = nextSelected
+        searchRef.current.linePos = 0
         break
       case 'view':
         viewRef.current.text = nextSelected
@@ -141,19 +178,24 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 
   const value = useMemo(
     () => ({
-      state,
-      setState,
-      getSelectedText,
-      setSelectedText,
-      editorRef,
-      searchRef,
-      viewRef,
-      confirmExit
+      swapPage: {
+        state, setState,
+        getSelectedText, setSelectedText,
+        editorRef, searchRef, viewRef,
+        confirmExit
+      },
+      initPage: {
+        consumeInitialMount, getIsInitialMount,resetInitialMount
+      }
     }),
-    [state, getSelectedText, setSelectedText, confirmExit]
+    [state, getSelectedText, setSelectedText, confirmExit, consumeInitialMount, getIsInitialMount, resetInitialMount]
   )
 
-  return <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>;
+  return (
+      <GlobalContext.Provider value={value}>
+        {children}
+      </GlobalContext.Provider>
+  )
 }
 
 export const useGlobalState = () => {
@@ -162,5 +204,3 @@ export const useGlobalState = () => {
     throw new Error("useGlobalState must be used within GlobalProvider")
   return ctx
 }
-
-export default GlobalContext
