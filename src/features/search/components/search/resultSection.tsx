@@ -4,7 +4,7 @@ import {Tooltip} from "@base-ui/react/tooltip";
 import CommonTooltip from "@/features/search/components/search/commonTooltip.tsx";
 import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import {DownloadIcon} from "@/components/ui/icons";
-import {EditorTextType} from "@/features/double-editor/page/editorPage.tsx";
+import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import ResultsCardPreviewSkeleton from "@/features/search/components/skeleton/resultCardPreviewSkeleton.tsx";
 import ResultOutput from "@/features/search/components/search/resultOutput.tsx";
 import useSearchResults from "@/features/search/hooks/useSearchResults.ts";

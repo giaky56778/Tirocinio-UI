@@ -2,7 +2,7 @@ import {useQueries, useSuspenseQuery} from "@tanstack/react-query";
 import {getTextNameBiblical, getTextNameHistorical} from "@/api";
 import {READ_QUERY_DEFAULTS} from "@/utils/settings.ts";
 import useTextNameSelection from "@/hook/useTextNameSelection.ts";
-import {getAllHighlightBiblical} from "@/features/view/api/editorApi.ts";
+import {getAllHighlightBiblical} from "@/features/view/api/viewApi.ts";
 
 export function useVisualizeAllHighlight(){
     const namesQuery = useSuspenseQuery({
@@ -10,7 +10,7 @@ export function useVisualizeAllHighlight(){
         queryFn: getTextNameHistorical,
         ...READ_QUERY_DEFAULTS,
     })
-    const {selected, setSelected,deleteText} = useTextNameSelection({side: 'historical', namesQuery: namesQuery, page:'view'})
+    const {selected, setSelected,deleteText} = useTextNameSelection({side: 'historical', names: namesQuery.data ?? [], page:'view'})
 
     const [highlightsTextQuery,biblicalNamesQuery] = useQueries({
         queries:[{

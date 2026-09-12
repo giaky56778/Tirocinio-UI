@@ -3,13 +3,26 @@ import {useLocation, useNavigate} from "react-router";
 import toast from "react-hot-toast";
 import {copyHighlightText, findLineIdByWordId} from "@/utils/commonUtil.ts";
 import {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
-import {SelectionOpType, SelectionPerSide, SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
+import {SelectionPerSide, SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
 import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import { selectionStore } from '@/features/editor/store/selectionStore.tsx';
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {TextIndexSchema, TextSchema} from "@/api/indexType.ts";
 import {TextType} from "@/utils/settings.ts";
 import {copyHighlightTextFromID} from "@/features/editor/lib/utils.ts";
+
+export type SelectionOpType={
+    update: (side: TextType, wordId: {
+        spanID: number | null
+        divID: number | null
+        spanFound?: number | null
+    }) => void,
+    search:() => void
+    clear:()=> void
+    copySelected:()=> Promise<void>
+    copyHighlight: (highlightId: string | null, highlightBounds: Record<string, HighlightBound>, side: TextType) => Promise<void>
+    resetSearchElement:()=> void
+}
 
 export type UseCustomSelectionReturn = {
     selectedRange: SelectionRange
@@ -129,7 +142,7 @@ export default function useCustomSelection({side, text, index, selectedText }: P
                 if(location.pathname !== "/search") {
                     globalState.swapPage.searchRef.current = {
                         ...globalState.swapPage.searchRef.current,
-                        confirmedSearch:{
+                        search:{
                             text: selectedTextResult,
                             path,
                             filename,

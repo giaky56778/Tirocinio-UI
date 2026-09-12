@@ -2,7 +2,7 @@ import {memo, RefObject} from "react";
 import {Form} from "@base-ui/react/form";
 import {Field} from "@base-ui/react/field";
 import {AlertDialog} from "@base-ui/react/alert-dialog";
-import {EditorTextType} from "@/features/double-editor/page/editorPage.tsx";
+import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import DialogSSESearch from "@/features/search/components/search/dialogSSESearch.tsx";
 import AlertModifySearch, {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";

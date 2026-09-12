@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import toast, { Toaster, useToasterStore } from "react-hot-toast";
 import {BrowserRouter, Routes, Route} from "react-router";
-import EditorPage from "@/features/double-editor/page/editorPage.tsx";
+import EditorPage from "@/features/double-editor/editorPage.tsx";
 import SearchPage from "@/features/search/components/searchPage.tsx";
 import VisualizeHighlights from "@/features/view/components/visualizeHighlights.tsx";
 import NavSidebar from "@/components/layout/navBar.tsx";

@@ -108,13 +108,21 @@ export default function useInitSearch(
         }
     }
 
+    function readSearchGlobalState(){
+        if(globalState.swapPage.state?.search ) {
+            globalState.swapPage.searchRef.current.search=undefined
+            return globalState.swapPage.state?.search?.search
+        }
+        return globalState.swapPage.state?.search?.confirmedSearch
+    }
+
     // Inizializzazione
     useEffect(() => {
         if(!globalState.initPage.getIsInitialMount('searchParams') || (location.pathname !== "/search" || !textHistoricalSelected || !textHistoricalContent || textHistoricalContent.length === 0)) {
             return
         }
 
-        const targetSearch = globalState.swapPage.state?.search?.confirmedSearch
+        const targetSearch: SearchType = readSearchGlobalState()
         const searchState = globalState.swapPage.state.search
         initSearchElement(textHistoricalSelected, textHistoricalContent,targetSearch)
 

@@ -2,7 +2,7 @@ import {Suspense, useEffect} from "react";
 import {highlightStore, HighlightStoreProvider} from "@/features/editor/store/highlightStore.tsx";
 import {SelectionStoreProvider} from "@/features/editor/store/selectionStore.tsx";
 import {SearchElementType} from "@/features/editor/reducer/selectionReducer.ts";
-import {EditorTextType} from "@/features/double-editor/page/editorPage.tsx";
+import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import ViewHighlightsSkeleton from "@/features/view/components/skeleton/viewHighlightsSkeleton.tsx";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
 import {HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";

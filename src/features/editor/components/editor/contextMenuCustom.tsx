@@ -4,9 +4,10 @@ import {colorMap, TextType} from "@/utils/settings.ts";
 import {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
 import {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
 import {CopyIcon, EditIcon, SearchIcon, TrashIcon} from "@/components/ui/icons";
-import {SelectionOpType, SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
+import {SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
 import {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
 import {AlertDialog} from "@base-ui/react/alert-dialog";
+import {SelectionOpType} from "@/features/editor/hooks/useCustomSelection.ts";
 
 export type menuType = "highlight" | 'selected' | "default"
 export type CostumeContextType = {
@@ -15,7 +16,7 @@ export type CostumeContextType = {
     toggleMenuType: (menuType: menuType, highlightId?: string) => void;
 }
 
-type ContextMenuProps = {
+type Props = {
     contextMenu: CostumeContextType,
     highlightState: HighlightStateType,
     highlightBound: Record<string, HighlightBound>,
@@ -27,17 +28,17 @@ type ContextMenuProps = {
     alertDeleteHandler?: RefObject<AlertDialog.Handle<AlertModifyPayloadType>>
 }
 
-const ContextMenuCostume = ({
-                                contextMenu,
-                                highlightState,
-                                highlightBound,
-                                selectedRange,
-                                selectionOp,
-                                side,
-                                textType,
-                                alertDeleteHandler,
-                                deleteHighlight
-                            }: ContextMenuProps) => {
+const ContextMenuCustom = ({
+    contextMenu,
+    highlightState,
+    highlightBound,
+    selectedRange,
+    selectionOp,
+    side,
+    textType,
+    alertDeleteHandler,
+    deleteHighlight
+}: Props) => {
 
     const itemCls = "mx-1 rounded-md outline-none cursor-pointer select-none py-1.5 pl-3 pr-6 flex items-center gap-2 text-sm font-medium leading-5 transition-colors duration-100 data-[highlighted]:bg-indigo-600 data-[highlighted]:text-white"
     const itemDestructiveCls = "mx-1 rounded-md outline-none cursor-pointer select-none py-1.5 pl-3 pr-6 flex items-center gap-2 text-sm font-medium leading-5 text-red-600 transition-colors duration-100 data-[highlighted]:bg-red-600 data-[highlighted]:text-white"
@@ -52,13 +53,15 @@ const ContextMenuCostume = ({
                     className={`${itemCls} ${!selectedRange ? disabledCls : ''}`}
                     onClick={selectionOp.copySelected}
                 >
-                    <CopyIcon className={"size-5"}/> Copia testo selezionato
+                    <CopyIcon className={"size-5"}/>
+                    Copia testo selezionato
                 </ContextMenu.Item>
                 <ContextMenu.Item
                     className={`${itemCls} ${!(selectedRange && textType === 'historical') ? disabledCls : ''}`}
                     onClick={selectionOp.search}
                 >
-                    <SearchIcon className={"size-5"}/> Ricerca
+                    <SearchIcon className={"size-5"}/>
+                    Ricerca
                 </ContextMenu.Item>
             </>
         )
@@ -128,4 +131,4 @@ const ContextMenuCostume = ({
     )
 }
 
-export default React.memo(ContextMenuCostume)
+export default React.memo(ContextMenuCustom)

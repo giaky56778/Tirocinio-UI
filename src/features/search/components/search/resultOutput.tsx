@@ -2,7 +2,7 @@ import {RefObject} from "react";
 import {VList} from "virtua";
 import {Tooltip} from "@base-ui/react/tooltip";
 import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
-import {EditorTextType} from "@/features/double-editor/page/editorPage.tsx";
+import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import LoadMore from "@/features/search/components/search/loadMore.tsx";
 import ResultCard from "@/features/search/components/search/resultCard.tsx";
 import {AddNewHighlightsType} from "@/features/search/hooks/useApiSearch.ts";

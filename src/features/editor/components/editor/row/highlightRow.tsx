@@ -4,7 +4,7 @@ import {Popover} from "@base-ui/react/popover";
 import {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
 import {ChapterTitleItem, TextLineItem, TitleTextItem} from "@/api/indexType.ts";
 import {WordGroup} from "@/utils/commonUtil.ts";
-import {CostumeContextType} from "@/features/editor/components/editor/contextMenuCostume.tsx";
+import {CostumeContextType} from "@/features/editor/components/editor/contextMenuCustom.tsx";
 import GroupRenderer from "./groupRender";
 import {SearchHighlight, SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
 import {TEXT_FONT_CLASS, TextType} from "@/utils/settings.ts";

@@ -18,7 +18,7 @@ import ComboboxTextName from "@/features/editor/components/editor/comboboxTextNa
 import IndexTextPosition from "@/features/editor/components/editor/indexTextPosition.tsx";
 import UploadTextForm from "@/features/upload-section/components/uploadTextForm.tsx";
 import {UploadIcon} from "@/components/ui/icons";
-import ContextMenuCostume from "@/features/editor/components/editor/contextMenuCostume.tsx";
+import ContextMenuCostume from "@/features/editor/components/editor/contextMenuCustom.tsx";
 import {TextType} from "@/utils/settings.ts";
 import {ChapterIndexSchema, TextIndexSchema, TextListSchema, TextSchema} from "@/api/indexType.ts";
 import {SyncHighlightsType} from "@/features/double-editor/hook/useSyncHighlights.ts";
@@ -120,20 +120,20 @@ const EMPTY_HIGHLIGHT_LINES: HighlightLine[] = []
 const EMPTY_HIGHLIGHT_BOUNDS: Record<string, HighlightBound> = {}
 
 export default function HighlightEditorWindow({
-                                                  mode,
-                                                  text,
-                                                  selectedText,
-                                                  side,
-                                                  previewCardHandler,
-                                                  blockSelectedRef,
-                                                  searchHighlight = null,
-                                                  chapterIndex = DEFAULT_CHAPTER_INDEX,
-                                                  textOp = DEFAULT_TEXT_OP,
-                                                  scroll = DEFAULT_SCROLL,
-                                                  globalHighlight = DEFAULT_GLOBAL_HIGHLIGHT,
-                                                  offset,
-                                                  alertDeleteHandler,
-                                              }: Props) {
+    mode,
+    text,
+    selectedText,
+    side,
+    previewCardHandler,
+    blockSelectedRef,
+    searchHighlight = null,
+    chapterIndex = DEFAULT_CHAPTER_INDEX,
+    textOp = DEFAULT_TEXT_OP,
+    scroll = DEFAULT_SCROLL,
+    globalHighlight = DEFAULT_GLOBAL_HIGHLIGHT,
+    offset,
+    alertDeleteHandler,
+}: Props) {
 
     const location = useLocation()
     const uploadDialog = useRef(Dialog.createHandle())

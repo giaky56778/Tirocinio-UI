@@ -4,7 +4,7 @@ import DialogPortalPreview from "@/components/ui/common/dialogPortalPreview.tsx"
 import DoubleResultViewReadOnly from "@/features/preview/doubleResultViewReadOnly.tsx";
 import {LINE_EXTRACT_LOWER, LINE_EXTRACT_UPPER} from "@/utils/settings.ts";
 import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
-import {EditorTextType} from "@/features/double-editor/page/editorPage.tsx";
+import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import {SingleSearchType} from "@/features/search/api/searchApiType.ts";
 import {findLineIdByWordId} from "@/utils/commonUtil.ts";
 

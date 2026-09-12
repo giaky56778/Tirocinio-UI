@@ -26,7 +26,7 @@ export function useTextReadBase({ namesQueryKey, getNames, readText, side, page}
         gcTime: Infinity
     })
 
-    const {selected, setSelected, deleteText} = useTextNameSelection({namesQuery: namesQuery, side, page})
+    const {selected, setSelected, deleteText} = useTextNameSelection({names: namesQuery.data ?? [], side, page})
 
     const textQuery = useQuery({
         queryKey: [namesQueryKey, 'content', selected?.items.id ?? 0],

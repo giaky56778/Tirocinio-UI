@@ -36,19 +36,6 @@ export type SearchElementType = {
 
 export type SearchType = SearchElementType | undefined
 
-export type SelectionOpType={
-    update: (side: TextType, wordId: {
-        spanID: number | null
-        divID: number | null
-        spanFound?: number | null
-    }) => void,
-    search:() => void
-    clear:()=> void
-    copySelected:()=> Promise<void>
-    copyHighlight: (highlightId: string | null, highlightBounds: Record<string, HighlightBound>, side: TextType) => Promise<void>
-    resetSearchElement:()=> void
-}
-
 type SelectionState = {
     selectedRange: SelectionRange;
     selectedRangePerLine: SelectionPerSide;

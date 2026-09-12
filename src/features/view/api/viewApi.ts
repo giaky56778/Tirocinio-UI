@@ -26,6 +26,6 @@ export async function getAllHighlightBiblical(filename: string, path: string) {
     const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/info/getAllHighlightBiblical?${params}`)
 
     if (!res.ok)
-        throw new Error();
+        throw new Error()
     return await res.json() as highlightTextType[]
 }

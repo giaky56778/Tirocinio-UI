@@ -32,6 +32,7 @@ export type SearchPageType = {
   sourcesSelected?: string[]
   searchQuery?: string
   confirmedSearch?: SearchType
+  search?: SearchType
   resultFilename?: {
     filename: string
     total_size: number

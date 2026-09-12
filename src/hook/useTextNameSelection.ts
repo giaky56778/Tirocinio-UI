@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import toast from "react-hot-toast";
-import {UseSuspenseQueryResult} from "@tanstack/react-query";
+
 import {PageType, useGlobalState} from "@/contexts/globalState.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {TextType} from "@/utils/settings.ts";
@@ -32,7 +32,7 @@ export type TextSelectedType = {
 }
 
 type TextNameSelectionConfig = {
-    namesQuery: UseSuspenseQueryResult<TextListSchema, Error>
+    names: TextListSchema
     initUrl?: UrlPath
     side: TextType
     page: PageType
@@ -83,8 +83,7 @@ export function resolveDefaultSelection(
     }
 }
 
-export default function useTextNameSelection({namesQuery, initUrl, side, page}: TextNameSelectionConfig) {
-    const names = namesQuery.data ?? []
+export default function useTextNameSelection({names, initUrl, side, page}: TextNameSelectionConfig) {
     const paramKey = side === 'historical' ? 'h':'b'
     const origin = page === 'editor' ? '/' : page === 'search' ? '/search' : '/viewHighlights'
 

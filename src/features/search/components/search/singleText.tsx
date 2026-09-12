@@ -1,7 +1,7 @@
 import HighlightEditorWindow, {
     SearchHighlightType
 } from "@/features/editor/components/highlightEditorWindow.tsx";
-import {EditorTextType} from "@/features/double-editor/page/editorPage.tsx";
+import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
 import {TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";

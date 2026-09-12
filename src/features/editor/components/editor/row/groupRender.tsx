@@ -2,7 +2,7 @@ import React, {memo} from "react";
 import {WordGroup} from "@/utils/commonUtil.ts";
 import {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
 import {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
-import {CostumeContextType} from "@/features/editor/components/editor/contextMenuCostume.tsx";
+import {CostumeContextType} from "@/features/editor/components/editor/contextMenuCustom.tsx";
 import {Popover} from "@base-ui/react/popover";
 import {colorMap, TextType} from "@/utils/settings.ts";
 import SingleWord from "@/features/editor/components/editor/row/singleWord.tsx";

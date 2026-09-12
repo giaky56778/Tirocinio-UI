@@ -8,7 +8,7 @@ import {ArrowSvg} from "@/components/ui/icons";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
 import RenderPreviewCardText from "@/components/ui/common/renderPreviewCardText.tsx";
 import {highlightStore} from "@/features/editor/store/highlightStore.tsx";
-import {EditorTextType} from "@/features/double-editor/page/editorPage.tsx";
+import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 
 type Props = {
     oppositeScrolls: {
@@ -47,7 +47,7 @@ export default function PreviewCardCustom({previewCardHandler, oppositeScrolls, 
 
     return (
         <Popover.Root
-            modal={true}
+            modal={false}
             handle={previewCardHandler.current}
             onOpenChange={(open, eventDetails) => {
                 blockSelectedRef.current = open

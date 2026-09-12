@@ -5,7 +5,7 @@ import TextRender from "@/features/view/components/view/textRender.tsx";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {TextListSchema} from "@/api/indexType.ts";
-import {highlightBiblicalType, highlightTextType} from "@/features/view/api/editorApi.ts";
+import {highlightBiblicalType, highlightTextType} from "@/features/view/api/viewApi.ts";
 
 export const HIGHLIGHT_CARD_CONTAINER_CLASS = "mb-4 rounded-xl border border-slate-200 bg-white shadow-2xs transition-shadow"
 export const HIGHLIGHT_CARD_HEADER_CLASS = "flex items-center justify-between px-4 py-2.5 rounded-t-xl border-b border-orange-100 bg-orange-50/60"

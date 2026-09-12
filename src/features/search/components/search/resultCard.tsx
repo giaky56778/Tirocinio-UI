@@ -1,6 +1,6 @@
 import {RefObject} from "react";
 import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
-import {EditorTextType} from "@/features/double-editor/page/editorPage.tsx";
+import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import {
     RESULT_CARD_BODY_CLASS,
     RESULT_CARD_CONTAINER_CLASS,

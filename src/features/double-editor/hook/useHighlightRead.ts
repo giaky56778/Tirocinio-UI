@@ -24,12 +24,12 @@ export function useHighlightRead() {
     })
 
     const historicalSelection = useTextNameSelection({
-        namesQuery: historicalNamesQuery,
+        names: historicalNamesQuery.data ?? [],
         side: 'historical',
         page:'editor'
     })
     const biblicalSelection = useTextNameSelection({
-        namesQuery: biblicalNamesQuery,
+        names: biblicalNamesQuery.data ?? [],
         side: 'biblical',
         page:'editor'
     })
