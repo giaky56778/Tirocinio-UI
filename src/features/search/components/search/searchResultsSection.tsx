@@ -78,7 +78,7 @@ function SearchResultsSection({settings, tooltip, searchElement, resetSearchElem
                                     <Field.Control
                                         className={`flex-1 outline-none w-4/5 overflow-x-scroll disabled:opacity-50 disabled:cursor-not-allowed`}
                                         id="search-input"
-                                        placeholder={(isTextLoading && searchElement) ? "Caricamento...." : "Inserisci una query di ricerca"}
+                                        placeholder={(isTextLoading && searchElement) ? "Caricamento...." : "Inserisci una frase o selezione una porzione del testo"}
                                         value={searchQuery}
                                         readOnly={!!searchElement || isTextLoading}
                                         disabled={isTextLoading}

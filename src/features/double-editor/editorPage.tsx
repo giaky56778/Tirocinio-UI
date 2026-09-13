@@ -1,12 +1,11 @@
 import {Suspense, useEffect} from "react";
 import {HighlightStoreProvider} from "@/features/editor/store/highlightStore.tsx";
 import {SelectionStoreProvider} from "@/features/editor/store/selectionStore.tsx";
-import ViewHighlightsSkeleton from "@/features/view/components/skeleton/viewHighlightsSkeleton.tsx";
+import DoubleEditorSkeleton from "@/features/view/components/skeleton/viewHighlightsSkeleton.tsx";
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import {ChapterIndexSchema, TextIndexSchema, TextListSchema, TextSchema} from "@/api/indexType.ts";
 import DoubleEditor from "@/features/double-editor/components/doubleEditor.tsx";
 import {LoadingSpinner} from "@/components/ui/icons";
-import EditorWindowSkeleton from "@/features/editor/components/skeleton/editorWindowSkeleton.tsx";
 import ForceUploadDialog from "@/features/upload-section/components/forceUploadDialog.tsx";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {useHighlightRead} from "@/features/double-editor/hook/useHighlightRead.ts";
@@ -20,7 +19,7 @@ export type EditorTextType={
 
 const EditorPage=()=> (
     <ErrorBoundary>
-        <Suspense fallback={<ViewHighlightsSkeleton />}>
+        <Suspense fallback={<DoubleEditorSkeleton />}>
             <EditorPageContent />
         </Suspense>
     </ErrorBoundary>
@@ -46,13 +45,13 @@ function EditorPageContent() {
     if (!historicalTextBundle && !historicalSelectedText)
         return(
             <>
-                <EditorWindowSkeleton />
+                <DoubleEditorSkeleton/>
                 <ForceUploadDialog selectText={textState.historical.setSelectedText} />
             </>
         )
 
     if (textState.isLoading || !historicalTextBundle || !biblicalTextBundle || !highlightWords || !historicalSelectedText || !biblicalSelectedText) {
-        return <ViewHighlightsSkeleton/>
+        return <DoubleEditorSkeleton/>
 
     }
 

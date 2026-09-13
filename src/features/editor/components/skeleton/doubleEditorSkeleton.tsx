@@ -6,7 +6,7 @@ import {CHAPTER_SELECT_CONTAINER_CLASS} from "@/features/editor/components/edito
 
 const ALL_WIDTHS = ['w-5/6', 'w-11/12', 'w-4/5', 'w-3/4', 'w-11/12', 'w-5/6', 'w-9/12', 'w-10/12', 'w-4/5', 'w-11/12', 'w-5/6', 'w-3/4', 'w-10/12', 'w-8/12', 'w-11/12']
 
-export default function EditorWindowSkeleton() {
+export default function DoubleEditorSkeleton() {
 
     return(
         <div className={EDITOR_WINDOW_CONTAINER_CLASS}>

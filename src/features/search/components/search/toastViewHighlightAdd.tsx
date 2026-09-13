@@ -41,19 +41,19 @@ export default function ToastViewHighlightAdd({ toastParam, value }: ToastViewHi
                                 path: value.forToast.b_path,
                                 items: {
                                     filename: value.forToast.b_filename,
-                                    id: value.newHighlight.b_id_text
+                                    id: value.newHighlight.h_id_text
                                 }
                             },
                             biblical: {
                                 path: value.forToast.h_path,
                                 items: {
                                     filename: value.forToast.h_filename,
-                                    id: value.forToast.h_id
+                                    id: value.forToast.b_id
                                 }
                             },
                             linePos: {
-                                historical: value.forToast.line_start_b-OFFSET_SCROLL,
-                                biblical: value.newHighlight.line_start_h-OFFSET_SCROLL
+                                historical: value.forToast.line_start_h-OFFSET_SCROLL,
+                                biblical: value.newHighlight.line_start_b-OFFSET_SCROLL
                             }
                         }
 

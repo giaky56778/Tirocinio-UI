@@ -56,23 +56,23 @@ const DoubleSearchPreview = ({item, confirmedSearch, historicalText, lineHistori
                 const last = spl.pop()
                 addNewHighlight.add({
                     newHighlight: {
-                        urn_h: item.text.source,
-                        start_h: item.range?.startWordId!,
-                        end_h: item.range?.endWordId!,
-                        line_start_h: item.range?.startLine!,
+                        urn_b: item.text.source,
+                        start_b: item.range?.startWordId!,
+                        end_b: item.range?.endWordId!,
+                        line_start_b: item.range?.startLine!,
 
-                        b_id_text: confirmedSearch?.id!,
-                        start_b: confirmedSearch?.selection?.start!,
-                        end_b: confirmedSearch?.selection?.end!
+                        h_id_text: confirmedSearch?.id!,
+                        start_h: confirmedSearch?.selection?.start!,
+                        end_h: confirmedSearch?.selection?.end!
                     },
                     forToast: {
-                        h_path: spl.join('.'),
-                        h_filename: last!,
-                        h_id: item.text.idBiblical,
+                        b_path: spl.join('.'),
+                        b_filename: last!,
+                        b_id: item.text.idBiblical,
 
-                        b_path: confirmedSearch?.path!,
-                        b_filename: confirmedSearch?.filename!,
-                        line_start_b: findLineIdByWordId({
+                        h_path: confirmedSearch?.path!,
+                        h_filename: confirmedSearch?.filename!,
+                        line_start_h: findLineIdByWordId({
                             wordId: confirmedSearch?.selection?.start!,
                             text: historicalText.index
                         })!

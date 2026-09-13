@@ -2,7 +2,7 @@ import {useCallback, useMemo, useRef} from "react";
 import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
-import EditorWindowSkeleton from "@/features/editor/components/skeleton/editorWindowSkeleton.tsx";
+import DoubleEditorSkeleton from "@/features/editor/components/skeleton/doubleEditorSkeleton.tsx";
 import SearchResultsSection from "@/features/search/components/search/searchResultsSection.tsx";
 import {TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
 import SingleText from "@/features/search/components/search/singleText.tsx";
@@ -75,7 +75,7 @@ export default function SearchPageEditor({settings, tooltip, text, selectedText,
             />
             {isLoading
                 ?
-                    <EditorWindowSkeleton/>
+                    <DoubleEditorSkeleton/>
                 : (
                     <SingleText
                         text={text}

@@ -1,5 +1,5 @@
 import {Suspense, useEffect} from "react";
-import EditorWindowSkeleton from "@/features/editor/components/skeleton/editorWindowSkeleton.tsx";
+import DoubleEditorSkeleton from "@/features/editor/components/skeleton/doubleEditorSkeleton.tsx";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
 import {useStaticBiblicalTextRead} from "@/features/editor/hooks/useTextRead.ts";
 import {highlightStore, HighlightStoreProvider} from "@/features/editor/store/highlightStore.tsx";
@@ -17,7 +17,7 @@ type Props = {
 }
 
 const SingleViewReadOnlyBiblical=(props: Props)=> (
-    <Suspense fallback={<EditorWindowSkeleton/>}>
+    <Suspense fallback={<DoubleEditorSkeleton/>}>
         <HighlightStoreProvider>
             <SelectionStoreProvider>
                 <MiniSingleEditorPageContent {...props}/>

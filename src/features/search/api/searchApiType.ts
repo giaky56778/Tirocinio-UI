@@ -19,14 +19,14 @@ export type SearchResultText={
 }
 
 export type NewHighlightType={
-    urn_h: string
-    start_h: number
-    end_h: number
-    line_start_h: number
-
-    b_id_text: number
+    urn_b: string
     start_b: number
     end_b: number
+    line_start_b: number
+
+    h_id_text: number
+    start_h: number
+    end_h: number
 }
 
 export type SingleSearchType = {
@@ -54,11 +54,11 @@ export type TooltipType={
 }
 
 export type ForToastType={
-    h_path: string,
-    h_filename: string,
-    h_id: number,
-
     b_path: string,
     b_filename: string,
-    line_start_b: number
+    b_id: number,
+
+    h_path: string,
+    h_filename: string,
+    line_start_h: number
 }
