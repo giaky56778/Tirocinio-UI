@@ -37,9 +37,7 @@ function ComboboxTextName({textNames, textNameSelect, textOp, side}: Props) {
                         }
                     }
                 }}
-                onOpenChange={(isOpen) => {
-                    setSelectionBlocked(isOpen)
-                }}
+                onOpenChange={setSelectionBlocked}
             >
                 <Combobox.Label className="sr-only">Seleziona testo</Combobox.Label>
                 <Combobox.Trigger className="cursor-pointer flex w-full items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-left text-gray-900 select-none hover:border-gray-300 data-popup-open:shadow-md focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-indigo-500 duration-150">

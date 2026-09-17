@@ -4,19 +4,14 @@ import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import LoadMore from "@/features/search/components/search/loadMore.tsx";
 import ResultCard from "@/features/search/components/search/resultCard.tsx";
-import {type AddNewHighlightsType} from "@/features/search/hooks/useApiSearch.ts";
 import {type SearchResultQueryType} from "@/features/search/hooks/useSearchResults.ts";
 import {type SingleSearchType} from "@/features/search/api/searchApiType.ts";
+import type {AddNewHighlightQueryType} from "@/features/search/hooks/useApiSearch.ts";
 
 export const RESULT_CARD_CONTAINER_CLASS = "mb-2.5 ml-4 mr-2 rounded-lg border bg-white"
 export const RESULT_CARD_HEADER_CLASS = "flex items-center justify-between px-3 py-2 rounded-t-lg border-b bg-orange-50 border-orange-100"
 export const RESULT_CARD_BODY_CLASS = "px-3 pt-2 pb-1"
 export const RESULT_CARD_FOOTER_CLASS = "flex items-center justify-between gap-2 px-3 pb-2.5 pt-1.5 border-t border-gray-100"
-
-export type AddNewHighlightObj = {
-    add: (data: AddNewHighlightsType) => void
-    isPending: boolean
-}
 
 type ResultOutputProps = {
     displayedResults: {
@@ -30,7 +25,7 @@ type ResultOutputProps = {
     lineHistorical: number
     accumulatedResultsLength: number
     tooltipRef: Tooltip.Handle<{ text: string }>
-    addNewHighlight: AddNewHighlightObj
+    addNewHighlight: AddNewHighlightQueryType
     confirmedSearch?: SearchType
     searchResultQuery: SearchResultQueryType
 }

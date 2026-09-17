@@ -27,6 +27,6 @@ export async function getAllHighlightBiblical(filename: string, path: string) {
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/info/getAllHighlightBiblical?${params}`)
 
     if (!res.ok)
-        throw new Error();
+        throw new Error("Errore: impossibile leggere le evidenziazioni inerente a tutto il testo biblico selezionato")
     return await res.json() as highlightTextType[]
 }

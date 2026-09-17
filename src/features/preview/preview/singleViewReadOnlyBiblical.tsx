@@ -3,7 +3,6 @@ import DoubleEditorSkeleton from "@/features/editor/components/skeleton/doubleEd
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
 import {useStaticBiblicalTextRead} from "@/features/editor/hooks/useTextRead.ts";
 import {useHighlightStore, HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
-import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
 import {type HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
 import useSyncHighlights from "@/features/double-editor/hook/useSyncHighlights.ts";
 import HighlightEditorWindow from "@/features/editor/components/highlightEditorWindow.tsx";
@@ -19,9 +18,7 @@ type Props = {
 const SingleViewReadOnlyBiblical=(props: Props)=> (
     <Suspense fallback={<DoubleEditorSkeleton/>}>
         <HighlightStoreProvider>
-            <SelectionStoreProvider>
-                <MiniSingleEditorPageContent {...props}/>
-            </SelectionStoreProvider>
+            <MiniSingleEditorPageContent {...props}/>
         </HighlightStoreProvider>
     </Suspense>
 )
@@ -66,7 +63,7 @@ function MiniSingleEditorPageContent({urn, start, end}: Props) {
     const scroll = {selfScroll: scrollBiblicalHook}
 
     return (
-        <div className={"relative h-full w-full"}>
+        <div inert className={"relative h-full w-full"}>
             <HighlightEditorWindow
                 mode={"readonly"}
                 side={"biblical"}

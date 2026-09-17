@@ -1,6 +1,5 @@
-import {Suspense, useEffect} from "react";
+import {Suspense} from "react";
 import {HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
-import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
 import DoubleEditorSkeleton from "@/features/view/components/skeleton/viewHighlightsSkeleton.tsx";
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import type {ChapterIndexSchema, TextIndexSchema, TextListSchema, TextSchema} from "@/api/indexType.ts";
@@ -27,10 +26,6 @@ const EditorPage=()=> (
 function EditorPageContent() {
 
     const textState = useHighlightRead()
-    useEffect(() => {
-        return () => {
-        }
-    }, [])
 
     const historicalSelectedText = textState.historical.selectedText
     const biblicalSelectedText = textState.biblical.selectedText
@@ -89,26 +84,24 @@ function EditorPageContent() {
                 </div>
             )}
             <HighlightStoreProvider>
-                <SelectionStoreProvider>
-                    <DoubleEditor
-                        highlightWords={highlightWords}
-                        text={textSafe}
-                        selectedText={{
-                            historical: historicalSelectedText,
-                            biblical: biblicalSelectedText,
-                        }}
-                        textOp={{
-                            historical: {
-                                select: textState.historical.setSelectedText,
-                                delete: textState.historical.deleteText
-                            },
-                            biblical: {
-                                select: textState.biblical.setSelectedText,
-                                delete: textState.biblical.deleteText
-                            }
-                        }}
-                    />
-                </SelectionStoreProvider>
+                <DoubleEditor
+                    highlightWords={highlightWords}
+                    text={textSafe}
+                    selectedText={{
+                        historical: historicalSelectedText,
+                        biblical: biblicalSelectedText,
+                    }}
+                    textOp={{
+                        historical: {
+                            select: textState.historical.setSelectedText,
+                            delete: textState.historical.deleteText
+                        },
+                        biblical: {
+                            select: textState.biblical.setSelectedText,
+                            delete: textState.biblical.deleteText
+                        }
+                }}
+                />
             </HighlightStoreProvider>
         </>
     )

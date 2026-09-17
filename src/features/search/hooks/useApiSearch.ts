@@ -6,10 +6,14 @@ import toast from "react-hot-toast";
 import ToastViewHighlightAdd from "@/features/search/components/search/toastViewHighlightAdd.tsx";
 import {createElement} from "react";
 import {type ForToastType, type NewHighlightType} from "@/features/search/api/searchApiType.ts";
-import type {AddNewHighlightObj} from "@/features/search/components/search/resultOutput.tsx";
 
-export type AddNewHighlightsType={
-    newHighlight: NewHighlightType,
+export type AddNewHighlightQueryType = {
+    add: (data: AddType) => void
+    isPending: boolean
+}
+
+export type AddType ={
+    newHighlight: NewHighlightType
     forToast: ForToastType
 }
 
@@ -37,10 +41,10 @@ export function useReadSettingsSearch(){
 
 export function useAddNewHighlightWords({searchQueryKey}:{
     searchQueryKey:  (string | SearchType)[],
-}):AddNewHighlightObj {
+}):AddNewHighlightQueryType {
     const queryClient = useQueryClient()
     const addNewQuote = useMutation({
-        mutationFn: (newHighlight: AddNewHighlightsType) => addNewHighlight(newHighlight.newHighlight),
+        mutationFn: (newHighlight: AddType) => addNewHighlight(newHighlight.newHighlight),
         async onSuccess(_, value) {
             await queryClient.invalidateQueries({queryKey: searchQueryKey, exact: true})
 
@@ -58,7 +62,7 @@ export function useAddNewHighlightWords({searchQueryKey}:{
     })
 
     return {
-        add: (newHighlight: AddNewHighlightsType) => addNewQuote.mutate(newHighlight),
+        add: (newHighlight: AddType) => addNewQuote.mutate(newHighlight),
         isPending: addNewQuote.isPending
     }
 }

@@ -105,7 +105,7 @@ export const useGlobalState = create<GlobalStore>((set, get) => ({
           text: state.view.text
         };
       default:
-        return undefined;
+        return undefined
     }
   },
 

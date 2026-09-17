@@ -7,7 +7,7 @@ import {type Popover} from "@base-ui/react/popover";
 import {colorMap, type TextType} from "@/utils/settings.ts";
 import SingleWord from "@/features/editor/components/editor/row/singleWord.tsx";
 import ColoredGroup from "@/features/editor/components/editor/row/coloredGroup.tsx";
-import {useResolveColorClass} from "@/features/editor/lib/utils.ts";
+import {useResolveColorClass} from "@/features/editor/hooks/useResolveColorClass.ts";
 
 const BOX_DECORATION_CLONE_STYLE = {
     boxDecorationBreak: 'clone',

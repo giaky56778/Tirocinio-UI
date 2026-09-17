@@ -22,7 +22,6 @@ export default function useSearchPage({settings, selectedText, searchElement,res
     const setBatchedParams = useBatchedSearchParams()
     const dialogHandle = Dialog.createHandle<never>()
     const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
     const [confirmedSearch, setConfirmedSearch] = useState<SearchType | undefined>(() => {
         const cs = globalState.state.search?.confirmedSearch
 
@@ -30,7 +29,6 @@ export default function useSearchPage({settings, selectedText, searchElement,res
             return cs
         return undefined
     })
-
     const [algoSelected,setAlgoSelected] = useState<string[]>(()=>{
         const paramAlgos = searchParams.get('algos')
         const refAlgos = globalState.state.search?.algoSelected
@@ -46,10 +44,10 @@ export default function useSearchPage({settings, selectedText, searchElement,res
     })
     const [sourcesSelected,setSourcesSelected]=useState<string[]>(()=>{
         const paramSources = searchParams.get('sources')
-        const refSources = globalState.state.search?.sourcesSelected
+        const globalSources = globalState.state.search?.sourcesSelected
 
-        if (refSources)
-            return refSources
+        if (globalSources)
+            return globalSources
         if (paramSources)
             return paramSources.split(',').filter(Boolean)
         return Object.keys(settings.sources)
@@ -67,6 +65,21 @@ export default function useSearchPage({settings, selectedText, searchElement,res
         dialogHandle,
         initialResultFilename: globalState.state.search?.resultFilename
     })
+
+    if (confirmedSearch && (confirmedSearch.path !== selectedText.path || confirmedSearch.filename !== selectedText.items.filename)) {
+        setConfirmedSearch(undefined)
+        setBatchedParams({
+            q: confirmedSearch.text
+        })
+        globalState.setSearch((prev) => ({
+            searchQuery: confirmedSearch.text,
+            confirmedSearch: undefined,
+            algoSelected: prev.algoSelected ?? [],
+            sourcesSelected: prev.sourcesSelected ?? [],
+            resultFilename: prev.resultFilename
+        }))
+        resetSearchElement()
+    }
 
     function onSearchSubmit() {
         if (debounceTimerRef.current)
@@ -113,30 +126,12 @@ export default function useSearchPage({settings, selectedText, searchElement,res
     }
 
     useEffect(() => {
-        if (confirmedSearch && (confirmedSearch.path !== selectedText.path || confirmedSearch.filename !== selectedText.items.filename)) {
-            setConfirmedSearch(undefined)
-            setBatchedParams({
-                q: confirmedSearch.text
-            })
-            globalState.setSearch((prev) => ({
-                searchQuery: confirmedSearch.text,
-                confirmedSearch: undefined,
-                algoSelected: prev.algoSelected ?? [],
-                sourcesSelected: prev.sourcesSelected ?? [],
-                resultFilename: prev.resultFilename
-            }))
-            resetSearchElement()
-        }
-    }, [selectedText])
-
-    useEffect(() => {
         const timer = debounceTimerRef.current
         return () => {
             if (timer)
                 clearTimeout(timer)
         }
     }, [])
-
 
     return{
         confirmedSearch,

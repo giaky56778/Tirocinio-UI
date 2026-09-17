@@ -21,13 +21,12 @@ export type HighlightStateType={
     lastPressedHandle: 'left'|'right'|null
 }
 
-
-type EditorStateProps = {
+type Props = {
     side: TextType
     globalHighlight: SyncHighlightsType
 }
 
-export function useEditorState({side, globalHighlight}: EditorStateProps) {
+export function useEditorState({side, globalHighlight}: Props) {
     const store = useHighlightStoreContext()
     const state = useHighlightStore(state => state[side])
     const color = useHighlightStore(state => state.colors)
@@ -127,7 +126,7 @@ export function useEditorState({side, globalHighlight}: EditorStateProps) {
     const toolBar = useMemo(() => ({
         toolBarVisibile: isVisible,
         save: () => saveCaller(highlightToModify),
-        restore: restoreCaller,
+        restore: restoreCaller
     }), [isVisible, saveCaller, highlightToModify, restoreCaller])
 
     return {

@@ -14,9 +14,7 @@ const AlertDeleteText =({alert,deleteText}: Props)=> {
     return (
         <AlertDialog.Root
             handle={alert}
-            onOpenChange={(isOpen) => {
-                setSelectionBlocked(isOpen)
-            }}
+            onOpenChange={setSelectionBlocked}
         >
         {({ payload }) => (
             <AlertDialog.Portal>

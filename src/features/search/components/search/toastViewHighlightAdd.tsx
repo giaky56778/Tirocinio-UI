@@ -2,11 +2,11 @@ import {router} from "@/utils/router.tsx";
 import toast, {type Toast} from "react-hot-toast";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
-import {type AddNewHighlightsType} from "@/features/search/hooks/useApiSearch.ts";
+import {type AddType} from "@/features/search/hooks/useApiSearch.ts";
 
 interface ToastViewHighlightAddProps {
     toastParam: Toast
-    value: AddNewHighlightsType
+    value: AddType
 }
 
 export default function ToastViewHighlightAdd({ toastParam, value }: ToastViewHighlightAddProps) {

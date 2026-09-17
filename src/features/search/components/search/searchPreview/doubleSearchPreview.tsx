@@ -7,8 +7,7 @@ import type {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import type {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import type {SingleSearchType} from "@/features/search/api/searchApiType.ts";
 import {findLineIdByWordId} from "@/utils/commonUtil.ts";
-
-import type {AddNewHighlightObj} from "@/features/search/components/search/resultOutput.tsx";
+import type {AddNewHighlightQueryType} from "@/features/search/hooks/useApiSearch.ts";
 
 type Props = {
     item: SingleSearchType,
@@ -16,7 +15,7 @@ type Props = {
     historicalText: EditorTextType,
     lineHistorical: number,
     isFree: boolean,
-    addNewHighlight: AddNewHighlightObj
+    addNewHighlight: AddNewHighlightQueryType
 }
 
 export default function DoubleSearchPreview({item, confirmedSearch, historicalText, lineHistorical, isFree, addNewHighlight}: Props){

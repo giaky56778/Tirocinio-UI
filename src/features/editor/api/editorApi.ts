@@ -27,8 +27,10 @@ export async function readHighlightPortion(biblicalID: number, historicalID: num
 
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/getQuotesPortion?${params}`)
 
-    if (!res.ok)
-        throw new Error('Highlight non trovata')
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Errore: impossibile trovare il testo designato")
+    }
     if (res.status === 204)
         return {} as Record<string,HighlightDouble>
 
@@ -45,7 +47,7 @@ async function readTextPortion({textType,id, path, filename, line, lineNumber,wo
     else if(id != undefined)
         params.set('text_id', String(id))
     else
-        throw new Error('Parametri non validi, inserire id o path e filename')
+        throw new Error('Errore: parametri non validi, inserire id o path e filename')
 
     if (lineNumber != undefined)
         params.set('lineNumber', lineNumber)
@@ -58,8 +60,11 @@ async function readTextPortion({textType,id, path, filename, line, lineNumber,wo
 
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/${endpoint}/?${params}`)
 
-    if (!res.ok)
-        throw new Error(`Impossibile trovare il testo specificato, controllare se i campi sono stati inseriti correttamente`)
+
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Errore: impossibile trovare il testo specificato")
+    }
 
     const json = await res.json() as TextBundle
 

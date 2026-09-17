@@ -1,13 +1,25 @@
 import {useCallback, useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import toast from "react-hot-toast";
-
 import {type PageType, useGlobalState} from "@/contexts/globalState.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {type TextType} from "@/utils/settings.ts";
 import {type ContentItemText, type TextListSchema} from "@/api/indexType.ts";
 import {useDeleteHistoricalText} from "@/hook/useDeleteText.ts";
 import {type UrlPath} from "@/features/editor/lib/utils.ts";
+import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
+
+export type TextSelectedType = {
+    path: string
+    items: ContentItemText
+}
+
+type Props = {
+    names: TextListSchema
+    initUrl?: UrlPath
+    side: TextType
+    page: PageType
+}
 
 function urlToPath(url: string | null, line: string | null | undefined): UrlPath | undefined {
     if (!url)
@@ -24,18 +36,6 @@ function urlToPath(url: string | null, line: string | null | undefined): UrlPath
                 ? Number(line)
                 : 0
     }
-}
-
-export type TextSelectedType = {
-    path: string
-    items: ContentItemText
-}
-
-type TextNameSelectionConfig = {
-    names: TextListSchema
-    initUrl?: UrlPath
-    side: TextType
-    page: PageType
 }
 
 export function resolveDefaultSelection(
@@ -83,7 +83,7 @@ export function resolveDefaultSelection(
     }
 }
 
-export default function useTextNameSelection({names, initUrl, side, page}: TextNameSelectionConfig) {
+export default function useTextNameSelection({names, initUrl, side, page}: Props) {
     const paramKey = side === 'historical' ? 'h':'b'
     const origin = page === 'editor' ? '/' : page === 'search' ? '/search' : '/viewHighlights'
 
@@ -91,6 +91,7 @@ export default function useTextNameSelection({names, initUrl, side, page}: TextN
     const useDelete=useDeleteHistoricalText()
     const globalState = useGlobalState()
     const setBatchedParams = useBatchedSearchParams()
+    const setSearchElement = useSelectionStore(state => state.setSearchElement)
 
     const [selected, setSelectedState] = useState<TextSelectedType | undefined>(() => {
         if (names.length === 0)
@@ -120,6 +121,7 @@ export default function useTextNameSelection({names, initUrl, side, page}: TextN
             return
         }
 
+        setSearchElement(undefined) //cancella la selezione confermata per la sezione search
         setSelectedState(newSelected)
         globalState.setSelectedText(page, side, newSelected)
 
@@ -129,7 +131,7 @@ export default function useTextNameSelection({names, initUrl, side, page}: TextN
         }
 
         setBatchedParams(newParams, origin)
-    }, [globalState, page, side, paramKey, setBatchedParams, origin])
+    }, [setSearchElement, globalState, page, side, paramKey, setBatchedParams, origin])
 
     const deleteText = useCallback((id: number) => {
         if (selected?.items.id === id) {
@@ -165,7 +167,11 @@ export default function useTextNameSelection({names, initUrl, side, page}: TextN
             return
         }
 
-        const exists = names.some(g => g.path === parsedUrlFromParams.path && g.items.some(i => i.filename === parsedUrlFromParams.filename))
+        const exists = names.some(g =>
+            g.path === parsedUrlFromParams.path && g.items.some(i =>
+                i.filename === parsedUrlFromParams.filename
+            )
+        )
 
         if (!exists) {
             toast.error("Testo specificato non trovato", {id: 'TextNotExist'})
@@ -177,7 +183,6 @@ export default function useTextNameSelection({names, initUrl, side, page}: TextN
                 }, origin, 'useTextNameSelection')
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return {

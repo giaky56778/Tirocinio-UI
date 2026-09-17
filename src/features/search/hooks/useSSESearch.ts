@@ -65,8 +65,7 @@ export default function useSSESearch({dialogHandle, initialResultFilename}: Prop
                 headers: {"Content-Type": "application/json"},
             });
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            Object.entries(algoSelected).forEach(([_, algo]) => {
+            Object.entries(algoSelected).forEach(([, algo]) => {
                 setAlgoFinished((prev) => ({...prev, [algo]: false}))
             })
 
@@ -120,7 +119,7 @@ export default function useSSESearch({dialogHandle, initialResultFilename}: Prop
                     setMessages((prev) => [...prev, `Errore nella comunicazione con il server: ${error instanceof Error ? error.message : "Errore sconosciuto"}`])
                     setHasError(true)
                     close()
-                    throw error; // throw to stop retrying
+                    throw error
                 }
             })
 

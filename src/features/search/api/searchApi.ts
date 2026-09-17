@@ -3,15 +3,19 @@ import {authFetch} from "@/api/authFetch.ts";
 
 export async function settingsRetrive() {
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/settings`)
+
     if (!res.ok)
-        throw new Error(`Errore lettura dei settings`)
+        throw new Error('Errore: impossibile leggere i settings')
+
     return await res.json() as SettingsType
 }
 
 export async function tooltipRetrive() {
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/info/getAlgoToolpit/`)
+
     if (!res.ok)
-        throw new Error(`Retrive algorithm information error`)
+        throw new Error("Errore: impossibile leggere le informazioni degli algoritmi")
+
     return await res.json() as TooltipType
 }
 
@@ -39,12 +43,12 @@ export async function researchResultRetrive(
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchJson/?${params}`)
 
     if (!res.ok)
-        throw new Error()
+        throw new Error("Errore: impossibile leggere i risultati della ricerca hybrid")
+
     return await res.json() as SearchResultType
 }
 
 export async function addNewHighlight(addNewHighlightsType: NewHighlightType) {
-    console.log(addNewHighlightsType)
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/saveQuote`, {
         method: 'POST',
         headers: {
@@ -53,7 +57,7 @@ export async function addNewHighlight(addNewHighlightsType: NewHighlightType) {
         body: JSON.stringify(addNewHighlightsType),
     })
     if (!res.ok)
-        throw new Error(`Error cannot add new highlight`)
+        throw new Error("Errore: impossibile aggiungere una nuova evidenziazione")
 }
 
 export async function searchXlsxExport(filename: string, opt?: {
@@ -73,9 +77,8 @@ export async function searchXlsxExport(filename: string, opt?: {
     })
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchXlsx/?${params}`)
 
-    console.log(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchXlsx/?${params}\``)
-
     if (!res.ok)
-        throw new Error(`Errore durante l'esportazione dei risultati`)
+        throw new Error("Errore: impossibile generare il file XLSX")
+
     return await res.blob()
 }

@@ -1,9 +1,8 @@
-import {Suspense, useEffect} from "react";
+import {Suspense} from "react";
 import {VList} from "virtua";
 import {Tabs} from "@base-ui/react/tabs";
 import ComboboxTextName from "@/features/editor/components/editor/comboboxTextName.tsx";
 import VisualizeHighlightsSkeleton from "@/features/view/components/skeleton/visualizeHighlightsSkeleton.tsx";
-
 import CardHighlight from "@/features/view/components/view/cardHighlight.tsx";
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import NoTextView from "@/features/view/components/no-element/noTextView.tsx";
@@ -37,22 +36,11 @@ function VisualizeHighlightsComponent() {
     const data = highlightsTextQuery.data
     const length = data?.length ?? 0
 
-    useEffect(() => {
-        return () => {
-        }
-    }, [])
-
-    if (highlightsTextQuery.isLoading === undefined) {
-        return <VisualizeHighlightsSkeleton/>
-    }
-
-    if (names.length === 0) {
+    if (names.length === 0)
         return <NoTextView />
-    }
 
-    if (highlightsTextQuery.data === undefined || selected === undefined) {
+    if (highlightsTextQuery.data === undefined || selected === undefined || highlightsTextQuery.isLoading === undefined)
         return <VisualizeHighlightsSkeleton/>
-    }
 
     return (
         <div className={VISUALIZE_CONTAINER_CLASS}>

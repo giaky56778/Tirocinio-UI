@@ -97,15 +97,12 @@ export default function useInitSearch(
         algo?: string
         sources?: string
     }){
-        if(searchParams.has('algos') && !algo){
+        if(searchParams.has('algos') && !algo)
             globalState.setSearch({ algoSelected: searchParams.get('algos')?.split(',') })
-        }
-        if(searchParams.has('sources') && !sources){
+        if(searchParams.has('sources') && !sources)
             globalState.setSearch({ sourcesSelected: searchParams.get('sources')?.split(',') })
-        }
-        if(searchParams.has('q') && !q){
+        if(searchParams.has('q') && !q)
             globalState.setSearch({ searchQuery: searchParams.get('q') ?? '' })
-        }
     }
 
     function readSearchGlobalState(){
@@ -116,7 +113,6 @@ export default function useInitSearch(
         return globalState.state?.search?.confirmedSearch
     }
 
-    // Inizializzazione
     useEffect(() => {
         if(!globalState.initPage.getIsInitialMount('searchParams') || (location.pathname !== "/search" || !textHistoricalSelected || !textHistoricalContent || textHistoricalContent.length === 0)) {
             return

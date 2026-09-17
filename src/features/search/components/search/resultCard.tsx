@@ -1,7 +1,6 @@
 import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import {
-    type AddNewHighlightObj,
     RESULT_CARD_BODY_CLASS,
     RESULT_CARD_CONTAINER_CLASS,
     RESULT_CARD_FOOTER_CLASS
@@ -11,6 +10,7 @@ import {Tooltip} from "@base-ui/react/tooltip";
 import PreviewSingle from "@/features/search/components/search/searchPreview/singleSearchPreview.tsx";
 import PreviewDouble from "@/features/search/components/search/searchPreview/doubleSearchPreview.tsx";
 import {type SingleSearchType} from "@/features/search/api/searchApiType.ts";
+import type {AddNewHighlightQueryType} from "@/features/search/hooks/useApiSearch.ts";
 
 type Props = {
     i: number,
@@ -23,7 +23,7 @@ type Props = {
     historicalText: EditorTextType,
     lineHistorical: number,
     tooltipRef: Tooltip.Handle<{ text: string }>,
-    addNewHighlight: AddNewHighlightObj
+    addNewHighlight: AddNewHighlightQueryType
 }
 
 export default function ResultCard({i, result, isDoubleMode, confirmedSearch, historicalText, lineHistorical, tooltipRef, addNewHighlight}: Props) {

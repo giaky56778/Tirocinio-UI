@@ -153,6 +153,7 @@ export default function useCustomSelection({side, text, index, selectedText }: P
                         linePos: res
                     })
                     navigate("/search")
+                    return
                 }
 
                 setSearchElement({

@@ -12,7 +12,7 @@ import {Tooltip} from "@base-ui/react/tooltip";
 import CommonTooltip from "@/features/search/components/search/commonTooltip.tsx";
 import {Dialog, Menu} from "@base-ui/react";
 import useAccount from "@/hook/useAccount.ts";
-import type {JSX} from "react";
+import {type JSX} from "react";
 
 type PageLabelType = {
     label: string

@@ -1,6 +1,5 @@
 import {Suspense, useEffect} from "react";
 import {useHighlightStore, HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
-import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
 import {useStaticBiblicalTextRead, useStaticHistoricalTextRead} from "@/features/editor/hooks/useTextRead.ts";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
 import type {HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
@@ -26,9 +25,7 @@ type Props = {
 const DoubleViewReadOnly=(props: Props)=> (
     <Suspense fallback={<ViewHighlightsSkeleton/>}>
         <HighlightStoreProvider>
-            <SelectionStoreProvider>
-                <MiniDoubleEditorPageContent {...props}/>
-            </SelectionStoreProvider>
+            <MiniDoubleEditorPageContent {...props}/>
         </HighlightStoreProvider>
     </Suspense>
 )
@@ -53,8 +50,6 @@ function MiniDoubleEditorPageContent({biblical,historical}: Props){
         range: br
     } = createTextConfig(urlBiblical, b_id!, b_text.data, biblical.start, biblical.end, b_line)
 
-    
-
     const initStore = useHighlightStore(state => state.init)
 
     useEffect(() => {
@@ -71,7 +66,7 @@ function MiniDoubleEditorPageContent({biblical,historical}: Props){
     const globalHighlight = useSyncHighlights()
 
     return (
-        <div className="grid grid-cols-2 divide-x divide-gray-500 min-h-0 overflow-hidden gap-0">
+        <div inert className="grid grid-cols-2 divide-x divide-gray-500 min-h-0 overflow-hidden gap-0">
             <div className={"relative h-full w-full"}>
                 <HighlightEditorWindow
                     mode={"readonly"}

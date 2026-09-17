@@ -9,11 +9,11 @@ export type TextQuery={
     filename?:string
 }
 
-type ExtendedTextQuery = TextQuery & {
+type Props = TextQuery & {
     textType: TextType
 }
 
-async function readText({textType,id, path, filename}:ExtendedTextQuery){
+async function readText({textType,id, path, filename}:Props){
     const params = new URLSearchParams()
 
     if(path != undefined && filename != undefined){
@@ -23,13 +23,15 @@ async function readText({textType,id, path, filename}:ExtendedTextQuery){
     else if(id != undefined)
         params.set('text_id', String(id))
     else
-        throw new Error('Invalid parameters: either id or (path and filename) must be provided')
+        throw new Error('Errore: è necessario fornire un id oppure i parametri path/filename')
 
     const endpoint = textType === "historical" ? "getHistoricalText" : "getBiblicalText"
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/${endpoint}/?${params}`)
 
-    if (!res.ok)
-        throw new Error('File non trovato')
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Errore: file non trovato")
+    }
 
     const json = await res.json() as TextBundle
 
@@ -50,36 +52,44 @@ export async function readBiblicalText({id, path, filename} :TextQuery) {
 }
 
 export async function getTextNameBiblical() {
-    console.log(('getTextNameBiblical'))
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getBiblicalTextNames`);
-    if (!res.ok)
-        throw new Error('File non trovato')
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getBiblicalTextNames`)
+
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Errore: impossibile trovare i testi biblici")
+    }
+
     return await res.json() as TextListSchema
 }
 
 export async function getTextNameHistorical() {
-    console.log(('getTextNameHistorical'))
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getHistoricalTextNames`);
-    if (!res.ok)
-        throw new Error('File non trovato')
-    console.log('ok getTextNameHistorical')
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getHistoricalTextNames`)
+
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Errore: file non trovato")
+    }
+
     return await res.json() as TextListSchema
 }
 
-export async function deleteText(id:number){
+export async function deleteText(id:number) {
     const params = new URLSearchParams({id: String(id)})
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/deleteHistoricalText?${params}`, {
-        method: 'DELETE',
+        method: 'DELETE'
     })
-    if (!res.ok)
-        throw new Error(`Errore durante l'eliminazione del testo`)
+
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Errore: impossibile eliminare il testo storico designato")
+    }
 }
 
 export async function login ({ username, password }: { username: string; password: string }) {
 
-    const body = new URLSearchParams();
-    body.append("username", username);
-    body.append("password", password);
+    const body = new URLSearchParams()
+    body.append("username", username)
+    body.append("password", password)
     const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/login`, {
         method: "POST",
         headers: {
@@ -90,24 +100,32 @@ export async function login ({ username, password }: { username: string; passwor
     })
     if (!res.ok) {
         const errorData = await res.json()
-        throw new Error(errorData.detail || "Login fallito. Credenziali non valide.")
+        throw new Error(errorData.detail || "Login fallito: credenziali non valide")
     }
+
     return await res.json()
 }
 
 export async function me(){
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/me`)
-    if (!res.ok)
-        throw new Error(`Errore durante il recupero delle informazioni utente`)
+
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Errore: impossibile trovare le informazioni dell'utente")
+    }
+
     return await res.json() as MeSchema
 }
 
 export async function logout(){
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/logout`, {
-        method: 'POST',
+        method: 'POST'
     })
-    if (!res.ok)
-        throw new Error(`Errore durante il logout`)
+
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Errore: impossibile fare logout")
+    }
 }
 
 export async function pswChange({oldPassword, newPassword}:{oldPassword:string, newPassword:string}){
@@ -120,11 +138,11 @@ export async function pswChange({oldPassword, newPassword}:{oldPassword:string, 
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: body,
+        body: body
     })
 
     if (!res.ok) {
         const errorData = await res.json()
-        throw new Error(errorData.detail || "Errore durante il cambio password.")
+        throw new Error(errorData.detail || "Errore: impossibile cambiare la password")
     }
 }

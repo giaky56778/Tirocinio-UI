@@ -4,7 +4,6 @@ import SearchPageSkeleton from "@/features/search/components/skeleton/searchSkel
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import ForceUploadDialog from "@/features/upload-section/components/forceUploadDialog.tsx";
 import {HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
-import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {useReadSettingsSearch} from "@/features/search/hooks/useApiSearch.ts";
 import {useHistoricalTextRead} from "@/features/search/hooks/useHistoricalTextRead.ts";
@@ -55,26 +54,25 @@ function SearchPageContent() {
     if (!hasLoadedOnce && isTextLoading)
         return <SearchPageSkeleton/>
 
+    //<SelectionStoreProvider key={rightSelectedText?.items.id ?? 'no-selected'}>
     return (
         <HighlightStoreProvider>
-            <SelectionStoreProvider key={rightSelectedText?.items.id ?? 'no-selected'}>
-                <SearchPageEditor
-                    settings={ settings.settingsQuery.data!}
-                    tooltip={settings.tooltipQuery.data!}
-                    text={{
-                        text: rightTextData.data?.text ?? EMPTY_ARRAY,
-                        index: rightTextData.data?.index ?? EMPTY_INDEX,
-                        chapter: rightTextData.data?.chapter ?? EMPTY_ARRAY,
-                        listOfText: textHistorical.historicalNames ?? EMPTY_ARRAY
-                    }}
-                    opTextHistorical={{
-                        select: textHistorical.setSelectedText,
-                        delete: textHistorical.deleteText
-                    }}
-                    selectedText={rightSelectedText!}
-                    isLoading={isTextLoading}
-                />
-            </SelectionStoreProvider>
+            <SearchPageEditor
+                settings={ settings.settingsQuery.data!}
+                tooltip={settings.tooltipQuery.data!}
+                text={{
+                    text: rightTextData.data?.text ?? EMPTY_ARRAY,
+                    index: rightTextData.data?.index ?? EMPTY_INDEX,
+                    chapter: rightTextData.data?.chapter ?? EMPTY_ARRAY,
+                    listOfText: textHistorical.historicalNames ?? EMPTY_ARRAY
+            }}
+                opTextHistorical={{
+                    select: textHistorical.setSelectedText,
+                    delete: textHistorical.deleteText
+            }}
+                selectedText={rightSelectedText!}
+                isLoading={isTextLoading}
+            />
         </HighlightStoreProvider>
     )
 }

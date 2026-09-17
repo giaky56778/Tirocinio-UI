@@ -11,9 +11,9 @@ import type {SelectionOpType} from "@/features/editor/hooks/useCustomSelection.t
 
 export type menuType = "highlight" | 'selected' | "default"
 export type CostumeContextType = {
-    menuType: menuType;
-    highlightId: string | null;
-    toggleMenuType: (menuType: menuType, highlightId?: string) => void;
+    menuType: menuType
+    highlightId: string | null
+    toggleMenuType: (menuType: menuType, highlightId?: string) => void
 }
 
 type Props = {
@@ -105,18 +105,22 @@ const ContextMenuCustom = ({
                         <ContextMenu.Item
                             className={itemDestructiveCls}
                             onClick={() => {
-                                alertDeleteHandler?.openWithPayload({onConfirm: () => {
+                                alertDeleteHandler?.openWithPayload({
+                                    onConfirm: () => {
                                         if(contextMenu.highlightId !== null)
                                             deleteHighlight(contextMenu.highlightId)
-                                }})
+                                    }
+                                })
                             }}
                         >
                             <TrashIcon className={"size-5"}/> Cancella evidenziazione
                         </ContextMenu.Item>
                     </>
                 )
-            default:
+            default: {
+                console.warn('Tipo di menu non supportato. È accettato unicamente: "default" | "highlight"')
                 return defaultContext
+            }
         }
     }
 

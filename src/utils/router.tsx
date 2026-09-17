@@ -1,11 +1,13 @@
-import {createBrowserRouter} from "react-router";
+import {createBrowserRouter, Outlet} from "react-router";
 import EditorPage from "@/features/double-editor/editorPage.tsx";
 import SearchPage from "@/features/search/components/searchPage.tsx";
 import VisualizeHighlights from "@/features/view/components/visualizeHighlights.tsx";
 import PreviewDouble from "@/features/preview/previewDouble.tsx";
 import PreviewSingle from "@/features/preview/previewSingle.tsx";
 import LoginPage from "@/features/account/loginPage.tsx";
-import AppLayout from "@/components/ui/appLayout.tsx";
+import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
+import NavSidebar from "@/components/layout/navBar.tsx";
+import ParamsProvider from "@/contexts/paramsProvider.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -13,7 +15,18 @@ export const router = createBrowserRouter([
         element: <LoginPage/>
     },
     {
-        element: <AppLayout/>,
+        element: (
+            <SelectionStoreProvider>
+                <div className={"relative text-black bg-white grid grid-cols-[auto_1fr] h-screen"}>
+                    <NavSidebar/>
+                    <div className={"border-r border-l border-slate-500 h-full"}>
+                        <ParamsProvider>
+                            <Outlet />
+                        </ParamsProvider>
+                    </div>
+                </div>
+            </SelectionStoreProvider>
+        ),
         children: [
             { path: "/", element: <EditorPage/> },
             { path: "/search", element: <SearchPage/> },

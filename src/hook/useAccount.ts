@@ -1,8 +1,17 @@
-import {useMutation, useSuspenseQuery} from "@tanstack/react-query";
+import {useMutation, useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
 import {logout, me, pswChange} from "@/api";
 import toast from "react-hot-toast";
+import {useLocation} from "react-router";
+import {useEffect} from "react";
 
 export default function useAccount(){
+    const {pathname} = useLocation()
+    const query = useQueryClient()
+
+    useEffect(() => {
+        void query.invalidateQueries({queryKey: ['account']})
+    }, [pathname, query])
+
     const changePasswordFunc=useMutation({
         mutationFn:pswChange,
         onSuccess:() => {

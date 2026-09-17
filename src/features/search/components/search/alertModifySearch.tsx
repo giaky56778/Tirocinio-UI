@@ -6,11 +6,11 @@ export type AlertModifyPayloadType = {
     onConfirm: ()=>void
 }
 
-type AlertModifySearchProps = {
+type Props = {
     alertHandle: AlertDialog.Handle<AlertModifyPayloadType>,
 }
 
-const AlertModifySearch = ({alertHandle}: AlertModifySearchProps) => (
+const AlertModifySearch = ({alertHandle}: Props) => (
     <AlertConfirmDialog
         handle={alertHandle}
         title={"Modifica ricerca"}

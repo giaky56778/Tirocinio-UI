@@ -55,6 +55,20 @@ export const createSelectionStore = (initialParams: Record<string, string | null
     initialUrlParams: initialParams,
 }))
 
+export function useSelectionStore<T>(selector: (state: SelectionStore) => T): T {
+    const store = useContext(SelectionStoreContext)
+    if (!store)
+        throw new Error('Missing SelectionStoreProvider in the component tree')
+    return useStore(store, selector)
+}
+
+export function useSelectionStoreContext() {
+    const store = useContext(SelectionStoreContext)
+    if (!store)
+        throw new Error('Missing SelectionStoreProvider in the component tree')
+    return store
+}
+
 const SelectionStoreContext = createContext<ReturnType<typeof createSelectionStore> | null>(null)
 
 export function SelectionStoreProvider({ children }: { children: ReactNode }) {
@@ -73,18 +87,4 @@ export function SelectionStoreProvider({ children }: { children: ReactNode }) {
             {children}
         </SelectionStoreContext.Provider>
     )
-}
-
-export function useSelectionStore<T>(selector: (state: SelectionStore) => T): T {
-    const store = useContext(SelectionStoreContext)
-    if (!store)
-        throw new Error('Missing SelectionStoreProvider in the component tree')
-    return useStore(store, selector)
-}
-
-export function useSelectionStoreContext() {
-    const store = useContext(SelectionStoreContext)
-    if (!store)
-        throw new Error('Missing SelectionStoreProvider in the component tree')
-    return store
 }

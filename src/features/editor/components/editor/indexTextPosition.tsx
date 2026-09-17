@@ -20,7 +20,7 @@ type chapterIndex = {
 export const CHAPTER_SELECT_CONTAINER_CLASS = "w-full max-w-full px-4 py-2 border border-gray-200 rounded-b-lg bg-white"
 export const CHAPTER_SELECT_TRIGGER_CLASS = "flex w-full max-w-full items-center justify-between gap-3 rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-left text-gray-900 select-none hover:bg-gray-50 hover:border-gray-400 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-orange-600 data-popup-open:border-orange-500 data-popup-open:bg-white transition-colors duration-150 cursor-default"
 
-const IndexTextPosition = memo(({chapterIndex, visibleRange, scroll}: Props) => {
+function IndexTextPosition({chapterIndex, visibleRange, scroll}: Props){
     const find = chapterIndex.find(r => visibleRange.startIndex + 2 <= r.indexMax)
     const setSelectionBlocked = useSelectionStore(s => s.setSelectionBlocked)
 
@@ -29,9 +29,7 @@ const IndexTextPosition = memo(({chapterIndex, visibleRange, scroll}: Props) => 
             <Combobox.Root
                 items={chapterIndex}
                 value={find}
-                onOpenChange={(isOpen) => {
-                    setSelectionBlocked(isOpen)
-                }}
+                onOpenChange={setSelectionBlocked}
             >
                 <Combobox.Label className="sr-only">
                     Seleziona capitolo
@@ -50,15 +48,18 @@ const IndexTextPosition = memo(({chapterIndex, visibleRange, scroll}: Props) => 
                     </Combobox.Icon>
                 </Combobox.Trigger>
                 <Combobox.Portal>
-                    <Combobox.Positioner align="start" sideOffset={6}>
+                    <Combobox.Positioner
+                        align="start"
+                        sideOffset={6}
+                    >
                         <Combobox.Popup
-                            className="w-(--anchor-width) max-h-96 flex flex-col rounded-xl bg-white shadow-xl shadow-gray-200/60 text-gray-900 border border-gray-100 outline-none overflow-hidden transition-all data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0"
+                            className="w-(--anchor-width) max-h-96 flex flex-col rounded-xl bg-white shadow-xl shadow-gray-200/60 text-gray-900 border border-gray-100 outline-none overflow-hidden transition-all data-ending-style:scale-95 data-ending-style:opacity-0"
                             aria-label="Seleziona testo"
                         >
                             <div className="border-b border-gray-200 px-4 py-3">
-                                <Combobox.InputGroup className="relative h-9 rounded-lg border border-gray-200 bg-gray-50 transition-colors focus-within:bg-white focus-within:border-indigo-400">
+                                <Combobox.InputGroup className="relative h-9 rounded-lg border border-gray-200 bg-gray-50 transition-colors">
                                     <Combobox.Input
-                                        className="h-full w-full border-0 bg-transparent pl-3 text-sm text-gray-900 outline-none placeholder:text-gray-400"
+                                        className="h-full w-full border-0 bg-transparent pl-3 text-sm text-gray-900 outline-none"
                                         placeholder="Cerca Capitolo..."
                                     />
                                     <ComboboxClearButton/>
@@ -66,7 +67,7 @@ const IndexTextPosition = memo(({chapterIndex, visibleRange, scroll}: Props) => 
                             </div>
                             <Combobox.Empty>
                                 <div className="p-4 text-center text-sm text-gray-500">
-                                    Nessun capitolo trovato.
+                                    Nessun capitolo trovato
                                 </div>
                             </Combobox.Empty>
 
@@ -91,6 +92,6 @@ const IndexTextPosition = memo(({chapterIndex, visibleRange, scroll}: Props) => 
             </Combobox.Root>
         </div>
     )
-})
+}
 
-export default IndexTextPosition
+export default memo(IndexTextPosition)

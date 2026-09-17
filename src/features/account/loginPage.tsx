@@ -4,19 +4,22 @@ import {LockClose, UserIcon} from "@/components/ui/icons";
 import {Separator} from "@base-ui/react/separator";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import {useNavigate} from "react-router";
+import {useNavigate, useLocation} from "react-router";
 import {login} from "@/api";
 
 export default function LoginPage() {
     const navigate = useNavigate()
+    const location = useLocation()
     const queryClient = useQueryClient()
+    const redirectTo = location.state?.from || '/'
+
     const loginMutation = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
             queryClient.clear()
             toast.success("Accesso effettuato!")
             console.log(data)
-            navigate("/")
+            navigate(redirectTo, { replace: true })
         },
         onError: (error: Error) => {
             toast.error(error.message)
