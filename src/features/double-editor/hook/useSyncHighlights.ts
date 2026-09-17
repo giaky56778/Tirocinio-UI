@@ -1,5 +1,5 @@
 import {useCallback} from "react";
-import {highlightStore, useHighlightStoreContext} from "@/features/editor/store/highlightStore.tsx";
+import {useHighlightStore, useHighlightStoreContext} from "@/features/editor/store/useHighlightStore.tsx";
 import {useDeleteHighlightWords, useUpdateHighlightWords} from "@/features/double-editor/hook/useHighlightMutate.ts";
 
 export type SyncHighlightsType = {
@@ -12,8 +12,8 @@ export default function useSyncHighlights():SyncHighlightsType {
     const updateHighlightMutation = useUpdateHighlightWords()
     const deleteHighlightMutation = useDeleteHighlightWords()
 
-    const setColor = highlightStore(state => state.setColor)
-    const removeHighlight = highlightStore(state => state.removeHighlight)
+    const setColor = useHighlightStore(state => state.setColor)
+    const removeHighlight = useHighlightStore(state => state.removeHighlight)
     
     const store = useHighlightStoreContext()
 
@@ -37,16 +37,16 @@ export default function useSyncHighlights():SyncHighlightsType {
             }
         })
 
-    }, [updateHighlightMutation])
+    }, [store, updateHighlightMutation])
 
     const save = useCallback((highlightId: string|number) => {
         privateSave(highlightId)
-    }, [updateHighlightMutation])
+    }, [privateSave])
 
     const changeColor = useCallback((highlightId: string, color: string) => {
         setColor(highlightId, color)
         privateSave(highlightId, color)
-    }, [setColor, save])
+    }, [setColor, privateSave])
 
     const deleteHighlight = useCallback((highlightId: string|null) => {
         if(!highlightId)

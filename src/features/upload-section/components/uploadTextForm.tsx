@@ -1,8 +1,8 @@
-import React, {memo, RefObject} from "react";
+import React, {memo} from "react";
 import {Tabs} from "@base-ui/react/tabs";
 import {XIcon} from "@/components/ui/icons";
 import {Button, Dialog, Field, Form} from "@base-ui/react";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {useUploadText} from "@/features/upload-section/hooks/useUploadText.ts";
 
 export type UploadFormat = "XML" | "TXT"
@@ -13,7 +13,7 @@ const inputClasses = "w-full rounded-md border border-neutral-200 px-3 py-2 text
 
 type Props= {
     onTextChange: (newSelected: TextSelectedType) => void
-    dialogHandle?:  RefObject<Dialog.Handle<any>>
+    dialogHandle?:  Dialog.Handle<never>
 }
 
 function UploadTextForm({onTextChange, dialogHandle}: Props){

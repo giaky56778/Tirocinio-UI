@@ -1,15 +1,12 @@
-import {
-    useMutation,
-    useQueryClient,
-    useSuspenseQueries
-} from "@tanstack/react-query";
+import {useMutation, useQueryClient, useSuspenseQueries} from "@tanstack/react-query";
 import {READ_QUERY_DEFAULTS} from "@/utils/settings.ts";
 import {addNewHighlight, settingsRetrive, tooltipRetrive} from "@/features/search/api/searchApi.ts";
-import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import toast from "react-hot-toast";
 import ToastViewHighlightAdd from "@/features/search/components/search/toastViewHighlightAdd.tsx";
 import {createElement} from "react";
-import {ForToastType, NewHighlightType} from "@/features/search/api/searchApiType.ts";
+import {type ForToastType, type NewHighlightType} from "@/features/search/api/searchApiType.ts";
+import type {AddNewHighlightObj} from "@/features/search/components/search/resultOutput.tsx";
 
 export type AddNewHighlightsType={
     newHighlight: NewHighlightType,
@@ -40,10 +37,9 @@ export function useReadSettingsSearch(){
 
 export function useAddNewHighlightWords({searchQueryKey}:{
     searchQueryKey:  (string | SearchType)[],
-}) {
+}):AddNewHighlightObj {
     const queryClient = useQueryClient()
-
-    return useMutation({
+    const addNewQuote = useMutation({
         mutationFn: (newHighlight: AddNewHighlightsType) => addNewHighlight(newHighlight.newHighlight),
         async onSuccess(_, value) {
             await queryClient.invalidateQueries({queryKey: searchQueryKey, exact: true})
@@ -60,4 +56,9 @@ export function useAddNewHighlightWords({searchQueryKey}:{
             toast.error(error.message)
         }
     })
+
+    return {
+        add: (newHighlight: AddNewHighlightsType) => addNewQuote.mutate(newHighlight),
+        isPending: addNewQuote.isPending
+    }
 }

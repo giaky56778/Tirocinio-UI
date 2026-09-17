@@ -1,6 +1,6 @@
 import React from "react";
-import {ShowLineType} from "@/utils/commonUtil.ts";
-import {colorMap, TextType, TEXT_FONT_CLASS} from "@/utils/settings.ts";
+import {type ShowLineType} from "@/utils/commonUtil.ts";
+import {colorMap, TEXT_FONT_CLASS, type TextType} from "@/utils/settings.ts";
 
 export type RenderPreviewCardTextProps ={
     text: ShowLineType[],

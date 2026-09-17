@@ -5,7 +5,17 @@ import App from '@/App.tsx'
 import '@/index.css'
 import '@/font.css'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: (fail, error) => {
+                if (error.message === 'UNAUTHORIZED')
+                    return false
+                return fail < 3
+            }
+        }
+    }
+})
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>

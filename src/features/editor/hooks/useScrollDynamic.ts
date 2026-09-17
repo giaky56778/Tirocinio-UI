@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {ScrollToIndexAlign} from "virtua";
+import {type ScrollToIndexAlign} from "virtua";
 
 export type SetScrollProps = {
     lineIndex?: number

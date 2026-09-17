@@ -1,4 +1,4 @@
-import { SVGProps } from "react";
+import type {SVGProps} from "react";
 
 export const ArrowSvg = (props: SVGProps<SVGSVGElement>) => (
     <svg width="20" height="10" viewBox="0 0 20 10" fill="none" {...props}>

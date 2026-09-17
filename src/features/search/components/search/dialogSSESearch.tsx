@@ -1,10 +1,10 @@
-import {RefObject, useEffect, useState} from "react";
+import {useState, useEffect} from 'react';
 import {Progress} from "@base-ui/react";
 import {Dialog} from "@base-ui/react/dialog";
 import {CheckIcon, LoadingSpinner, TriangleExclamationIcon} from "@/components/ui/icons";
 
 type Props = {
-    dialogHandle: RefObject<Dialog.Handle<any>>
+    dialogHandle: Dialog.Handle<never>
     algoSelected: string[]
     data: {
         isLoading: boolean
@@ -31,27 +31,34 @@ export default function DialogSSESearch({
 
     useEffect(() => {
         let interval: number | undefined
+        let timeout: number | undefined
         
         if (!data.isLoading && closeAlertTimerRemain < TIMERLIMIT) {
             if (closeAlertTimerRemain === DEFAULTTIMER) {
-                setCloseAlertTimerRemain(0)
+                timeout = window.setTimeout(() => {
+                    setCloseAlertTimerRemain(0)
+                }, 0)
+            } else {
+                interval = window.setInterval(() => {
+                    setCloseAlertTimerRemain(prev => prev + 1)
+                }, 1000)
             }
-            
-            interval = setInterval(() => {
-                setCloseAlertTimerRemain(prev => prev === DEFAULTTIMER ? 1 : prev + 1)
-            }, 1000)
         }
         
-        if(closeAlertTimerRemain >= TIMERLIMIT)
-            dialogHandle.current.close()
+        if (closeAlertTimerRemain >= TIMERLIMIT) {
+            dialogHandle.close()
+        }
 
-        return () => clearInterval(interval)
-    }, [data.isLoading, closeAlertTimerRemain, dialogHandle]);
+        return () => {
+            window.clearInterval(interval)
+            window.clearTimeout(timeout)
+        }
+    }, [data.isLoading, closeAlertTimerRemain, dialogHandle])
 
     return (
         <Dialog.Root
             disablePointerDismissal={data.isLoading}
-            handle={dialogHandle.current}
+            handle={dialogHandle}
             onOpenChange={(open, eventDetails) => {
                 if (!open && data.isLoading) {
                     eventDetails.cancel()

@@ -1,5 +1,9 @@
+import {authFetch} from "@/api/authFetch.ts";
+
 export type UploadIdType={
     id:number
+    path:string
+    filename:string
 }
 
 type Props = {
@@ -18,7 +22,7 @@ export async function uploadHistoricalText({path, filename, file, text}: Props) 
     if (text !== undefined)
         formData.append('text', text)
 
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/upload`, {
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/upload`, {
         method: 'POST',
         body: formData,
     })

@@ -2,12 +2,12 @@ import {useCallback, useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import toast from "react-hot-toast";
 
-import {PageType, useGlobalState} from "@/contexts/globalState.tsx";
+import {type PageType, useGlobalState} from "@/contexts/globalState.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
-import {TextType} from "@/utils/settings.ts";
-import {ContentItemText, TextListSchema} from "@/api/indexType.ts";
+import {type TextType} from "@/utils/settings.ts";
+import {type ContentItemText, type TextListSchema} from "@/api/indexType.ts";
 import {useDeleteHistoricalText} from "@/hook/useDeleteText.ts";
-import {UrlPath} from "@/features/editor/lib/utils.ts";
+import {type UrlPath} from "@/features/editor/lib/utils.ts";
 
 function urlToPath(url: string | null, line: string | null | undefined): UrlPath | undefined {
     if (!url)
@@ -99,7 +99,7 @@ export default function useTextNameSelection({names, initUrl, side, page}: TextN
         const urlString = searchParams.get(paramKey)
 
         const parsedUrlFromParams = urlToPath(urlString,undefined)
-        const globalSelected = globalState.swapPage.getSelectedText(page, side)
+        const globalSelected = globalState.getSelectedText(page, side)
 
         if (parsedUrlFromParams) {
             const resolved = resolveDefaultSelection(names, globalSelected?.text, parsedUrlFromParams)
@@ -121,7 +121,7 @@ export default function useTextNameSelection({names, initUrl, side, page}: TextN
         }
 
         setSelectedState(newSelected)
-        globalState.swapPage.setSelectedText(page, side, newSelected)
+        globalState.setSelectedText(page, side, newSelected)
 
         const newParams: Record<string, string> = {
             [paramKey]: `${newSelected.path}:${newSelected.items.filename}`,
@@ -129,7 +129,26 @@ export default function useTextNameSelection({names, initUrl, side, page}: TextN
         }
 
         setBatchedParams(newParams, origin)
-    }, [paramKey, setBatchedParams, globalState, page, side])
+    }, [globalState, page, side, paramKey, setBatchedParams, origin])
+
+    const deleteText = useCallback((id: number) => {
+        if (selected?.items.id === id) {
+            let firstRemainingItem: TextSelectedType | undefined
+            for (const group of names) {
+                const item = group.items.find(i => i.id !== id)
+                if (item) {
+                    firstRemainingItem = {
+                        path: group.path,
+                        items: item
+                    }
+                    break
+                }
+            }
+            setSelected(firstRemainingItem)
+        }
+        useDelete.mutate({id})
+
+    }, [selected?.items.id, useDelete, setSelected, names])
 
     useEffect(() => {
         const urlString = searchParams.get(paramKey)
@@ -151,29 +170,15 @@ export default function useTextNameSelection({names, initUrl, side, page}: TextN
         if (!exists) {
             toast.error("Testo specificato non trovato", {id: 'TextNotExist'})
             if (selected) {
-                setSelected(selected)
+                globalState.setSelectedText(page, side, selected)
+                setBatchedParams({
+                    [paramKey]: `${selected.path}:${selected.items.filename}`,
+                    [`${paramKey}line`]: '0'
+                }, origin, 'useTextNameSelection')
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    const deleteText = useCallback((id: number) => {
-        if (selected?.items.id === id) {
-            let firstRemainingItem: TextSelectedType | undefined
-            for (const group of names) {
-                const item = group.items.find(i => i.id !== id)
-                if (item) {
-                    firstRemainingItem = {
-                        path: group.path,
-                        items: item
-                    }
-                    break
-                }
-            }
-            setSelected(firstRemainingItem)
-        }
-        useDelete.mutate({ id })
-
-    }, [selected, names, setSelected])
 
     return {
         selected,

@@ -1,10 +1,10 @@
-import {Suspense, useEffect, useRef} from "react";
+import {useEffect, useState, Suspense} from 'react';
 import SearchPageEditor from "@/features/search/components/search/searchPageEditor.tsx";
 import SearchPageSkeleton from "@/features/search/components/skeleton/searchSkeleton.tsx";
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import ForceUploadDialog from "@/features/upload-section/components/forceUploadDialog.tsx";
-import {HighlightStoreProvider} from "@/features/editor/store/highlightStore.tsx";
-import {SelectionStoreProvider} from "@/features/editor/store/selectionStore.tsx";
+import {HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
+import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {useReadSettingsSearch} from "@/features/search/hooks/useApiSearch.ts";
 import {useHistoricalTextRead} from "@/features/search/hooks/useHistoricalTextRead.ts";
@@ -29,11 +29,10 @@ function SearchPageContent() {
     const textHistorical = useHistoricalTextRead('search')
     const globalState = useGlobalState()
     const rightSelectedText = textHistorical.selectedText
-    const isFirstLoad = useRef(true)
+    const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
 
     useEffect(() => {
         return ()=> {
-            globalState.swapPage.confirmExit()
             globalState.initPage.resetInitialMount('searchParams')
         }
     }, [])
@@ -50,10 +49,11 @@ function SearchPageContent() {
     const rightTextData = textHistorical.textQuery
     const isTextLoading = rightTextData.isLoading || rightTextData.isFetching
 
-    if (isFirstLoad.current && isTextLoading)
-        return <SearchPageSkeleton/>
+    if (!isTextLoading && !hasLoadedOnce)
+        setHasLoadedOnce(true)
 
-    isFirstLoad.current = false
+    if (!hasLoadedOnce && isTextLoading)
+        return <SearchPageSkeleton/>
 
     return (
         <HighlightStoreProvider>

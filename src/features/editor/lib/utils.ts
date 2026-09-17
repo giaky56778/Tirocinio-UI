@@ -1,10 +1,10 @@
-import {TextBundle, TextLineItem, TextSchema, Word} from "@/api/indexType.ts";
-import {HighlightBound, HighlightLine} from "@/features/editor/reducer/wordHighlightReducer.ts";
-import {SearchHighlight, SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
-import {copyHighlightText, WordGroup} from "@/utils/commonUtil.ts";
-import {colorMap, TextType} from "@/utils/settings.ts";
-import {highlightStore} from "@/features/editor/store/highlightStore.tsx";
-import {HighlightColor, HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
+import {type TextBundle, type TextLineItem, type TextSchema, type Word} from "@/api/indexType.ts";
+import {type HighlightBound, type HighlightLine} from "@/features/editor/reducer/wordHighlightReducer.ts";
+import {type SearchHighlight, type SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
+import {copyHighlightText, type WordGroup} from "@/utils/commonUtil.ts";
+import {colorMap, type TextType} from "@/utils/settings.ts";
+import {useHighlightStore} from "@/features/editor/store/useHighlightStore.tsx";
+import {type HighlightColor, type HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
 
 export type UrlPath = {
     path: string
@@ -16,8 +16,8 @@ export function composeTitle(text: Word[]) {
     return text.map(w => w.word).join(' ')
 }
 
-export function resolveColorClass(group: WordGroup, colors: Record<string, string>): string {
-    const isPreview = highlightStore(state => state.isPreview)
+export function useResolveColorClass(group: WordGroup, colors: Record<string, string>): string {
+    const isPreview = useHighlightStore(state => state.isPreview)
     const colorId = colors[group.highlightId]
     if (!colorId || !colorMap[colorId])
         return ''

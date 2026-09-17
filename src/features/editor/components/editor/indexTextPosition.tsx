@@ -1,14 +1,14 @@
-import React, {memo} from "react";
+import {memo} from "react";
 import {Combobox} from "@base-ui/react/combobox";
 import {CheckIcon, ChevronUpDownIcon} from "@/components/ui/icons";
-import {ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
+import type {ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
 import ComboboxClearButton from "@/components/ui/common/comboboxClearButton.tsx";
+import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 
 type Props = {
     chapterIndex: chapterIndex[],
     visibleRange: { startIndex: number; endIndex: number },
     scroll: ScrollType
-    blockSelectedRef?: React.RefObject<boolean>
 }
 
 type chapterIndex = {
@@ -20,16 +20,17 @@ type chapterIndex = {
 export const CHAPTER_SELECT_CONTAINER_CLASS = "w-full max-w-full px-4 py-2 border border-gray-200 rounded-b-lg bg-white"
 export const CHAPTER_SELECT_TRIGGER_CLASS = "flex w-full max-w-full items-center justify-between gap-3 rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-left text-gray-900 select-none hover:bg-gray-50 hover:border-gray-400 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-orange-600 data-popup-open:border-orange-500 data-popup-open:bg-white transition-colors duration-150 cursor-default"
 
-const IndexTextPosition = memo(({chapterIndex, visibleRange, scroll, blockSelectedRef}: Props) => {
+const IndexTextPosition = memo(({chapterIndex, visibleRange, scroll}: Props) => {
     const find = chapterIndex.find(r => visibleRange.startIndex + 2 <= r.indexMax)
+    const setSelectionBlocked = useSelectionStore(s => s.setSelectionBlocked)
+
     return (
         <div className={CHAPTER_SELECT_CONTAINER_CLASS}>
             <Combobox.Root
                 items={chapterIndex}
                 value={find}
                 onOpenChange={(isOpen) => {
-                    if (blockSelectedRef)
-                        blockSelectedRef.current = isOpen
+                    setSelectionBlocked(isOpen)
                 }}
             >
                 <Combobox.Label className="sr-only">

@@ -1,14 +1,15 @@
-import React, {useCallback, useRef, useMemo, useEffect} from 'react';
+import type React from 'react';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useLocation, useNavigate} from "react-router";
 import toast from "react-hot-toast";
 import {copyHighlightText, findLineIdByWordId} from "@/utils/commonUtil.ts";
-import {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
-import {SelectionPerSide, SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
-import { selectionStore } from '@/features/editor/store/selectionStore.tsx';
+import {type HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
+import {type SelectionPerSide, type SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {useSelectionStore} from '@/features/editor/store/useSelectionStore.tsx';
 import {useGlobalState} from "@/contexts/globalState.tsx";
-import {TextIndexSchema, TextSchema} from "@/api/indexType.ts";
-import {TextType} from "@/utils/settings.ts";
+import {type TextIndexSchema, type TextSchema} from "@/api/indexType.ts";
+import {type TextType} from "@/utils/settings.ts";
 import {copyHighlightTextFromID} from "@/features/editor/lib/utils.ts";
 
 export type SelectionOpType={
@@ -42,10 +43,10 @@ type Props = {
 }
 
 export default function useCustomSelection({side, text, index, selectedText }: Props): UseCustomSelectionReturn {
-    const selectionState = selectionStore(state => state.selectionState)
-    const dispatch = selectionStore(state => state.dispatchSelection)
-    const clearSelection = selectionStore(state => state.clearSelection)
-    const setSearchElement = selectionStore(state => state.setSearchElement)
+    const selectionState = useSelectionStore(state => state.selectionState)
+    const dispatch = useSelectionStore(state => state.dispatchSelection)
+    const clearSelection = useSelectionStore(state => state.clearSelection)
+    const setSearchElement = useSelectionStore(state => state.setSearchElement)
     
     const location = useLocation()
     const navigate = useNavigate()
@@ -140,8 +141,7 @@ export default function useCustomSelection({side, text, index, selectedText }: P
 
                 const res = findLineIdByWordId({text: index, wordId: selectedRange.start}) ?? 0
                 if(location.pathname !== "/search") {
-                    globalState.swapPage.searchRef.current = {
-                        ...globalState.swapPage.searchRef.current,
+                    globalState.setSearch({
                         search:{
                             text: selectedTextResult,
                             path,
@@ -151,8 +151,7 @@ export default function useCustomSelection({side, text, index, selectedText }: P
                         },
                         text: selectedText,
                         linePos: res
-                    }
-                    globalState.swapPage.confirmExit()
+                    })
                     navigate("/search")
                 }
 
@@ -166,7 +165,7 @@ export default function useCustomSelection({side, text, index, selectedText }: P
                 handleClearSelection()
             }
         }
-    }, [selectedRange, text, selectedText, index, handleClearSelection, location.pathname, navigate, globalState, setSearchElement])
+    }, [selectedRange, text, selectedText, index, location.pathname, setSearchElement, handleClearSelection, globalState, navigate])
 
     const copySelected = useCallback(async () => {
         if (!selectedRange)
@@ -203,9 +202,9 @@ export default function useCustomSelection({side, text, index, selectedText }: P
     const resetSearchElement = useCallback(() => {
         setSearchElement(undefined)
         if (location.pathname === "/search") {
-            globalState.swapPage.searchRef.current.confirmedSearch = undefined
+            globalState.setSearch({ confirmedSearch: undefined })
         }
-    }, [setSearchElement, location.pathname, globalState.swapPage.searchRef])
+    }, [setSearchElement, location.pathname, globalState])
 
     useEffect(() => {
         const handleSelectionChange = () => {

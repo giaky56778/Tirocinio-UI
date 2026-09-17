@@ -1,12 +1,12 @@
-import {useEffect, useRef, useState} from "react";
+import {useState, useEffect, useRef} from 'react';
 import {useSearchParams} from "react-router";
-import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {Dialog} from "@base-ui/react/dialog";
 import useSSESearch from "@/features/search/hooks/useSSESearch.ts";
-import {SettingsType} from "@/features/search/api/searchApiType.ts";
+import {type SettingsType} from "@/features/search/api/searchApiType.ts";
 
 type Props={
     settings: SettingsType,
@@ -20,11 +20,11 @@ export default function useSearchPage({settings, selectedText, searchElement,res
     const globalState = useGlobalState()
     const [searchParams] = useSearchParams()
     const setBatchedParams = useBatchedSearchParams()
-    const dialogHandle = useRef(Dialog.createHandle())
+    const dialogHandle = Dialog.createHandle<never>()
     const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     const [confirmedSearch, setConfirmedSearch] = useState<SearchType | undefined>(() => {
-        const cs = globalState.swapPage.state.search?.confirmedSearch
+        const cs = globalState.state.search?.confirmedSearch
 
         if (cs && cs.path === selectedText.path && cs.filename === selectedText.items.filename)
             return cs
@@ -33,7 +33,7 @@ export default function useSearchPage({settings, selectedText, searchElement,res
 
     const [algoSelected,setAlgoSelected] = useState<string[]>(()=>{
         const paramAlgos = searchParams.get('algos')
-        const refAlgos = globalState.swapPage.state.search?.algoSelected
+        const refAlgos = globalState.state.search?.algoSelected
 
         if (refAlgos)
             return refAlgos
@@ -46,7 +46,7 @@ export default function useSearchPage({settings, selectedText, searchElement,res
     })
     const [sourcesSelected,setSourcesSelected]=useState<string[]>(()=>{
         const paramSources = searchParams.get('sources')
-        const refSources = globalState.swapPage.state.search?.sourcesSelected
+        const refSources = globalState.state.search?.sourcesSelected
 
         if (refSources)
             return refSources
@@ -58,14 +58,14 @@ export default function useSearchPage({settings, selectedText, searchElement,res
         const q = searchParams.get('q')
         if (q)
             return q
-        const globalQ = globalState.swapPage.state.search?.searchQuery
+        const globalQ = globalState.state.search?.searchQuery
         if (globalQ)
             return globalQ
         return ""
     })
     const {handleSearch, sseData} = useSSESearch({
         dialogHandle,
-        initialResultFilename: globalState.swapPage.state.search?.resultFilename
+        initialResultFilename: globalState.state.search?.resultFilename
     })
 
     function onSearchSubmit() {
@@ -84,14 +84,13 @@ export default function useSearchPage({settings, selectedText, searchElement,res
             sources: sourcesSelected.length > 0 ? sourcesSelected.join(',') : undefined
         }
 
-        globalState.swapPage.searchRef.current={
-            ...globalState.swapPage.searchRef.current,
+        globalState.setSearch({
             searchQuery: searchQuery,
             confirmedSearch: searchElement,
             algoSelected: algoSelected,
             sourcesSelected: sourcesSelected,
             resultFilename: sseData.resultFilename
-        }
+        })
 
         if (searchElement) {
             updates.h = `${searchElement.path}:${searchElement.filename}`
@@ -105,36 +104,39 @@ export default function useSearchPage({settings, selectedText, searchElement,res
         setBatchedParams(updates)
     }
 
+    const [prevSearchElement, setPrevSearchElement] = useState(searchElement)
+    if (searchElement !== prevSearchElement) {
+        setPrevSearchElement(searchElement)
+        if (searchElement) {
+            setSearchQuery(searchElement.text)
+        }
+    }
+
     useEffect(() => {
         if (confirmedSearch && (confirmedSearch.path !== selectedText.path || confirmedSearch.filename !== selectedText.items.filename)) {
             setConfirmedSearch(undefined)
             setBatchedParams({
                 q: confirmedSearch.text
             })
-            globalState.swapPage.searchRef.current = {
-                ...globalState.swapPage.searchRef.current,
+            globalState.setSearch((prev) => ({
                 searchQuery: confirmedSearch.text,
                 confirmedSearch: undefined,
-                algoSelected: globalState.swapPage.state.search?.algoSelected ?? [],
-                sourcesSelected: globalState.swapPage.state.search?.sourcesSelected ?? [],
-                resultFilename: globalState.swapPage.state.search?.resultFilename
-            }
+                algoSelected: prev.algoSelected ?? [],
+                sourcesSelected: prev.sourcesSelected ?? [],
+                resultFilename: prev.resultFilename
+            }))
             resetSearchElement()
         }
     }, [selectedText])
 
     useEffect(() => {
+        const timer = debounceTimerRef.current
         return () => {
-            if (debounceTimerRef.current)
-                clearTimeout(debounceTimerRef.current)
+            if (timer)
+                clearTimeout(timer)
         }
     }, [])
 
-    useEffect(() => {
-        if (searchElement != undefined) {
-            setSearchQuery(searchElement.text)
-        }
-    }, [searchElement])
 
     return{
         confirmedSearch,

@@ -1,10 +1,10 @@
-import {useCallback, useEffect, useMemo, useRef} from "react";
+import {useEffect, useRef, useMemo, useCallback} from 'react';
 import {useSearchParams} from "react-router";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {useGlobalState} from "@/contexts/globalState.tsx";
-import {TextType} from "@/utils/settings.ts";
-import {ModeType} from "@/features/editor/components/highlightEditorWindow.tsx";
-import {ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
+import {type TextType} from "@/utils/settings.ts";
+import {type ModeType} from "@/features/editor/components/highlightEditorWindow.tsx";
+import {type ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
 
 type UseLineScrollManagerProps = {
     page: ModeType,
@@ -17,7 +17,7 @@ export default function useLineScroll({page, side, scroll}: UseLineScrollManager
     const setBatchedParams = useBatchedSearchParams()
     const globalState = useGlobalState()
     const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-    const isInit = useRef(globalState.initPage.getIsInitialMount(page))
+    const isInitialMount = globalState.initPage.getIsInitialMount(page)
 
     const origin = useMemo(()=>{
         if(page==='editor')
@@ -30,31 +30,34 @@ export default function useLineScroll({page, side, scroll}: UseLineScrollManager
         return side === 'historical' ? 'hline' : 'bline'
     },[side])
 
-    const lineRef = useRef<number>(
-        isInit.current && searchParams.has(paramKey)
-            ? parseInt(searchParams.get(paramKey)!)
-            : page==='editor' || page==='search'
-                ? globalState.swapPage.getSelectedText(page, side)?.linePos ?? 0
-                : 0
-    )
+    const paramVal = searchParams.get(paramKey)
+    const initialLine = isInitialMount && paramVal
+        ? parseInt(paramVal, 10)
+        : page === 'editor' || page === 'search'
+            ? globalState.getSelectedText(page, side)?.linePos ?? 0
+            : 0
+
+    const lineRef = useRef<number>(initialLine)
 
     useEffect(() => {
         globalState.initPage.consumeInitialMount(page)
-    }, [page, globalState])
+    }, [globalState.initPage, page])
 
     const handleLineScroll = useCallback((line: number) => {
         lineRef.current = line
         
-        if (page === 'editor' && globalState.swapPage.editorRef.current) {
-            if (!globalState.swapPage.editorRef.current.linePos)
-                globalState.swapPage.editorRef.current.linePos = {
-                    historical: 0,
-                    biblical: 0
-            }
-
-            globalState.swapPage.editorRef.current.linePos[side] = line
-        } else if (page === 'search' && globalState.swapPage.searchRef.current)
-            globalState.swapPage.searchRef.current.linePos = line
+        if (page === 'editor') {
+            globalState.setEditor((prev) => ({
+                linePos: {
+                    ...prev.linePos,
+                    historical: prev.linePos?.historical ?? 0,
+                    biblical: prev.linePos?.biblical ?? 0,
+                    [side]: line
+                }
+            }))
+        } else if (page === 'search') {
+            globalState.setSearch({ linePos: line })
+        }
 
         if (debounceTimerRef.current)
             clearTimeout(debounceTimerRef.current)
@@ -82,6 +85,7 @@ export default function useLineScroll({page, side, scroll}: UseLineScrollManager
                 clearTimeout(debounceTimerRef.current)
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return handleLineScroll

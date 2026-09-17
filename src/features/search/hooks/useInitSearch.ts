@@ -1,12 +1,12 @@
 import {useEffect} from "react";
 import {useLocation, useSearchParams} from "react-router";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
-import {TextSchema} from "@/api/indexType.ts";
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {type TextSchema} from "@/api/indexType.ts";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {copyHighlightText} from "@/utils/commonUtil.ts";
-import {selectionStore} from "@/features/editor/store/selectionStore.tsx";
+import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
-import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 
 export default function useInitSearch(
     textHistoricalSelected?: TextSelectedType,
@@ -15,7 +15,7 @@ export default function useInitSearch(
     const [searchParams] = useSearchParams()
     const location = useLocation()
     const globalState = useGlobalState()
-    const setSearchElement = selectionStore(state => state.setSearchElement)
+    const setSearchElement = useSelectionStore(state => state.setSearchElement)
     const setBatchedParams = useBatchedSearchParams()
 
     function initSearchElement(textHistoricalSelected: TextSelectedType, textHistoricalContent: TextSchema, targetSearch: SearchType) {
@@ -57,7 +57,7 @@ export default function useInitSearch(
             }
 
             setSearchElement(searchObj)
-            globalState.swapPage.searchRef.current.confirmedSearch = searchObj
+            globalState.setSearch({ confirmedSearch: searchObj })
         }
     }
 
@@ -98,22 +98,22 @@ export default function useInitSearch(
         sources?: string
     }){
         if(searchParams.has('algos') && !algo){
-            globalState.swapPage.searchRef.current.algoSelected = searchParams.get('algos')?.split(',')
+            globalState.setSearch({ algoSelected: searchParams.get('algos')?.split(',') })
         }
         if(searchParams.has('sources') && !sources){
-            globalState.swapPage.searchRef.current.sourcesSelected = searchParams.get('sources')?.split(',')
+            globalState.setSearch({ sourcesSelected: searchParams.get('sources')?.split(',') })
         }
         if(searchParams.has('q') && !q){
-            globalState.swapPage.searchRef.current.searchQuery = searchParams.get('q') ?? ''
+            globalState.setSearch({ searchQuery: searchParams.get('q') ?? '' })
         }
     }
 
     function readSearchGlobalState(){
-        if(globalState.swapPage.state?.search ) {
-            globalState.swapPage.searchRef.current.search=undefined
-            return globalState.swapPage.state?.search?.search
+        if(globalState.state?.search ) {
+            globalState.setSearch({ search: undefined })
+            return globalState.state?.search?.search
         }
-        return globalState.swapPage.state?.search?.confirmedSearch
+        return globalState.state?.search?.confirmedSearch
     }
 
     // Inizializzazione
@@ -123,7 +123,7 @@ export default function useInitSearch(
         }
 
         const targetSearch: SearchType = readSearchGlobalState()
-        const searchState = globalState.swapPage.state.search
+        const searchState = globalState.state.search
         initSearchElement(textHistoricalSelected, textHistoricalContent,targetSearch)
 
         const q = searchState?.searchQuery

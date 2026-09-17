@@ -1,4 +1,5 @@
-import {RangeHighlight, TextSchema} from "@/api/indexType.ts";
+import {type RangeHighlight, type TextSchema} from "@/api/indexType.ts";
+import {authFetch} from "@/api/authFetch.ts";
 
 export type highlightBiblicalType = {
     color_id:string
@@ -23,9 +24,9 @@ export async function getAllHighlightBiblical(filename: string, path: string) {
         filename,
         path
     })
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/info/getAllHighlightBiblical?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/info/getAllHighlightBiblical?${params}`)
 
     if (!res.ok)
-        throw new Error()
+        throw new Error();
     return await res.json() as highlightTextType[]
 }

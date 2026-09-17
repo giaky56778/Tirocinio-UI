@@ -1,6 +1,8 @@
-import React, {useCallback, useState} from "react";
-import {Dialog} from "@base-ui/react/dialog";
+import {useCallback, useState} from "react";
+import {type Dialog} from "@base-ui/react/dialog";
 import {useGlobalState} from "@/contexts/globalState.tsx";
+import {fetchEventSource} from "@microsoft/fetch-event-source";
+import {authFetch} from "@/api/authFetch.ts";
 
 type SearchFilenameType = {
     filename: string
@@ -8,7 +10,7 @@ type SearchFilenameType = {
 }
 
 type Props={
-    dialogHandle:  React.RefObject<Dialog.Handle<any>>,
+    dialogHandle: Dialog.Handle<never>,
     initialResultFilename?: {
         filename: string
         total_size: number
@@ -29,7 +31,7 @@ export default function useSSESearch({dialogHandle, initialResultFilename}: Prop
 
     const setResultFilename = useCallback((filename: SearchFilenameType) => {
         setResultFilenamePrivate(filename)
-        globalState.swapPage.searchRef.current.resultFilename = filename
+        globalState.setSearch({ resultFilename: filename })
     }, [globalState])
 
     const handleSearch = useCallback(async (
@@ -41,7 +43,7 @@ export default function useSSESearch({dialogHandle, initialResultFilename}: Prop
         function resetState() {
             setMessages([])
             setHasError(false)
-            dialogHandle.current.open(null)
+            dialogHandle.open(null)
             setIsLoading(true)
             setAlgoFinished({})
             setResultFilename({
@@ -58,63 +60,70 @@ export default function useSSESearch({dialogHandle, initialResultFilename}: Prop
             params.append("sources", sourcesSelected.join(""))
             algoSelected.forEach((algo) => params.append("algoList", algo))
 
-            await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/hybridSearch?${params}`, {
+            await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/hybridSearch?${params}`, {
                 method: "GET",
                 headers: {"Content-Type": "application/json"},
             });
 
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             Object.entries(algoSelected).forEach(([_, algo]) => {
                 setAlgoFinished((prev) => ({...prev, [algo]: false}))
             })
 
-            const eventSource = new EventSource(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/hybridSearch?${params}`)
-
+            const ctrl = new AbortController();
             const close=()=>{
-                eventSource.close()
+                ctrl.abort();
                 setIsLoading(false)
             }
 
-            eventSource.addEventListener("search-start", (event) => {
-                try {
-                    setMessages((prev) => [...prev, `Inizio della ricerca in corso, Attendere...`])
-                } catch (error) {
-                    setMessages((prev) => [...prev, event.data, error])
+            await fetchEventSource(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/hybridSearch?${params}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+                signal: ctrl.signal,
+                onmessage(event) {
+                    if (event.event === "search-start") {
+                        try {
+                            setMessages((prev) => [...prev, `Inizio della ricerca in corso, Attendere...`])
+                        } catch (error) {
+                            setMessages((prev) => [...prev, event.data, String(error)])
+                            setHasError(true)
+                        }
+                    } else if (event.event === "search-complete") {
+                        try {
+                            const data = JSON.parse(event.data)
+                            setAlgoFinished((prev) => ({...prev, [data.algo]: true}))
+                            setMessages((prev) => [...prev, `Ricerca completata: ${data.algo}`])
+                        } catch (error) {
+                            setMessages((prev) => [...prev, event.data, String(error)])
+                            setHasError(true)
+                        }
+                    } else if (event.event === "complete") {
+                        try {
+                            const data = JSON.parse(event.data);
+                            setMessages((prev) => [...prev, `Elaborazione completata: ${data.filename}`]);
+                            setResultFilename({
+                                filename:data.filename,
+                                total_size:data.total_results,
+                            })
+                            close()
+                        } catch (error) {
+                            setMessages((prev) => [...prev, event.data, String(error)])
+                            setHasError(true)
+                            close()
+                        }
+                    }
+                },
+                onerror(error) {
+                    setMessages((prev) => [...prev, `Errore nella comunicazione con il server: ${error instanceof Error ? error.message : "Errore sconosciuto"}`])
                     setHasError(true)
-                }
-            })
-
-            eventSource.addEventListener("search-complete", (event) => {
-                try {
-                    const data = JSON.parse(event.data)
-                    setAlgoFinished((prev) => ({...prev, [data.algo]: true}))
-                    setMessages((prev) => [...prev, `Ricerca completata: ${data.algo}`])
-                } catch (error) {
-                    setMessages((prev) => [...prev, event.data, error])
-                    setHasError(true)
-                }
-            })
-
-            eventSource.addEventListener("complete", async (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    setMessages((prev) => [...prev, `Elaborazione completata: ${data.filename}`]);
-                    setResultFilename({
-                        filename:data.filename,
-                        total_size:data.total_results,
-                    })
                     close()
-                } catch (error) {
-                    setMessages((prev) => [...prev, event.data, error])
-                    setHasError(true)
-                    close()
+                    throw error; // throw to stop retrying
                 }
             })
 
-            eventSource.onerror = (error) => {
-                setMessages((prev) => [...prev, `Errore nella comunicazione con il server: ${error instanceof Error ? error.message : "Errore sconosciuto"}`])
-                setHasError(true)
-                close()
-            }
         } catch (error) {
             setMessages((prev) => [...prev, `Errore: ${error instanceof Error ? error.message : "Errore sconosciuto"}`])
             setHasError(true)

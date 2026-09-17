@@ -1,6 +1,6 @@
-import { Dialog } from "@base-ui/react";
+import {Dialog} from "@base-ui/react";
 import UploadTextForm from "@/features/upload-section/components/uploadTextForm.tsx";
-import { TextSelectedType } from "@/hook/useTextNameSelection.ts";
+import type {TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {UploadIcon} from "@/components/ui/icons";
 
 type Props= {
@@ -31,6 +31,6 @@ const ForceUploadDialog = ({ selectText }: Props) => (
             </Dialog.Popup>
         </Dialog.Portal>
     </Dialog.Root>
-);
+)
 
 export default ForceUploadDialog

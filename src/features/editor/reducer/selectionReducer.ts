@@ -1,12 +1,12 @@
-import {TextIndexSchema} from "@/api/indexType.ts";
+import {type TextIndexSchema} from "@/api/indexType.ts";
 import {
     areHighlightMarkersEqual,
     buildHighlightMarkerForLine,
-    HighlightBound,
-    HighlightLine,
+    type HighlightBound,
+    type HighlightLine,
     resolveLineByWordId
 } from "@/features/editor/reducer/wordHighlightReducer.ts";
-import {TextType} from "@/utils/settings.ts";
+import {type TextType} from "@/utils/settings.ts";
 
 export type SelectionRange = {
     start: number
@@ -41,7 +41,7 @@ type SelectionState = {
     selectedRangePerLine: SelectionPerSide;
 }
 
-type SelectionAction = {
+export type SelectionAction = {
     type: "START_SELECTION"
     payload: {
         side: TextType

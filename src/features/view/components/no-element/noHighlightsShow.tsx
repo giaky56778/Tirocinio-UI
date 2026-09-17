@@ -1,6 +1,6 @@
 import {DocumentIcon} from "@/components/ui/icons";
 import {useNavigate} from "react-router";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 
 type Props={
     selected: TextSelectedType

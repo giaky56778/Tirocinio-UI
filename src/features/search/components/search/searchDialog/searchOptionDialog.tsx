@@ -1,12 +1,12 @@
-import {useRef, useState} from "react";
+import {useState} from 'react';
 import {Tooltip} from '@base-ui/react/tooltip';
 import {Dialog} from "@base-ui/react/dialog";
 import toast from "react-hot-toast";
 import AlgorithmOptionItem from "@/features/search/components/search/searchDialog/algorithmButton.tsx";
 import CommonTooltip from "@/features/search/components/search/commonTooltip.tsx";
 import DialogCloseCostume from "@/components/ui/common/dialogCloseCostume.tsx";
-import {CheckIcon, SettingsIcon, InfoIcon, MinusIcon, TriangleExclamationIcon} from "@/components/ui/icons";
-import {SettingsType, TooltipType} from "@/features/search/api/searchApiType.ts";
+import {CheckIcon, InfoIcon, MinusIcon, SettingsIcon, TriangleExclamationIcon} from "@/components/ui/icons";
+import {type SettingsType, type TooltipType} from "@/features/search/api/searchApiType.ts";
 
 export const optionRowClass = 'cursor-pointer flex items-center gap-3 px-3 py-2 border'
 export const optionRowActiveClass = 'border-orange-500 bg-orange-50'
@@ -24,7 +24,7 @@ export default function SearchOptionDialog({settings, tooltip, algoSelected,setA
     const hybridAlgorithm: string[] = Object.values(Object.keys(settings.sentence_transformer_models)).concat(settings.explicit_algorithms)
     const [value, setValue] = useState<string[]>(() => algoSelected.slice())
     const [algoError,setAlgoError]=useState(false)
-    const tooltipRef=useRef(Tooltip.createHandle<{ text: string }>())
+    const tooltipRef = Tooltip.createHandle<{ text: string }>()
 
     const toggleAlgorithm = (key: string) => {
         setValue(value => value.includes(key) ? value.filter(x => x !== key) : [...value, key])
@@ -86,7 +86,7 @@ export default function SearchOptionDialog({settings, tooltip, algoSelected,setA
                             <span className="text-sm flex items-center gap-2">
                                 Seleziona tutto
                                 <Tooltip.Trigger
-                                    handle={tooltipRef.current}
+                                    handle={tooltipRef}
                                     render={<label/>}
                                     payload={{ text: tooltip?.algo?.select_all ?? tooltip?.algo?.all ?? 'Seleziona o deseleziona tutti gli algoritmi' }}
                                 >

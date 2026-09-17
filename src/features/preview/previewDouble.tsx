@@ -5,7 +5,7 @@ import {Suspense} from "react";
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import ErrorPreview from "@/components/layout/errorPreview.tsx";
 import ViewHighlightsSkeleton from "@/features/view/components/skeleton/viewHighlightsSkeleton.tsx";
-import DoubleViewReadOnly from "@/features/search/components/preview/doubleViewReadOnly.tsx";
+import DoubleViewReadOnly from "@/features/preview/preview/doubleViewReadOnly.tsx";
 
 export default function PreviewDouble() {
 

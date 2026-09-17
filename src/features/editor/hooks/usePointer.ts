@@ -1,6 +1,7 @@
-import React, {PointerEvent, RefObject, useCallback, useRef} from "react";
+import {useRef, useCallback} from 'react';
+import type React from "react";
 import {WORD_PROXIMITY_PX} from "@/utils/settings.ts";
-
+import {useSelectionStoreContext} from "@/features/editor/store/useSelectionStore.tsx";
 
 function getClosestWordIdx(event: React.PointerEvent<HTMLDivElement> | PointerEvent, lineDiv: HTMLElement | null): number | null {
     if (!lineDiv)
@@ -31,24 +32,21 @@ type Props={
     onPointerUp: () => void
     selectionUpdate: (wordId: { spanID: number | null; divID: number | null }) => void
     updateHighlight: (wordId: { spanID: number | null; divID: number | null }) => void
-    blockSelectedRef?: RefObject<boolean>
 }
 
 export type PointerType={
-    isBlocked: RefObject<boolean>,
-    handlePointerDown:(event: PointerEvent<HTMLDivElement>)=> void
-    handlePointerMove:(event: PointerEvent<HTMLDivElement>)=> void
+    handlePointerDown:(event: React.PointerEvent<HTMLDivElement>)=> void
+    handlePointerMove:(event: React.PointerEvent<HTMLDivElement>)=> void
     onPointerUp:()=> void
 }
 
 type HtmlElType= HTMLElement | null
 
-export default function usePointer({onPointerDown, onPointerUp, selectionUpdate, updateHighlight, blockSelectedRef: externalBlockRef}:Props):PointerType {
+export default function usePointer({onPointerDown, onPointerUp, selectionUpdate, updateHighlight}:Props):PointerType {
+    const selectionStore = useSelectionStoreContext()
 
-    const internalBlockRef = useRef<boolean>(false)
-    const blockSelectedRef = externalBlockRef ?? internalBlockRef
     const requestRef = useRef<number | null>(null)
-    const latestEventRef = useRef<PointerEvent<HTMLDivElement> | null>(null)
+    const latestEventRef = useRef<React.PointerEvent<HTMLDivElement> | null>(null)
 
     const isPressed=useRef<boolean>(false)
     const lastWordId = useRef<{
@@ -58,7 +56,7 @@ export default function usePointer({onPointerDown, onPointerUp, selectionUpdate,
     } |null>(null)
     const lastHandleSpanId = useRef<number | null>(null)
 
-    function findSpanID (event: PointerEvent<HTMLDivElement>) {
+    function findSpanID (event: React.PointerEvent<HTMLDivElement>) {
         const elements = document.elementsFromPoint(event.clientX, event.clientY)
         let divID=-1
         let spanFound=-1
@@ -92,8 +90,8 @@ export default function usePointer({onPointerDown, onPointerUp, selectionUpdate,
         }
     }
 
-    function handlePointerDown (event: PointerEvent<HTMLDivElement>) {
-        if(blockSelectedRef.current)
+    function handlePointerDown (event: React.PointerEvent<HTMLDivElement>) {
+        if(selectionStore.getState().isSelectionBlocked)
             return
         if(event.buttons===1){ // 1 = mouse sinistro
             isPressed.current=true
@@ -108,37 +106,37 @@ export default function usePointer({onPointerDown, onPointerUp, selectionUpdate,
         onPointerUp()
     }
 
-    const handlePointerMove = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    const handlePointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
         latestEventRef.current = event
 
         if (requestRef.current !== null)
             return
 
         requestRef.current = requestAnimationFrame(() => { 
-            const ev = latestEventRef.current
-            if (!ev) {
+            const e = latestEventRef.current
+            if (!e) {
                 requestRef.current = null
                 return
             }
 
             if(isPressed.current){
-                if(blockSelectedRef.current) {
+                if(selectionStore.getState().isSelectionBlocked) {
                     requestRef.current = null
                     return
                 }
 
-                const wordId = findSpanID(ev)
+                const wordId = findSpanID(e)
 
                 if (wordId.spanID !== null && (lastWordId.current?.spanID !== wordId.spanID || lastWordId.current?.divID !== wordId.divID)) {
                     lastWordId.current = wordId
                     selectionUpdate(wordId)
                 }
             }else{
-                if(blockSelectedRef.current) {
+                if(selectionStore.getState().isSelectionBlocked) {
                     requestRef.current = null
                     return
                 }
-                const wordId = findSpanID(ev)
+                const wordId = findSpanID(e)
                 if (wordId.spanID !== null && lastHandleSpanId.current !== wordId.spanID) {
                     lastHandleSpanId.current = wordId.spanID
                     updateHighlight(wordId)
@@ -147,10 +145,9 @@ export default function usePointer({onPointerDown, onPointerUp, selectionUpdate,
             
             requestRef.current = null
         })
-    }, [selectionUpdate, updateHighlight, blockSelectedRef])
+    }, [selectionUpdate, updateHighlight, selectionStore])
 
     return {
-        isBlocked: blockSelectedRef,
         handlePointerDown,
         handlePointerMove,
         onPointerUp:reset

@@ -1,5 +1,5 @@
-import {TextBundle, TextIndexSchema, TextLineItem, TextSchema, Word} from "@/api/indexType.ts";
-import {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
+import type {TextBundle, TextIndexSchema, TextLineItem, TextSchema, Word} from "@/api/indexType.ts";
+import type {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
 import {LIMIT_PREVIEW_WORD} from "@/utils/settings.ts";
 
 export type WordGroup = {
@@ -143,8 +143,11 @@ export function normalizeChapter(chapter: TextBundle['chapter']): TextBundle['ch
 }
 
 export function findLineIdByWordId({text,wordId}:{text:TextIndexSchema,wordId:number}):number | null{
-    return Number(Object.keys(text.content).find(key => {
+    const res= Number(Object.keys(text.content).find(key => {
         const line = text.content[Number(key)]
         return line.start <= wordId && line.end > wordId
-    })) ?? null
+    }))
+    if(res)
+        return res
+    return null
 }

@@ -1,16 +1,16 @@
 import {Suspense, useEffect} from "react";
-import {highlightStore, HighlightStoreProvider} from "@/features/editor/store/highlightStore.tsx";
-import {SelectionStoreProvider} from "@/features/editor/store/selectionStore.tsx";
-import {SearchElementType} from "@/features/editor/reducer/selectionReducer.ts";
-import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
+import {useHighlightStore, HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
+import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
+import type {SearchElementType} from "@/features/editor/reducer/selectionReducer.ts";
+import type {EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import ViewHighlightsSkeleton from "@/features/view/components/skeleton/viewHighlightsSkeleton.tsx";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
-import {HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
+import type {HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
 import useSyncHighlights from "@/features/double-editor/hook/useSyncHighlights.ts";
 import HighlightEditorWindow from "@/features/editor/components/highlightEditorWindow.tsx";
 import {LINE_EXTRACT_LOWER} from "@/utils/settings.ts";
-import {RangeHighlight} from "@/api/indexType.ts";
-import {UrlPath} from "@/features/editor/lib/utils.ts";
+import type {RangeHighlight} from "@/api/indexType.ts";
+import type {UrlPath} from "@/features/editor/lib/utils.ts";
 import {useStaticTextRead} from "@/features/editor/hooks/useStaticTextRead.ts";
 
 type Props = {
@@ -78,16 +78,16 @@ function MiniEditorPageContent({bLine, bSearch, h, b_range, h_range, historicalT
         return result
     })()
 
-    const mergedHighlights:Record<string,HighlightDouble> = previewHighlight ? {
-        ...staticText.highlightWordsQuery.data,
-        ...previewHighlight
-    } : {...staticText.highlightWordsQuery.data}
-
-    const initStore = highlightStore(state => state.init)
+    const initStore = useHighlightStore(state => state.init)
 
     useEffect(() => {
+        const mergedHighlights:Record<string,HighlightDouble> = previewHighlight ? {
+            ...staticText.highlightWordsQuery.data,
+            ...previewHighlight
+        } : {...staticText.highlightWordsQuery.data}
+        
         initStore(mergedHighlights, historicalText.index, staticText.biblicalTextQuery.data.index)
-    }, [mergedHighlights, historicalText.index, staticText.biblicalTextQuery.data.index])
+    }, [historicalText.index, staticText.biblicalTextQuery.data.index, initStore, previewHighlight, staticText.highlightWordsQuery.data])
 
     const globalHighlight = useSyncHighlights()
 

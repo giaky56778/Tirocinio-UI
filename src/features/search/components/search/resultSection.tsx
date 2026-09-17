@@ -1,10 +1,10 @@
-import {memo, useRef} from "react";
+import {memo} from 'react';
 import {Switch} from "@base-ui/react/switch";
 import {Tooltip} from "@base-ui/react/tooltip";
 import CommonTooltip from "@/features/search/components/search/commonTooltip.tsx";
-import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import {DownloadIcon} from "@/components/ui/icons";
-import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
+import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import ResultsCardPreviewSkeleton from "@/features/search/components/skeleton/resultCardPreviewSkeleton.tsx";
 import ResultOutput from "@/features/search/components/search/resultOutput.tsx";
 import useSearchResults from "@/features/search/hooks/useSearchResults.ts";
@@ -24,7 +24,7 @@ type Props = {
 
 function ShowResultSearch({filename, historicalText, confirmedSearch, isLoading}: Props) {
 
-    const tooltipRef = useRef(Tooltip.createHandle<{text:string}>())
+    const tooltipRef = Tooltip.createHandle<{text:string}>()
     const {
         hasSearch, isDoubleMode,
         confirmedSearchKey,
@@ -52,7 +52,7 @@ function ShowResultSearch({filename, historicalText, confirmedSearch, isLoading}
                     </button>
                     <div className="flex justify-end">
                         <Tooltip.Trigger
-                            handle={tooltipRef.current}
+                            handle={tooltipRef}
                             render={<label/>}
                             className={`inline-flex items-center gap-2 text-xs font-medium text-gray-600 select-none bg-gray-50 border border-gray-200 rounded-md px-2.5 py-1.5 transition-colors duration-100 
                                         ${!confirmedSearch ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-gray-100'}
@@ -68,11 +68,11 @@ function ShowResultSearch({filename, historicalText, confirmedSearch, isLoading}
                                     key: confirmedSearchKey,
                                     value: checked
                                 })}
-                                className={`flex h-4.5 w-8 shrink-0 border border-neutral-400 data-checked:border-emerald-600 data-checked:bg-emerald-600 p-0.5 rounded-full transition-colors duration-150 ease-[ease] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 
+                                className={`flex h-4.5 w-8 shrink-0 border border-neutral-400 data-checked:bg-emerald-600 p-0.5 rounded-full transition-colors duration-150 ease-[ease] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 
                                            ${!confirmedSearch ? 'cursor-not-allowed' : ''}
                                `}
                             >
-                                <Switch.Thumb className="size-3 bg-neutral-400 data-checked:bg-white rounded-full transition-[translate,background-color] duration-150 ease-[ease] data-checked:translate-x-3.5"/>
+                                <Switch.Thumb className="size-3 bg-neutral-400 rounded-full transition-[translate,background-color] duration-150 ease-[ease] data-checked:translate-x-3.5"/>
                             </Switch.Root>
                             Solo validi
                         </Tooltip.Trigger>

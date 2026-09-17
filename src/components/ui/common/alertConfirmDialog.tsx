@@ -1,11 +1,11 @@
-import {ReactNode, RefObject} from "react";
+import type {ReactNode} from "react";
 import {AlertDialog} from "@base-ui/react/alert-dialog";
 import {TriangleExclamationIcon} from "@/components/ui/icons";
 import DialogCloseCostume from "@/components/ui/common/dialogCloseCostume.tsx";
-import {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
+import type {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
 
 type Props = {
-    handle: RefObject<AlertDialog.Handle<AlertModifyPayloadType>>,
+    handle: AlertDialog.Handle<AlertModifyPayloadType>,
     title: ReactNode,
     description: ReactNode,
     confirmText: string,
@@ -22,15 +22,13 @@ const AlertConfirmDialog = ({
 }: Props) => (
 
     <AlertDialog.Root
-        handle={handle.current}
+        handle={handle}
         onOpenChange={onOpenChange}
     >
         {({payload}) => (
             <AlertDialog.Portal>
-                <AlertDialog.Backdrop
-                    className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity data-ending-style:opacity-0 data-starting-style:opacity-0"/>
-                <AlertDialog.Popup
-                    className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+                <AlertDialog.Backdrop className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity data-ending-style:opacity-0"/>
+                <AlertDialog.Popup className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden">
                     <DialogCloseCostume/>
                     <div className="flex items-start gap-4 px-6 pt-6 pb-4">
                         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-800 shrink-0">

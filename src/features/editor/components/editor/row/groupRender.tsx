@@ -1,13 +1,13 @@
 import React, {memo} from "react";
-import {WordGroup} from "@/utils/commonUtil.ts";
-import {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
-import {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
-import {CostumeContextType} from "@/features/editor/components/editor/contextMenuCustom.tsx";
-import {Popover} from "@base-ui/react/popover";
-import {colorMap, TextType} from "@/utils/settings.ts";
+import type {WordGroup} from "@/utils/commonUtil.ts";
+import type {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
+import type {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
+import type {CostumeContextType} from "@/features/editor/components/editor/contextMenuCustom.tsx";
+import {type Popover} from "@base-ui/react/popover";
+import {colorMap, type TextType} from "@/utils/settings.ts";
 import SingleWord from "@/features/editor/components/editor/row/singleWord.tsx";
 import ColoredGroup from "@/features/editor/components/editor/row/coloredGroup.tsx";
-import {resolveColorClass} from "@/features/editor/lib/utils.ts";
+import {useResolveColorClass} from "@/features/editor/lib/utils.ts";
 
 const BOX_DECORATION_CLONE_STYLE = {
     boxDecorationBreak: 'clone',
@@ -34,7 +34,7 @@ type GroupRendererProps = {
     highlightState: HighlightStateType,
     colors: Record<string, string>,
     contextMenu: CostumeContextType,
-    previewCardHandler?: React.RefObject<Popover.Handle<string>>,
+    previewCardHandler?: Popover.Handle<string>,
     onClearSelection:()=> void,
     toolBarVisible: boolean,
     blinkHighlightId: string | null
@@ -47,7 +47,7 @@ function GroupRenderer({group, side, lineIndex, highlightBounds, highlightState,
     const isSearchHighlighted = !!group.searchColorId && !isColored
     const showHandles = highlightState.editMode && highlightState.highlightToModify === group.highlightId
 
-    const colorClass = resolveColorClass(group, colors)
+    const colorClass = useResolveColorClass(group, colors)
 
     const wordElements = group.words.map((w) => (
         <SingleWord

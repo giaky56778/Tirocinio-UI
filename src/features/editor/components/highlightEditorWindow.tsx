@@ -1,17 +1,17 @@
-import {RefObject, useMemo, useRef} from "react";
+import {useMemo} from 'react';
 import {useLocation} from "react-router";
-import {ScrollToIndexAlign, VList} from "virtua";
+import {type ScrollToIndexAlign, VList} from "virtua";
 import {Dialog} from "@base-ui/react/dialog";
-import {AlertDialog} from "@base-ui/react/alert-dialog";
-import {Popover} from "@base-ui/react/popover";
+import {type AlertDialog} from "@base-ui/react/alert-dialog";
+import {type Popover} from "@base-ui/react/popover";
 import {ContextMenu} from "@base-ui/react/context-menu";
 import {useEditorState} from "@/features/editor/hooks/useEditorState.ts";
 import useEditorUI from "@/features/editor/hooks/useEditorUI.ts";
 import useCustomSelection from "@/features/editor/hooks/useCustomSelection.ts";
 import usePointer from "@/features/editor/hooks/usePointer.ts";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
-import {ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
-import {HighlightBound, HighlightLine} from "@/features/editor/reducer/wordHighlightReducer.ts";
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {type ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
+import {type HighlightBound, type HighlightLine} from "@/features/editor/reducer/wordHighlightReducer.ts";
 import HighlightRow from "@/features/editor/components/editor/row/highlightRow.tsx";
 import ToolBar from "@/features/editor/components/editor/toolBar.tsx";
 import ComboboxTextName from "@/features/editor/components/editor/comboboxTextName.tsx";
@@ -19,14 +19,15 @@ import IndexTextPosition from "@/features/editor/components/editor/indexTextPosi
 import UploadTextForm from "@/features/upload-section/components/uploadTextForm.tsx";
 import {UploadIcon} from "@/components/ui/icons";
 import ContextMenuCostume from "@/features/editor/components/editor/contextMenuCustom.tsx";
-import {TextType} from "@/utils/settings.ts";
-import {ChapterIndexSchema, TextIndexSchema, TextListSchema, TextSchema} from "@/api/indexType.ts";
-import {SyncHighlightsType} from "@/features/double-editor/hook/useSyncHighlights.ts";
+import type {TextType} from "@/utils/settings.ts";
+import type {ChapterIndexSchema, TextIndexSchema, TextListSchema, TextSchema} from "@/api/indexType.ts";
+import type {SyncHighlightsType} from "@/features/double-editor/hook/useSyncHighlights.ts";
 import DialogCloseCostume from "@/components/ui/common/dialogCloseCostume.tsx";
-import {TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
-import {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
+import type {TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
+import type {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
 import useVList from "@/features/editor/hooks/useVList.ts";
 import useEditorContextMenu from "@/features/editor/hooks/useEditorContextMenu.ts";
+import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 
 export type ModeType = 'readonly' | 'search' | 'editor' | 'doubleReadonly'
 
@@ -57,11 +58,10 @@ type BaseProps = {
     searchHighlight?: SearchHighlightType,
     chapterIndex?: ChapterIndexSchema,
     textOp?: TextOperationType,
-    previewCardHandler?: RefObject<Popover.Handle<string>>,
-    blockSelectedRef?: RefObject<boolean>,
+    previewCardHandler?: Popover.Handle<string>,
     globalHighlight?: SyncHighlightsType,
     offset?: number,
-    alertDeleteHandler?: RefObject<AlertDialog.Handle<AlertModifyPayloadType>>
+    alertDeleteHandler?: AlertDialog.Handle<AlertModifyPayloadType>
 }
 
 type Props = BaseProps & (
@@ -81,9 +81,8 @@ type Props = BaseProps & (
         mode: 'editor'
         textOp: TextOperationType
         globalHighlight: SyncHighlightsType
-        previewCardHandler: RefObject<Popover.Handle<string>>
-        blockSelectedRef: RefObject<boolean>
-        alertDeleteHandler: RefObject<AlertDialog.Handle<AlertModifyPayloadType>>
+        previewCardHandler: Popover.Handle<string>
+        alertDeleteHandler: AlertDialog.Handle<AlertModifyPayloadType>
     }
 )
 
@@ -125,7 +124,6 @@ export default function HighlightEditorWindow({
     selectedText,
     side,
     previewCardHandler,
-    blockSelectedRef,
     searchHighlight = null,
     chapterIndex = DEFAULT_CHAPTER_INDEX,
     textOp = DEFAULT_TEXT_OP,
@@ -136,10 +134,11 @@ export default function HighlightEditorWindow({
 }: Props) {
 
     const location = useLocation()
-    const uploadDialog = useRef(Dialog.createHandle())
+    const uploadDialog = Dialog.createHandle<never>()
 
-    const vList = useVList({ mode, side, scroll })
+    const { ref: vListRef, visibleRange, findRange } = useVList({ mode, side, scroll })
     const contextMenu = useEditorContextMenu()
+    const setSelectionBlocked = useSelectionStore(s => s.setSelectionBlocked)
 
     const {
         stateInteractive,
@@ -167,8 +166,7 @@ export default function HighlightEditorWindow({
             const press = whichIsPressed()
             if (press != null && wordId.spanID != null)
                 updateHighlightBound(wordId.spanID, press, text.index)
-        },
-        blockSelectedRef
+        }
     })
 
     const highlightState = useMemo(() => ({
@@ -193,11 +191,10 @@ export default function HighlightEditorWindow({
                     textNames={text.listOfText}
                     textNameSelect={selectedText}
                     textOp={textOp}
-                    blockSelectedRef={pointer.isBlocked}
                 />
                 {side === "historical" && ((location.pathname === '/search' && mode === 'search') || location.pathname === '/') && (
                     <Dialog.Trigger
-                        handle={uploadDialog.current}
+                        handle={uploadDialog}
                         className="border border-gray-200 absolute bottom-2 right-4 inline-flex items-center gap-2 bg-white p-2 rounded-md text-sm font-medium  hover:bg-gray-100 cursor-pointer"
                     >
                         <UploadIcon className="size-4"/>
@@ -207,13 +204,12 @@ export default function HighlightEditorWindow({
             </header>
             <IndexTextPosition
                 chapterIndex={chapterIndex}
-                visibleRange={vList.visibleRange}
+                visibleRange={visibleRange}
                 scroll={scroll?.selfScroll}
-                blockSelectedRef={pointer.isBlocked}
             />
             <ContextMenu.Root
                 onOpenChangeComplete={(isOpen) => {
-                    pointer.isBlocked.current = isOpen
+                    setSelectionBlocked(isOpen)
                     if (!isOpen)
                         contextMenu.toggleMenuType("default")
                 }}
@@ -223,15 +219,15 @@ export default function HighlightEditorWindow({
                         data-editor-side={side}
                         className="relative flex-1 h-full min-h-0"
                         onContextMenuCapture={() => {
-                            pointer.isBlocked.current = true
+                            setSelectionBlocked(true)
                             contextMenu.toggleMenuType("default")
                         }}
                     >
                         <VList
                             className={'select-none h-full w-full'}
                             data={text.text}
-                            ref={vList.ref}
-                            onScroll={vList.findRange}
+                            ref={vListRef}
+                            onScroll={findRange}
                             style={{
                                 overflowY: `${mode === 'readonly' || mode === 'doubleReadonly' ? 'hidden' : 'auto'}`
                             }}
@@ -298,7 +294,7 @@ export default function HighlightEditorWindow({
             </ContextMenu.Root>
             <ToolBar toolBar={toolBar}/>
             {side === "historical" && (
-                <Dialog.Root handle={uploadDialog.current}>
+                <Dialog.Root handle={uploadDialog}>
                     <Dialog.Portal>
                         <Dialog.Backdrop
                             className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-200 data-ending-style:opacity-0"/>

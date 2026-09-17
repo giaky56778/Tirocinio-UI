@@ -1,13 +1,12 @@
-import {RefObject} from "react";
 import {VList} from "virtua";
-import {Tooltip} from "@base-ui/react/tooltip";
-import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
-import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
+import {type Tooltip} from "@base-ui/react/tooltip";
+import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import LoadMore from "@/features/search/components/search/loadMore.tsx";
 import ResultCard from "@/features/search/components/search/resultCard.tsx";
-import {AddNewHighlightsType} from "@/features/search/hooks/useApiSearch.ts";
-import {SearchResultQueryType} from "@/features/search/hooks/useSearchResults.ts";
-import {SingleSearchType} from "@/features/search/api/searchApiType.ts";
+import {type AddNewHighlightsType} from "@/features/search/hooks/useApiSearch.ts";
+import {type SearchResultQueryType} from "@/features/search/hooks/useSearchResults.ts";
+import {type SingleSearchType} from "@/features/search/api/searchApiType.ts";
 
 export const RESULT_CARD_CONTAINER_CLASS = "mb-2.5 ml-4 mr-2 rounded-lg border bg-white"
 export const RESULT_CARD_HEADER_CLASS = "flex items-center justify-between px-3 py-2 rounded-t-lg border-b bg-orange-50 border-orange-100"
@@ -30,25 +29,25 @@ type ResultOutputProps = {
     historicalText: EditorTextType
     lineHistorical: number
     accumulatedResultsLength: number
-    tooltipRef: RefObject<Tooltip.Handle<{ text: string }>>
+    tooltipRef: Tooltip.Handle<{ text: string }>
     addNewHighlight: AddNewHighlightObj
     confirmedSearch?: SearchType
     searchResultQuery: SearchResultQueryType
 }
 
 export default function ResultOutput({
-                                         displayedResults,
-                                         filterValid,
-                                         isDoubleMode,
-                                         hasSearch,
-                                         historicalText,
-                                         lineHistorical,
-                                         accumulatedResultsLength,
-                                         tooltipRef,
-                                         confirmedSearch,
-                                         addNewHighlight,
-                                         searchResultQuery
-                                     }: ResultOutputProps) {
+    displayedResults,
+    filterValid,
+    isDoubleMode,
+    hasSearch,
+    historicalText,
+    lineHistorical,
+    accumulatedResultsLength,
+    tooltipRef,
+    confirmedSearch,
+    addNewHighlight,
+    searchResultQuery
+}: ResultOutputProps) {
 
     if (!hasSearch)
         return (

@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 
 export default function usePage(setSelected: (selected: TextSelectedType) => void) {
     const [searchParams] = useSearchParams()
@@ -10,8 +10,8 @@ export default function usePage(setSelected: (selected: TextSelectedType) => voi
     const setBatchedParams = useBatchedSearchParams()
 
     const [showPage, privateSetShowPage] = useState(() => {
-        if(globalState.swapPage.state.view?.page !== undefined)
-            return globalState.swapPage.state.view?.page
+        if(globalState.state.view?.page !== undefined)
+            return globalState.state.view?.page
         const pageParam = searchParams.get('page')
         if (pageParam !== null) {
             const parsedPage = parseInt(pageParam)
@@ -24,13 +24,13 @@ export default function usePage(setSelected: (selected: TextSelectedType) => voi
 
     function setShowPage(page: number) {
         privateSetShowPage(page)
-        globalState.swapPage.viewRef.current.page = page
+        globalState.setView({ page })
         setBatchedParams({page: String(page)}, '/viewHighlights')
     }
 
     useEffect(() => {
-        if(globalState.swapPage.state.view?.page !== undefined){
-            setBatchedParams({page: String(globalState.swapPage.state.view?.page)}, '/viewHighlights')
+        if(globalState.state.view?.page !== undefined){
+            setBatchedParams({page: String(globalState.state.view?.page)}, '/viewHighlights')
             return
         }
         if(!searchParams.has('page')){

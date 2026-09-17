@@ -1,5 +1,5 @@
-import {createContext, useContext, useRef, useCallback, ReactNode, useEffect} from "react";
-import { useSearchParams } from "react-router"
+import {useEffect, useRef, useCallback, createContext, type ReactNode, useContext} from 'react';
+import {useSearchParams} from "react-router"
 
 type SetParamsFunction = (
     params: Record<string, string | undefined>,
@@ -10,22 +10,17 @@ type SetParamsFunction = (
 const ParamsContext = createContext<SetParamsFunction | null>(null);
 
 export default function ParamsProvider({ children }: { children: ReactNode }) {
-    const [_, setSearchParams] = useSearchParams()
-
-    const locationRef = useRef(location.pathname)
-    useEffect(() => {
-        locationRef.current = location.pathname
-    }, [location.pathname])
+    const [, setSearchParams] = useSearchParams()
 
     const pendingParams = useRef<Record<string, string | undefined>>({})
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-    const updateParams = useCallback((newParams: Record<string, string | undefined>, origin?: '/' | '/search' | '/viewHighlights', _source?: string) => {
+    const updateParams = useCallback((newParams: Record<string, string | undefined>, origin?: '/' | '/search' | '/viewHighlights') => {
         pendingParams.current = { ...pendingParams.current, ...newParams }
 
         if (!timeoutRef.current) {
             timeoutRef.current = setTimeout(() => {
-                if (origin && locationRef.current !== origin) {
+                if (origin && window.location.pathname !== origin) {
                     pendingParams.current = {}
                     timeoutRef.current = null
                     return

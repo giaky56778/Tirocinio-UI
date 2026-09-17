@@ -3,7 +3,7 @@ import {Combobox} from "@base-ui/react/combobox";
 import {Tooltip} from "@base-ui/react/tooltip";
 import {CheckIcon, ChevronUpDownIcon, InfoIcon, MinusIcon, XIcon} from "@/components/ui/icons";
 import CommonTooltip from "@/features/search/components/search/commonTooltip.tsx";
-import {SettingsType} from "@/features/search/api/searchApiType.ts";
+import type {SettingsType} from "@/features/search/api/searchApiType.ts";
 
 type Props = {
     sourcesSelected: string[]
@@ -21,7 +21,7 @@ export default function ComboboxTextSearch({sourcesSelected,setSourcesSelected,s
     const allSourceIds = Object.keys(settings.sources)
     const isAllSelected = allSourceIds.length > 0 && sourcesSelected.length === allSourceIds.length
     const isSomeSelected = sourcesSelected.length > 0 && !isAllSelected
-    const tooltipRef=React.useRef(Tooltip.createHandle<{text: string}>())
+    const tooltipRef=Tooltip.createHandle<{text: string}>()
 
     function handleToggleSelectAll(){
         if (isAllSelected)
@@ -36,7 +36,7 @@ export default function ComboboxTextSearch({sourcesSelected,setSourcesSelected,s
                 <span className="text-sm font-medium text-gray-600">Sorgenti:</span>
                 <Tooltip.Provider>
                     <Tooltip.Trigger
-                        handle={tooltipRef.current}
+                        handle={tooltipRef}
                         type="button"
                         className="flex size-5 items-center justify-center border-0 bg-transparent text-neutral-500 hover:text-neutral-700 cursor-pointer"
                         aria-label="Informazioni sorgenti"

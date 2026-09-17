@@ -1,6 +1,7 @@
-import {TextBundle, TextListSchema,} from "@/api/indexType.ts";
+import type {MeSchema, TextBundle, TextListSchema,} from "@/api/indexType.ts";
 import {normalizeChapter} from "@/utils/commonUtil.ts";
-import {TextType} from "@/utils/settings.ts";
+import type {TextType} from "@/utils/settings.ts";
+import {authFetch} from "@/api/authFetch.ts";
 
 export type TextQuery={
     id?: number
@@ -25,7 +26,7 @@ async function readText({textType,id, path, filename}:ExtendedTextQuery){
         throw new Error('Invalid parameters: either id or (path and filename) must be provided')
 
     const endpoint = textType === "historical" ? "getHistoricalText" : "getBiblicalText"
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/${endpoint}/?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/${endpoint}/?${params}`)
 
     if (!res.ok)
         throw new Error('File non trovato')
@@ -50,7 +51,7 @@ export async function readBiblicalText({id, path, filename} :TextQuery) {
 
 export async function getTextNameBiblical() {
     console.log(('getTextNameBiblical'))
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getBiblicalTextNames`);
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getBiblicalTextNames`);
     if (!res.ok)
         throw new Error('File non trovato')
     return await res.json() as TextListSchema
@@ -58,7 +59,7 @@ export async function getTextNameBiblical() {
 
 export async function getTextNameHistorical() {
     console.log(('getTextNameHistorical'))
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getHistoricalTextNames`);
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getHistoricalTextNames`);
     if (!res.ok)
         throw new Error('File non trovato')
     console.log('ok getTextNameHistorical')
@@ -67,9 +68,63 @@ export async function getTextNameHistorical() {
 
 export async function deleteText(id:number){
     const params = new URLSearchParams({id: String(id)})
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/deleteHistoricalText?${params}`, {
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/deleteHistoricalText?${params}`, {
         method: 'DELETE',
     })
     if (!res.ok)
         throw new Error(`Errore durante l'eliminazione del testo`)
+}
+
+export async function login ({ username, password }: { username: string; password: string }) {
+
+    const body = new URLSearchParams();
+    body.append("username", username);
+    body.append("password", password);
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/login`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: body,
+        credentials: "include"
+    })
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Login fallito. Credenziali non valide.")
+    }
+    return await res.json()
+}
+
+export async function me(){
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/me`)
+    if (!res.ok)
+        throw new Error(`Errore durante il recupero delle informazioni utente`)
+    return await res.json() as MeSchema
+}
+
+export async function logout(){
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/logout`, {
+        method: 'POST',
+    })
+    if (!res.ok)
+        throw new Error(`Errore durante il logout`)
+}
+
+export async function pswChange({oldPassword, newPassword}:{oldPassword:string, newPassword:string}){
+    const body = new URLSearchParams()
+    body.append("old_password", oldPassword)
+    body.append("new_password", newPassword)
+
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/changePassword`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: body,
+    })
+
+    if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.detail || "Errore durante il cambio password.")
+    }
 }

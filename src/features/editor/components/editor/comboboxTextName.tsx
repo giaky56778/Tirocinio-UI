@@ -1,24 +1,25 @@
-import {RefObject, useRef, memo} from "react";
+import {memo} from 'react';
 import {AlertDialog} from "@base-ui/react/alert-dialog";
 import {Combobox} from '@base-ui/react/combobox';
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import type {TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {CheckIcon, ChevronUpDownIcon, XIcon} from "@/components/ui/icons";
 import AlertDeleteText from "@/features/editor/components/editor/alertDeleteText.tsx";
 import ComboboxClearButton from "@/components/ui/common/comboboxClearButton.tsx";
-import {ContentItemText, TextListSchema} from "@/api/indexType.ts";
-import {TextType} from "@/utils/settings.ts";
-import {TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
+import type {ContentItemText, TextListSchema} from "@/api/indexType.ts";
+import type {TextType} from "@/utils/settings.ts";
+import type {TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
+import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 
 type Props ={
     textNames: TextListSchema
     textNameSelect: TextSelectedType
     textOp:TextOperationType
-    blockSelectedRef?: RefObject<boolean>
     side: TextType
 }
 
-function ComboboxTextName({textNames, textNameSelect, textOp, blockSelectedRef, side}: Props) {
-    const alert=useRef(AlertDialog.createHandle<{id: number}>())
+function ComboboxTextName({textNames, textNameSelect, textOp, side}: Props) {
+    const alert = AlertDialog.createHandle<{id: number}>()
+    const setSelectionBlocked = useSelectionStore(s => s.setSelectionBlocked)
 
     return(
         <div className="w-75 max-w-full">
@@ -37,8 +38,7 @@ function ComboboxTextName({textNames, textNameSelect, textOp, blockSelectedRef, 
                     }
                 }}
                 onOpenChange={(isOpen) => {
-                    if (blockSelectedRef)
-                        blockSelectedRef.current = isOpen
+                    setSelectionBlocked(isOpen)
                 }}
             >
                 <Combobox.Label className="sr-only">Seleziona testo</Combobox.Label>
@@ -96,7 +96,7 @@ function ComboboxTextName({textNames, textNameSelect, textOp, blockSelectedRef, 
                                                     <span className="col-start-2 min-w-0 truncate">{item.filename}</span>
                                                     {side==='historical' && (
                                                         <AlertDialog.Trigger
-                                                            handle={alert.current}
+                                                            handle={alert}
                                                             onClick={(e) => {
                                                                 e.stopPropagation()
                                                             }}

@@ -1,8 +1,8 @@
-import {useNavigate} from "react-router";
-import toast, {Toast} from "react-hot-toast";
+import {router} from "@/utils/router.tsx";
+import toast, {type Toast} from "react-hot-toast";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
-import {AddNewHighlightsType} from "@/features/search/hooks/useApiSearch.ts";
+import {type AddNewHighlightsType} from "@/features/search/hooks/useApiSearch.ts";
 
 interface ToastViewHighlightAddProps {
     toastParam: Toast
@@ -11,7 +11,6 @@ interface ToastViewHighlightAddProps {
 
 export default function ToastViewHighlightAdd({ toastParam, value }: ToastViewHighlightAddProps) {
     const t=toastParam
-    const navigate = useNavigate()
     const globalState= useGlobalState()
 
     return (
@@ -36,7 +35,7 @@ export default function ToastViewHighlightAdd({ toastParam, value }: ToastViewHi
                     onClick={() => {
                         toast.dismiss("toastViewHighlightAdd")
 
-                        globalState.swapPage.editorRef.current= {
+                        globalState.setEditor({
                             historical: {
                                 path: value.forToast.b_path,
                                 items: {
@@ -55,9 +54,9 @@ export default function ToastViewHighlightAdd({ toastParam, value }: ToastViewHi
                                 historical: value.forToast.line_start_h-OFFSET_SCROLL,
                                 biblical: value.newHighlight.line_start_b-OFFSET_SCROLL
                             }
-                        }
+                        })
 
-                        navigate(`/`)
+                        void router.navigate(`/`)
                     }}
                     className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors cursor-pointer"
                 >

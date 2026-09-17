@@ -2,13 +2,13 @@ import {Suspense, useEffect} from "react";
 import DoubleEditorSkeleton from "@/features/editor/components/skeleton/doubleEditorSkeleton.tsx";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
 import {useStaticBiblicalTextRead} from "@/features/editor/hooks/useTextRead.ts";
-import {highlightStore, HighlightStoreProvider} from "@/features/editor/store/highlightStore.tsx";
-import {SelectionStoreProvider} from "@/features/editor/store/selectionStore.tsx";
-import {HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
+import {useHighlightStore, HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
+import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
+import {type HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
 import useSyncHighlights from "@/features/double-editor/hook/useSyncHighlights.ts";
 import HighlightEditorWindow from "@/features/editor/components/highlightEditorWindow.tsx";
 import AccuracyError from "@/components/ui/common/accuracyError.tsx";
-import {createTextConfig, UrlPath} from "@/features/editor/lib/utils.ts";
+import {createTextConfig, type UrlPath} from "@/features/editor/lib/utils.ts";
 
 type Props = {
     urn: string
@@ -39,7 +39,7 @@ function MiniSingleEditorPageContent({urn, start, end}: Props) {
     }
 
     const scrollBiblicalHook = useScrollDynamic()
-    const initStore = highlightStore(state => state.init)
+    const initStore = useHighlightStore(state => state.init)
     const {text, id} = useStaticBiblicalTextRead(urlBiblical, line)
 
     const {
@@ -48,20 +48,19 @@ function MiniSingleEditorPageContent({urn, start, end}: Props) {
         range: hr
     } = createTextConfig(urlBiblical, id!, text.data, start, end, line)
 
-    const previewHighlight: Record<string, HighlightDouble> = {
-        "preview-highlight": {
-            color: "1",
-            historical: {
-                startWord: 0,
-                endWord: 0
-            },
-            biblical: hr
-        }
-    }
-
     useEffect(() => {
+        const previewHighlight: Record<string, HighlightDouble> = {
+            "preview-highlight": {
+                color: "1",
+                historical: {
+                    startWord: 0,
+                    endWord: 0
+                },
+                biblical: hr
+            }
+        }
         initStore(previewHighlight, null, text.data.index)
-    }, [previewHighlight, text.data.index])
+    }, [hr, initStore, text.data.index])
 
     const globalHighlight = useSyncHighlights()
     const scroll = {selfScroll: scrollBiblicalHook}

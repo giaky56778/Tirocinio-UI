@@ -1,14 +1,15 @@
-import {NewHighlightType, SearchResultType, SettingsType, TooltipType} from "@/features/search/api/searchApiType.ts";
+import {type NewHighlightType, type SearchResultType, type SettingsType, type TooltipType} from "@/features/search/api/searchApiType.ts";
+import {authFetch} from "@/api/authFetch.ts";
 
 export async function settingsRetrive() {
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/settings`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/settings`)
     if (!res.ok)
         throw new Error(`Errore lettura dei settings`)
     return await res.json() as SettingsType
 }
 
 export async function tooltipRetrive() {
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/info/getAlgoToolpit/`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/info/getAlgoToolpit/`)
     if (!res.ok)
         throw new Error(`Retrive algorithm information error`)
     return await res.json() as TooltipType
@@ -35,7 +36,7 @@ export async function researchResultRetrive(
         })
     })
 
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchJson/?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchJson/?${params}`)
 
     if (!res.ok)
         throw new Error()
@@ -43,7 +44,8 @@ export async function researchResultRetrive(
 }
 
 export async function addNewHighlight(addNewHighlightsType: NewHighlightType) {
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/saveQuote`, {
+    console.log(addNewHighlightsType)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/saveQuote`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -69,7 +71,7 @@ export async function searchXlsxExport(filename: string, opt?: {
             search_end: String(opt.search_end)
         })
     })
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchXlsx/?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchXlsx/?${params}`)
 
     console.log(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchXlsx/?${params}\``)
 

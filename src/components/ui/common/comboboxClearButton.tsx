@@ -1,4 +1,4 @@
-import { Combobox } from "@base-ui/react";
+import {Combobox} from "@base-ui/react";
 import {XIcon} from "@/components/ui/icons";
 
 const ComboboxClearButton=()=>(

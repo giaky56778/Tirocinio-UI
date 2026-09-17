@@ -1,4 +1,4 @@
-import {UrlPath} from "@/features/editor/lib/utils.ts";
+import {type UrlPath} from "@/features/editor/lib/utils.ts";
 import {useSuspenseQuery} from "@tanstack/react-query";
 import {READ_QUERY_DEFAULTS} from "@/utils/settings.ts";
 import {useStaticBiblicalTextRead} from "@/features/editor/hooks/useTextRead.ts";

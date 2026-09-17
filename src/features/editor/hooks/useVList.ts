@@ -1,9 +1,9 @@
-import {TextType} from "@/utils/settings.ts";
-import {ModeType} from "@/features/editor/components/highlightEditorWindow.tsx";
-import {ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
+import { useState, useEffect, useRef, useCallback} from 'react';
+import {type TextType} from "@/utils/settings.ts";
+import {type ModeType} from "@/features/editor/components/highlightEditorWindow.tsx";
+import {type ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
 import useLineScroll from "@/features/editor/hooks/useLineScroll.ts";
-import {VListHandle} from "virtua";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {type VListHandle} from "virtua";
 
 type Props = {
     mode: ModeType

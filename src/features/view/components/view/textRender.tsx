@@ -1,5 +1,5 @@
-import {ShowLineType} from "@/utils/commonUtil.ts";
-import {TextType} from "@/utils/settings.ts";
+import {type ShowLineType} from "@/utils/commonUtil.ts";
+import {type TextType} from "@/utils/settings.ts";
 import RenderPreviewCardText from "@/components/ui/common/renderPreviewCardText.tsx";
 
 type RenderPreviewCardTextProps={

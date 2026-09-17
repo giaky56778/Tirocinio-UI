@@ -1,33 +1,34 @@
-import {RefObject, useMemo, useState} from "react";
+import { useState, useMemo } from 'react';
 import {Popover} from "@base-ui/react"
-import {ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
-import {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
-import {TextSchema} from "@/api/indexType.ts";
-import { showText} from "@/utils/commonUtil.ts";
+import {type ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
+import {type HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
+import {type TextSchema} from "@/api/indexType.ts";
+import {showText} from "@/utils/commonUtil.ts";
 import {ArrowSvg} from "@/components/ui/icons";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
 import RenderPreviewCardText from "@/components/ui/common/renderPreviewCardText.tsx";
-import {highlightStore} from "@/features/editor/store/highlightStore.tsx";
-import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
+import {useHighlightStore} from "@/features/editor/store/useHighlightStore.tsx";
+import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
+import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
 
 type Props = {
     oppositeScrolls: {
         historical:ScrollType
         biblical:ScrollType
     },
-    previewCardHandler: RefObject<Popover.Handle<string>>
-    blockSelectedRef: RefObject<boolean>
+    previewCardHandler: Popover.Handle<string>
     texts: {
         historical: EditorTextType,
         biblical: EditorTextType
     }
 }
 
-export default function PreviewCardCustom({previewCardHandler, oppositeScrolls, blockSelectedRef, texts}: Props) {
+export default function PreviewCardCustom({previewCardHandler, oppositeScrolls, texts}: Props) {
+    const setSelectionBlocked = useSelectionStore(s => s.setSelectionBlocked)
 
-    const historical = highlightStore(state => state['historical']).highlightBounds
-    const biblical = highlightStore(state => state['biblical']).highlightBounds
-    const colors = highlightStore(state => state.colors)
+    const historical = useHighlightStore(state => state['historical']).highlightBounds
+    const biblical = useHighlightStore(state => state['biblical']).highlightBounds
+    const colors = useHighlightStore(state => state.colors)
     const highlightBounds ={
         historical,
         biblical
@@ -48,9 +49,9 @@ export default function PreviewCardCustom({previewCardHandler, oppositeScrolls, 
     return (
         <Popover.Root
             modal={false}
-            handle={previewCardHandler.current}
+            handle={previewCardHandler}
             onOpenChange={(open, eventDetails) => {
-                blockSelectedRef.current = open
+                setSelectionBlocked(open)
                 if (open) {
                     const nativeEvent = eventDetails.event as { clientX?: number; clientY?: number } | undefined
                     if (nativeEvent?.clientX != null && nativeEvent?.clientY != null) {

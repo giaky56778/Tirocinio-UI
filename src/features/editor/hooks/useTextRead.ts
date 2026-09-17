@@ -1,10 +1,10 @@
-import {TextQuery} from "@/api";
+import {type TextQuery} from "@/api";
 import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
-import {READ_QUERY_DEFAULTS, TextType} from "@/utils/settings.ts";
-import useTextNameSelection, {TextSelectedType} from "@/hook/useTextNameSelection.ts";
-import {TextBundle, TextListSchema} from "@/api/indexType.ts";
-import {PageType} from "@/contexts/globalState.tsx";
-import {UrlPath} from "@/features/editor/lib/utils.ts";
+import {READ_QUERY_DEFAULTS, type TextType} from "@/utils/settings.ts";
+import useTextNameSelection, {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {type TextBundle, type TextListSchema} from "@/api/indexType.ts";
+import {type PageType} from "@/contexts/globalState.tsx";
+import {type UrlPath} from "@/features/editor/lib/utils.ts";
 import {readBiblicalTextPortion, readHistoricalTextPortion} from "@/features/editor/api/editorApi.ts";
 
 type TextReadConfig = {

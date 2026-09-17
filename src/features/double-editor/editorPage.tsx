@@ -1,13 +1,13 @@
 import {Suspense, useEffect} from "react";
-import {HighlightStoreProvider} from "@/features/editor/store/highlightStore.tsx";
-import {SelectionStoreProvider} from "@/features/editor/store/selectionStore.tsx";
+import {HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
+import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
 import DoubleEditorSkeleton from "@/features/view/components/skeleton/viewHighlightsSkeleton.tsx";
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
-import {ChapterIndexSchema, TextIndexSchema, TextListSchema, TextSchema} from "@/api/indexType.ts";
+import type {ChapterIndexSchema, TextIndexSchema, TextListSchema, TextSchema} from "@/api/indexType.ts";
 import DoubleEditor from "@/features/double-editor/components/doubleEditor.tsx";
 import {LoadingSpinner} from "@/components/ui/icons";
 import ForceUploadDialog from "@/features/upload-section/components/forceUploadDialog.tsx";
-import {useGlobalState} from "@/contexts/globalState.tsx";
+
 import {useHighlightRead} from "@/features/double-editor/hook/useHighlightRead.ts";
 
 export type EditorTextType={
@@ -27,10 +27,8 @@ const EditorPage=()=> (
 function EditorPageContent() {
 
     const textState = useHighlightRead()
-    const globalState = useGlobalState()
     useEffect(() => {
         return () => {
-            globalState.swapPage.confirmExit()
         }
     }, [])
 

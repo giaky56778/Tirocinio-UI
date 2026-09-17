@@ -1,7 +1,7 @@
-import {Word} from "@/api/indexType.ts";
-import {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
+import {type Word} from "@/api/indexType.ts";
+import {type HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
 import HandGrip from "@/features/editor/components/editor/row/handGrip.tsx";
-import {TextType} from "@/utils/settings.ts";
+import {type TextType} from "@/utils/settings.ts";
 
 const MARKER = "absolute z-[100] w-0 h-0 border-l-4 border-r-4 border-l-transparent border-r-transparent"
 const START_MARKER = MARKER + " -top-1 left-0 border-t-[5px] border-t-[#1976d2]"

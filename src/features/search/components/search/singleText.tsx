@@ -1,10 +1,8 @@
-import HighlightEditorWindow, {
-    SearchHighlightType
-} from "@/features/editor/components/highlightEditorWindow.tsx";
-import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import HighlightEditorWindow, {type SearchHighlightType} from "@/features/editor/components/highlightEditorWindow.tsx";
+import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
-import {TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
+import {type TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
 import {memo, useEffect, useMemo} from "react";
 import {useGlobalState} from "@/contexts/globalState.tsx";
 import {useSearchParams} from "react-router";
@@ -18,7 +16,7 @@ type Props={
     opTextHistorical: TextOperationType
 }
 
-function singleText({text, selectedText, searchHighlight, opTextHistorical}:Props){
+function SingleText({text, selectedText, searchHighlight, opTextHistorical}:Props){
 
     const scrollRight = useScrollDynamic()
     const globalState = useGlobalState()
@@ -27,7 +25,7 @@ function singleText({text, selectedText, searchHighlight, opTextHistorical}:Prop
 
     useEffect(() => {
         const isHMatch = searchParams.has("h")
-        const isStateMatch = globalState.swapPage.state.search?.text?.items.id === selectedText.items.id
+        const isStateMatch = globalState.state.search?.text?.items.id === selectedText.items.id
 
         if (isStateMatch || isHMatch) {
             if (searchParams.has('start')) {
@@ -57,4 +55,4 @@ function singleText({text, selectedText, searchHighlight, opTextHistorical}:Prop
     )
 }
 
-export default memo(singleText)
+export default memo(SingleText)

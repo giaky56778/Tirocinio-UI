@@ -1,4 +1,4 @@
-import {SearchResultQueryType} from "@/features/search/hooks/useSearchResults.ts";
+import {type SearchResultQueryType} from "@/features/search/hooks/useSearchResults.ts";
 
 const LoadMore = ({hasSearch,searchResultQuery}: {
     hasSearch: boolean

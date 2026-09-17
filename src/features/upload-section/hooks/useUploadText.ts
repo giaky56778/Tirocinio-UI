@@ -1,8 +1,10 @@
-import React, {RefObject, useRef, useState} from "react";
+import {useState, useRef} from 'react';
+import type React from "react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {UploadFormat} from "@/features/upload-section/components/uploadTextForm.tsx";
+import {type UploadFormat} from "@/features/upload-section/components/uploadTextForm.tsx";
 import toast from "react-hot-toast";
 import {uploadHistoricalText} from "@/features/upload-section/api/uploadApi.ts";
+import {Dialog} from "@base-ui/react/dialog";
 
 const ACCEPTED_EXTENSIONS: Record<string, UploadFormat> = {
     xml: "XML",
@@ -18,7 +20,7 @@ function detectFormat(filename: string): UploadFormat | null {
 
 type Props={
     onTextChange: (newSelected: { path: string, items: { id: number, filename: string } }) => void
-    dialogHandle?:  RefObject<any>
+    dialogHandle?: Dialog.Handle<never>
 }
 
 export function useUploadText({onTextChange, dialogHandle}: Props) {
@@ -67,15 +69,15 @@ export function useUploadText({onTextChange, dialogHandle}: Props) {
             void queryClient.invalidateQueries({queryKey: ['historicalText']})
 
             onTextChange({
-                path: path.trim(),
+                path: data.path.trim(),
                 items: {
                     id: Number(data.id),
-                    filename: filename.trim()
+                    filename: data.filename.trim()
                 }
             })
 
-            if (dialogHandle?.current)
-                dialogHandle.current.close()
+            if (dialogHandle)
+                dialogHandle.close()
         },
         onError(error) {
             toast.error(error.message)

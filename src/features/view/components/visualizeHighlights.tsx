@@ -3,7 +3,7 @@ import {VList} from "virtua";
 import {Tabs} from "@base-ui/react/tabs";
 import ComboboxTextName from "@/features/editor/components/editor/comboboxTextName.tsx";
 import VisualizeHighlightsSkeleton from "@/features/view/components/skeleton/visualizeHighlightsSkeleton.tsx";
-import {useGlobalState} from "@/contexts/globalState.tsx";
+
 import CardHighlight from "@/features/view/components/view/cardHighlight.tsx";
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import NoTextView from "@/features/view/components/no-element/noTextView.tsx";
@@ -29,7 +29,7 @@ const VisualizeHighlights=()=> (
 )
 
 function VisualizeHighlightsComponent() {
-    const globalState = useGlobalState()
+
     const {namesQuery, highlightsTextQuery,selected,opText,biblicalNamesQuery} = useVisualizeAllHighlight()
     const {showPage, setShowPage, select} = usePage(opText.setSelected)
 
@@ -39,7 +39,6 @@ function VisualizeHighlightsComponent() {
 
     useEffect(() => {
         return () => {
-            globalState.swapPage.confirmExit()
         }
     }, [])
 

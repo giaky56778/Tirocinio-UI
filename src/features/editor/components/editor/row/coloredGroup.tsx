@@ -1,6 +1,6 @@
 import {Popover} from "@base-ui/react/popover";
-import {ReactNode, RefObject} from "react";
-import {TextType} from "@/utils/settings.ts";
+import type {ReactNode} from "react";
+import type {TextType} from "@/utils/settings.ts";
 
 type ColoredGroupProps = {
     side: TextType,
@@ -11,7 +11,7 @@ type ColoredGroupProps = {
     toolBarVisible: boolean,
     onContextMenu: () => void,
     children: ReactNode,
-    previewCardHandler?: RefObject<Popover.Handle<string>>
+    previewCardHandler?: Popover.Handle<string>
 }
 
 export default function ColoredGroup({side, lineIndex, highlightId, colorClass, isBlinking, toolBarVisible, previewCardHandler, onContextMenu, children}: ColoredGroupProps) {
@@ -32,7 +32,7 @@ export default function ColoredGroup({side, lineIndex, highlightId, colorClass, 
     return (
         <Popover.Trigger
             key={triggerId}
-            handle={previewCardHandler.current}
+            handle={previewCardHandler}
             id={triggerId}
             payload={`${side}:${highlightId}`}
             nativeButton={false}

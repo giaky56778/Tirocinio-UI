@@ -1,20 +1,21 @@
-import {memo, RefObject} from "react";
+import {memo} from 'react';
 import {Form} from "@base-ui/react/form";
 import {Field} from "@base-ui/react/field";
-import {AlertDialog} from "@base-ui/react/alert-dialog";
-import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
-import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import {type AlertDialog} from "@base-ui/react/alert-dialog";
+import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
+import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import DialogSSESearch from "@/features/search/components/search/dialogSSESearch.tsx";
-import AlertModifySearch, {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
+import AlertModifySearch, {type AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
 import {LockClose, SearchIcon, XIcon} from "@/components/ui/icons";
 import SearchOptionDialog from "@/features/search/components/search/searchDialog/searchOptionDialog.tsx";
 import ComboboxTextSearch from "@/features/search/components/search/comboboxTextSearch.tsx";
 import ResultSection from "@/features/search/components/search/resultSection.tsx";
 import useSearchPage from "@/features/search/hooks/useSearchPage.ts";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
-import {SettingsType, TooltipType} from "@/features/search/api/searchApiType.ts";
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {type SettingsType, type TooltipType} from "@/features/search/api/searchApiType.ts";
+import {Button} from "@base-ui/react";
 
-export const SEARCH_SECTION_CONTAINER_CLASS = "text-left relative flex flex-col h-full w-1/2 min-w-0 min-h-0 z-0"
+export const SEARCH_SECTION_CONTAINER_CLASS = "text-left relative flex flex-col h-full w-full flex-1 min-w-0 min-h-0 z-0"
 export const SEARCH_SECTION_HEADER_CLASS = "relative flex shrink-0 items-center justify-center h-24 bg-orange-100 shadow-xs"
 export const SEARCH_SECTION_FORM_CLASS = "border-b border-t border-t-gray-300 border-gray-500 p-4"
 export const SEARCH_RESULTS_CONTAINER_CLASS = "relative flex-1 min-h-0"
@@ -27,7 +28,7 @@ type SearchResultsSectionProps = {
     historicalText: EditorTextType,
     selectedText: TextSelectedType,
     isTextLoading: boolean,
-    searchHandle: RefObject<AlertDialog.Handle<AlertModifyPayloadType>>
+    searchHandle: AlertDialog.Handle<AlertModifyPayloadType>
 }
 
 function SearchResultsSection({settings, tooltip, searchElement, resetSearchElement, historicalText, selectedText, isTextLoading, searchHandle}: SearchResultsSectionProps) {
@@ -68,7 +69,7 @@ function SearchResultsSection({settings, tooltip, searchElement, resetSearchElem
                                     key={searchElement ? "search-element" : "custom-query"}
                                     name="search-input"
                                     className="flex-1 flex items-center gap-2 overflow-hidden"
-                                    validationMode="onChange"
+                                    validationMode="onSubmit"
                                     validate={(value) => {
                                         if (searchElement)
                                             return null
@@ -91,7 +92,7 @@ function SearchResultsSection({settings, tooltip, searchElement, resetSearchElem
                                                 return
 
                                             if (searchElement && (e.key.length === 1 || e.key === "Backspace" || e.key === "Delete"))
-                                                searchHandle.current.openWithPayload({onConfirm: resetSearchElement})
+                                                searchHandle.openWithPayload({onConfirm: resetSearchElement})
                                         }}
                                     />
                                     <Field.Error className="text-xs text-red-600"/>
@@ -100,7 +101,7 @@ function SearchResultsSection({settings, tooltip, searchElement, resetSearchElem
                                     <button
                                         type={"button"}
                                         className={"flex items-center justify-center shrink-0 w-6 h-6 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"}
-                                        onClick={() => searchHandle.current.openWithPayload({onConfirm: resetSearchElement})}
+                                        onClick={() => searchHandle.openWithPayload({onConfirm: resetSearchElement})}
                                     >
                                         <LockClose className={"size-6"}/>
                                     </button>
@@ -135,13 +136,13 @@ function SearchResultsSection({settings, tooltip, searchElement, resetSearchElem
                             setSourcesSelected={setSourcesSelected}
                             settings={settings}
                         />
-                        <button
+                        <Button
                             type="submit"
                             disabled={sseData.isLoading}
                             className="mt-7 w-1/2 mx-auto block bg-orange-700 hover:bg-orange-800 cursor-pointer transition-colors text-white px-4 py-2 rounded shadow-lg font-bold"
                         >
                             Ricerca
-                        </button>
+                        </Button>
                     </Form>
                 </div>
                 <div className={SEARCH_RESULTS_CONTAINER_CLASS}>

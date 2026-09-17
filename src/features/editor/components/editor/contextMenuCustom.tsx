@@ -1,13 +1,13 @@
-import React, {RefObject} from "react";
+import React from "react";
 import {ContextMenu} from "@base-ui/react/context-menu"
-import {colorMap, TextType} from "@/utils/settings.ts";
-import {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
-import {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
+import {colorMap, type TextType} from "@/utils/settings.ts";
+import type {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
+import type {HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
 import {CopyIcon, EditIcon, SearchIcon, TrashIcon} from "@/components/ui/icons";
-import {SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
-import {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
-import {AlertDialog} from "@base-ui/react/alert-dialog";
-import {SelectionOpType} from "@/features/editor/hooks/useCustomSelection.ts";
+import type {SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
+import type {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
+import {type AlertDialog} from "@base-ui/react/alert-dialog";
+import type {SelectionOpType} from "@/features/editor/hooks/useCustomSelection.ts";
 
 export type menuType = "highlight" | 'selected' | "default"
 export type CostumeContextType = {
@@ -25,7 +25,7 @@ type Props = {
     side: TextType,
     textType: TextType
     deleteHighlight: (highlightId: string) => void
-    alertDeleteHandler?: RefObject<AlertDialog.Handle<AlertModifyPayloadType>>
+    alertDeleteHandler?: AlertDialog.Handle<AlertModifyPayloadType>
 }
 
 const ContextMenuCustom = ({
@@ -46,7 +46,7 @@ const ContextMenuCustom = ({
     const swatchCls = "block w-[1.375rem] h-[1.375rem] p-0 rounded-full outline outline-2 outline-transparent outline-offset-1 cursor-pointer shadow-[inset_0_0_0_1px_rgb(0_0_0/0.1)] transition-all duration-[120ms] data-[highlighted]:outline-gray-500 data-[highlighted]:scale-[1.18] data-[disabled]:opacity-45 data-[disabled]:cursor-not-allowed"
     const separatorCls = "my-[0.3rem] mx-2.5 h-px bg-gray-200"
 
-    function ContextMenuRender() {
+    function renderContextMenuContent() {
         const defaultContext = (
             <>
                 <ContextMenu.Item
@@ -105,7 +105,7 @@ const ContextMenuCustom = ({
                         <ContextMenu.Item
                             className={itemDestructiveCls}
                             onClick={() => {
-                                alertDeleteHandler?.current.openWithPayload({onConfirm: () => {
+                                alertDeleteHandler?.openWithPayload({onConfirm: () => {
                                         if(contextMenu.highlightId !== null)
                                             deleteHighlight(contextMenu.highlightId)
                                 }})
@@ -121,11 +121,9 @@ const ContextMenuCustom = ({
     }
 
     return (
-        <ContextMenu.Positioner
-            className="outline-none h-(--positioner-height) w-(--positioner-width) max-w-(--available-width)">
-            <ContextMenu.Popup
-                className="box-border min-w-40 py-1.5 rounded-lg bg-[canvas] text-gray-900 w-auto h-auto origin-(--transform-origin) transition-[transform,opacity] duration-150 outline-1 outline-gray-200 shadow-lg data-starting-style:opacity-0 data-starting-style:scale-95 data-ending-style:opacity-0 data-ending-style:scale-95">
-                <ContextMenuRender/>
+        <ContextMenu.Positioner className="outline-none h-(--positioner-height) w-(--positioner-width) max-w-(--available-width)">
+            <ContextMenu.Popup className="box-border min-w-40 py-1.5 rounded-lg bg-[canvas] text-gray-900 w-auto h-auto origin-(--transform-origin) transition-[transform,opacity] duration-150 outline-1 outline-gray-200 shadow-lg data-starting-style:opacity-0 data-starting-style:scale-95">
+                {renderContextMenuContent()}
             </ContextMenu.Popup>
         </ContextMenu.Positioner>
     )

@@ -1,5 +1,5 @@
 import {Dialog} from "@base-ui/react/dialog";
-import {ReactNode} from "react";
+import type {ReactNode} from "react";
 import DialogCloseCostume from "@/components/ui/common/dialogCloseCostume.tsx";
 
 type Props={

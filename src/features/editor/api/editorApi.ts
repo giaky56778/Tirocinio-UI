@@ -1,7 +1,8 @@
-import {HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
-import {TextBundle} from "@/api/indexType.ts";
+import type {HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
+import type {TextBundle} from "@/api/indexType.ts";
 import {normalizeChapter} from "@/utils/commonUtil.ts";
-import {TextType} from "@/utils/settings.ts";
+import type {TextType} from "@/utils/settings.ts";
+import {authFetch} from "@/api/authFetch.ts";
 
 export type TextQueryPortion={
     id?: number
@@ -24,7 +25,7 @@ export async function readHighlightPortion(biblicalID: number, historicalID: num
         'lineH': String(lineH)
     })
 
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/getQuotesPortion?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/getQuotesPortion?${params}`)
 
     if (!res.ok)
         throw new Error('Highlight non trovata')
@@ -55,12 +56,14 @@ async function readTextPortion({textType,id, path, filename, line, lineNumber,wo
 
     const endpoint = textType === "historical" ? "getHistoricalTextPortion" : "getBiblicalTextPortion"
 
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/${endpoint}/?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/${endpoint}/?${params}`)
 
     if (!res.ok)
         throw new Error(`Impossibile trovare il testo specificato, controllare se i campi sono stati inseriti correttamente`)
 
     const json = await res.json() as TextBundle
+
+    console.log(json)
 
     return {
         text: json.text,

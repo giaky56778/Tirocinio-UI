@@ -1,10 +1,10 @@
 import {useMemo, useState} from "react";
 import {useInfiniteQuery} from "@tanstack/react-query";
-import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
 import {OFFSET_LIMIT, READ_QUERY_DEFAULTS} from "@/utils/settings.ts";
-import {AddNewHighlightsType, useAddNewHighlightWords} from "@/features/search/hooks/useApiSearch.ts";
+import {useAddNewHighlightWords} from "@/features/search/hooks/useApiSearch.ts";
 import {researchResultRetrive, searchXlsxExport} from "@/features/search/api/searchApi.ts";
-import {SingleSearchType} from "@/features/search/api/searchApiType.ts";
+import {type SingleSearchType} from "@/features/search/api/searchApiType.ts";
 
 export type SearchResultQueryType = {
     hasNextPage: boolean
@@ -112,10 +112,7 @@ export default function useSearchResults({ filename, confirmedSearch }: Props) {
         confirmedSearchKey,
         displayedResults,
         exportResults,
-        addNewHighlight: {
-            add: (data: AddNewHighlightsType) => addNewHighlightMutation.mutate(data),
-            isPending: addNewHighlightMutation.isPending
-        },
+        addNewHighlight: addNewHighlightMutation,
         accumulatedResultsLength: accumulatedResults.length,
         lineHistorical: searchResultQuery.data?.pages[0]?.lineIndex ?? -1
     }

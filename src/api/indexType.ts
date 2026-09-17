@@ -70,4 +70,10 @@ export type RangeHighlight={
     endWord: number
 }
 
+/**
+ * Me Schema
+ */
+export type MeSchema = {
+    username: string
+}
 

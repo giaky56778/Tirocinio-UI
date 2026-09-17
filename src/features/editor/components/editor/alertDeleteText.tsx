@@ -1,22 +1,23 @@
 import {AlertDialog} from "@base-ui/react/alert-dialog";
 import {TriangleExclamationIcon} from "@/components/ui/icons";
-import {RefObject} from "react";
 import DialogCloseCostume from "@/components/ui/common/dialogCloseCostume.tsx";
+import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 
 type Props={
-    alert: RefObject<AlertDialog.Handle<{id: number}>>
+    alert: AlertDialog.Handle<{id: number}>
     deleteText: (id:number)=>void
-    blockSelectedRef?: RefObject<boolean>
 }
 
-const AlertDeleteText =({alert,deleteText,blockSelectedRef}: Props)=> (
-    <AlertDialog.Root
-        handle={alert.current}
-        onOpenChange={(isOpen) => {
-            if (blockSelectedRef)
-                blockSelectedRef.current = isOpen
-        }}
-    >
+const AlertDeleteText =({alert,deleteText}: Props)=> {
+    const setSelectionBlocked = useSelectionStore(s => s.setSelectionBlocked)
+
+    return (
+        <AlertDialog.Root
+            handle={alert}
+            onOpenChange={(isOpen) => {
+                setSelectionBlocked(isOpen)
+            }}
+        >
         {({ payload }) => (
             <AlertDialog.Portal>
                 <AlertDialog.Backdrop className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity data-ending-style:opacity-0"/>
@@ -62,6 +63,7 @@ const AlertDeleteText =({alert,deleteText,blockSelectedRef}: Props)=> (
             </AlertDialog.Portal>
         )}
     </AlertDialog.Root>
-)
+    )
+}
 
 export default AlertDeleteText

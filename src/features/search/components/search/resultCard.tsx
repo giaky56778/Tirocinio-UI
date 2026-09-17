@@ -1,17 +1,16 @@
-import {RefObject} from "react";
-import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
-import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
+import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import {
+    type AddNewHighlightObj,
     RESULT_CARD_BODY_CLASS,
     RESULT_CARD_CONTAINER_CLASS,
-    RESULT_CARD_FOOTER_CLASS,
-    AddNewHighlightObj
+    RESULT_CARD_FOOTER_CLASS
 } from "@/features/search/components/search/resultOutput.tsx";
 import {TEXT_FONT_CLASS} from "@/utils/settings.ts";
 import {Tooltip} from "@base-ui/react/tooltip";
 import PreviewSingle from "@/features/search/components/search/searchPreview/singleSearchPreview.tsx";
 import PreviewDouble from "@/features/search/components/search/searchPreview/doubleSearchPreview.tsx";
-import {SingleSearchType} from "@/features/search/api/searchApiType.ts";
+import {type SingleSearchType} from "@/features/search/api/searchApiType.ts";
 
 type Props = {
     i: number,
@@ -23,7 +22,7 @@ type Props = {
     confirmedSearch?: SearchType,
     historicalText: EditorTextType,
     lineHistorical: number,
-    tooltipRef: RefObject<Tooltip.Handle<{ text: string }>>,
+    tooltipRef: Tooltip.Handle<{ text: string }>,
     addNewHighlight: AddNewHighlightObj
 }
 
@@ -68,14 +67,6 @@ export default function ResultCard({i, result, isDoubleMode, confirmedSearch, hi
                     isOccupied: false,
                     isError: true
                 }
-            default:
-                return {
-                    containerClass: "border-gray-200",
-                    headerClass: "bg-gray-50 border-gray-200",
-                    badgeClass: "bg-gray-400 text-white",
-                    isOccupied: false,
-                    isError: false
-                }
         }
     }
 
@@ -114,7 +105,7 @@ export default function ResultCard({i, result, isDoubleMode, confirmedSearch, hi
                 </div>
                 {isOccupied ? (
                     <Tooltip.Trigger
-                        handle={tooltipRef.current}
+                        handle={tooltipRef}
                         payload={{text: "Non puoi salvare questa evidenziazione! Tale posizione è già occupata da un'altra evidenziazione."}}
                         aria-disabled="true"
                         className="shrink-0 text-xs font-semibold px-3 py-1 rounded-md transition-colors bg-gray-100 text-gray-400 cursor-not-allowed"
@@ -123,7 +114,7 @@ export default function ResultCard({i, result, isDoubleMode, confirmedSearch, hi
                     </Tooltip.Trigger>
                 ) : isError ? (
                     <Tooltip.Trigger
-                        handle={tooltipRef.current}
+                        handle={tooltipRef}
                         payload={{text: "Errore durante la ricerca, il risultato è stato trovato correttamente ma non è associabile al testo storico selezionato."}}
                         aria-disabled="true"
                         className="shrink-0 text-xs font-semibold px-3 py-1 rounded-md transition-colors bg-red-100 text-red-500 cursor-not-allowed"

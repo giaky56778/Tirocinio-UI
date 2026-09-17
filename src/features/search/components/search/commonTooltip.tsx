@@ -1,10 +1,9 @@
-import {RefObject} from "react";
 import {Tooltip} from "@base-ui/react/tooltip";
 import {ArrowSvg} from "@/components/ui/icons";
-import {Side} from "node_modules/@base-ui/react/esm/utils/useAnchorPositioning";
+import type {Side} from "@base-ui/react/internals/useAnchorPositioning";
 
 type Props = {
-    handle: RefObject<Tooltip.Handle<{text: string}>>
+    handle:Tooltip.Handle<{text: string}>
     position?: Side
     sideOffset?: number
 };
@@ -14,7 +13,7 @@ export const CommonTooltip = ({
     position = 'top',
     sideOffset = 6
 }: Props) => (
-    <Tooltip.Root handle={handle.current}>
+    <Tooltip.Root handle={handle}>
         {({ payload }) => (
             <Tooltip.Portal>
                 <Tooltip.Positioner
@@ -26,7 +25,7 @@ export const CommonTooltip = ({
                             <span className={"text-sm"}>{payload.text}</span>
                         )}
                         <Tooltip.Arrow
-                            className="data-[side=bottom]:-top-2 data-[side=left]:-right-3.25 data-[side=left]:rotate-90 data-[side=right]:-left-3.25 data-[side=right]:-rotate-90 data-[side=top]:-bottom-2 data-[side=top]:rotate-180"
+                            className="data-[side=bottom]:-top-2 data-[side=left]:-right-3.25 data-[side=left]:rotate-90 data-[side=right]:-left-3.25 data-[side=top]:-bottom-2"
                             render={ArrowSvg}
                         />
                     </Tooltip.Popup>

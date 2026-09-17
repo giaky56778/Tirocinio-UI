@@ -1,12 +1,14 @@
-type HandGripProps = {
+import React from "react";
+
+type Props = {
     side:'left'|'right',
-    onPointerDown: (e: any) => void
+    onPointerDown: (e: React.PointerEvent<SVGSVGElement>) => void
 }
 
 const HAND_LEFT= "-left-3 z-[1000]"
 const HAND_RIGHT= "-right-3 z-[1000]"
 
-const HandGrip=({side, onPointerDown}: HandGripProps) => (
+const HandGrip=({side, onPointerDown}: Props) => (
     <svg
         className={`cursor-col-resize select-none absolute -top-2 w-6 h-[calc(100%+16px)] z-10 pointer-events-auto ${side === 'left' ? HAND_LEFT : HAND_RIGHT}`}
         onPointerDown={onPointerDown}

@@ -1,11 +1,11 @@
 import {useNavigate} from "react-router";
 import {showText} from "@/utils/commonUtil.ts";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import type {TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import TextRender from "@/features/view/components/view/textRender.tsx";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
 import {useGlobalState} from "@/contexts/globalState.tsx";
-import {TextListSchema} from "@/api/indexType.ts";
-import {highlightBiblicalType, highlightTextType} from "@/features/view/api/viewApi.ts";
+import type {TextListSchema} from "@/api/indexType.ts";
+import type {highlightBiblicalType, highlightTextType} from "@/features/view/api/viewApi.ts";
 
 export const HIGHLIGHT_CARD_CONTAINER_CLASS = "mb-4 rounded-xl border border-slate-200 bg-white shadow-2xs transition-shadow"
 export const HIGHLIGHT_CARD_HEADER_CLASS = "flex items-center justify-between px-4 py-2.5 rounded-t-xl border-b border-orange-100 bg-orange-50/60"
@@ -57,8 +57,6 @@ export default function CardHighlight({index,selected,highlight,highlightData,sh
         if (!page)
             return
 
-        const editorRef= globalState.swapPage.editorRef.current
-
         const biblicalGroup = biblicalNames.find(g => g.path === page.path)
         const biblicalItem = biblicalGroup?.items.find(i => i.filename === page.filename)
         const biblicalSelected = (biblicalGroup && biblicalItem)
@@ -73,16 +71,18 @@ export default function CardHighlight({index,selected,highlight,highlightData,sh
             }
         }
 
-        editorRef.historical = selected
-        editorRef.biblical = biblicalSelected
-        globalState.swapPage.editorRef.current.linePos={
-            historical: highlight.historical_start_line - OFFSET_SCROLL,
-            biblical: highlight.biblical_start_line - OFFSET_SCROLL
-        }
-        globalState.swapPage.viewRef.current.text = selected
-        globalState.swapPage.viewRef.current.page = showPage
-
-        globalState.swapPage.confirmExit()
+        globalState.setEditor({
+            historical: selected,
+            biblical: biblicalSelected,
+            linePos: {
+                historical: highlight.historical_start_line - OFFSET_SCROLL,
+                biblical: highlight.biblical_start_line - OFFSET_SCROLL
+            }
+        })
+        globalState.setView({
+            text: selected,
+            page: showPage
+        })
 
         navigate('/')
     }

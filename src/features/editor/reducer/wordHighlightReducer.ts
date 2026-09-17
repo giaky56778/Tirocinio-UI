@@ -1,6 +1,7 @@
-import {DragType} from "@/features/editor/hooks/useEditorUI.ts";
-import {TextIndexSchema} from "@/api/indexType.ts";
-import {HighlightColor, HighlightSingle} from "@/features/double-editor/components/doubleEditor.tsx";
+import {
+    type DragType} from "@/features/editor/hooks/useEditorUI.ts";
+import {type TextIndexSchema} from "@/api/indexType.ts";
+import {type HighlightColor, type HighlightSingle} from "@/features/double-editor/components/doubleEditor.tsx";
 
 // -- Type --------------------------------------------------------------
 
@@ -141,6 +142,7 @@ export function wordHighlightReducer(
         case "REMOVE_HIGHLIGHT": {
             const { highlightId } = action.payload
             const newRecord = copyRecordWithoutHighlight(state.startEndPosition, highlightId)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [highlightId]: _, ...newBounds } = state.highlightBounds;
             return({
                 ...state,

@@ -1,10 +1,11 @@
-import {createContext, useContext, useRef, ReactNode} from 'react'
+import {createContext, type ReactNode, useContext, useState} from 'react'
 import {createStore} from 'zustand/vanilla'
 import {useStore} from 'zustand'
-import {wordHighlightReducer, stateType, actionType, initState} from '@/features/editor/reducer/wordHighlightReducer.ts'
-import {HighlightDouble} from '@/features/double-editor/components/doubleEditor.tsx'
-import {TextType} from '@/utils/settings.ts'
+import {type actionType, initState, type stateType, wordHighlightReducer} from '@/features/editor/reducer/wordHighlightReducer.ts'
+import type {HighlightDouble} from '@/features/double-editor/components/doubleEditor.tsx'
+import type {TextType} from '@/utils/settings.ts'
 import {getSideHighlight} from "@/features/editor/lib/utils.ts";
+import type {TextIndexSchema} from "@/api/indexType.ts";
 
 export type HighlightStore = {
     historical: stateType
@@ -13,7 +14,7 @@ export type HighlightStore = {
     isPreview: boolean
     sideToModify: TextType | null
 
-    init: (highlights: Record<string, HighlightDouble>, historicalIndex: any, biblicalIndex: any) => void
+    init: (highlights: Record<string, HighlightDouble>, historicalIndex: TextIndexSchema | null, biblicalIndex: TextIndexSchema | null) => void
     dispatch: (side: TextType, action: actionType) => void
     setColor: (highlightId: string, color: string) => void
     setSideToModify: (side: TextType | null) => void
@@ -57,7 +58,8 @@ export const createHighlightStore = () => createStore<HighlightStore>((set) => (
         if(id === null)
             return state
 
-        const { [id]: _, ...newColors } = state.colors
+        const newColors = { ...state.colors }
+        delete newColors[id]
         return {
             colors: newColors,
             historical: wordHighlightReducer(state.historical, { type: "REMOVE_HIGHLIGHT", payload: { highlightId: id } }),
@@ -75,18 +77,15 @@ export const createHighlightStore = () => createStore<HighlightStore>((set) => (
 const HighlightStoreContext = createContext<ReturnType<typeof createHighlightStore> | null>(null)
 
 export function HighlightStoreProvider({ children }: { children: ReactNode }) {
-    const storeRef = useRef<ReturnType<typeof createHighlightStore> | null>(null)
-    if (!storeRef.current) {
-        storeRef.current = createHighlightStore()
-    }
+    const [store] = useState(createHighlightStore)
     return (
-        <HighlightStoreContext.Provider value={storeRef.current}>
+        <HighlightStoreContext.Provider value={store}>
             {children}
         </HighlightStoreContext.Provider>
     )
 }
 
-export function highlightStore<T>(selector: (state: HighlightStore) => T): T {
+export function useHighlightStore<T>(selector: (state: HighlightStore) => T): T {
     const store = useContext(HighlightStoreContext)
     if (!store)
         throw new Error('Missing HighlightStoreProvider in the component tree')

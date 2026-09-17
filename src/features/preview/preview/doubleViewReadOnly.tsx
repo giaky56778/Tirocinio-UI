@@ -1,9 +1,9 @@
 import {Suspense, useEffect} from "react";
-import {highlightStore, HighlightStoreProvider} from "@/features/editor/store/highlightStore.tsx";
-import {SelectionStoreProvider} from "@/features/editor/store/selectionStore.tsx";
+import {useHighlightStore, HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
+import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
 import {useStaticBiblicalTextRead, useStaticHistoricalTextRead} from "@/features/editor/hooks/useTextRead.ts";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
-import {HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
+import type {HighlightDouble} from "@/features/double-editor/components/doubleEditor.tsx";
 import useSyncHighlights from "@/features/double-editor/hook/useSyncHighlights.ts";
 import HighlightEditorWindow from "@/features/editor/components/highlightEditorWindow.tsx";
 import ViewHighlightsSkeleton from "@/features/view/components/skeleton/viewHighlightsSkeleton.tsx";
@@ -53,19 +53,20 @@ function MiniDoubleEditorPageContent({biblical,historical}: Props){
         range: br
     } = createTextConfig(urlBiblical, b_id!, b_text.data, biblical.start, biblical.end, b_line)
 
-    const previewHighlight: Record<string, HighlightDouble> = {
-        "preview-highlight": {
-            color: "1",
-            historical: hr,
-            biblical: br
-        }
-    }
+    
 
-    const initStore = highlightStore(state => state.init)
+    const initStore = useHighlightStore(state => state.init)
 
     useEffect(() => {
+        const previewHighlight: Record<string, HighlightDouble> = {
+            "preview-highlight": {
+                color: "1",
+                historical: hr,
+                biblical: br
+            }
+        }
         initStore(previewHighlight, h_text.data.index, b_text.data.index)
-    }, [previewHighlight, b_text.data.index, h_text.data.index])
+    }, [b_text.data.index, br, h_text.data.index, hr, initStore])
 
     const globalHighlight = useSyncHighlights()
 

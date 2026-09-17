@@ -1,5 +1,4 @@
-import {RefObject} from "react";
-import {AlertDialog} from "@base-ui/react/alert-dialog";
+import {type AlertDialog} from "@base-ui/react/alert-dialog";
 import {Separator} from "@base-ui/react/separator";
 import AlertConfirmDialog from "@/components/ui/common/alertConfirmDialog.tsx";
 
@@ -8,7 +7,7 @@ export type AlertModifyPayloadType = {
 }
 
 type AlertModifySearchProps = {
-    alertHandle: RefObject<AlertDialog.Handle<AlertModifyPayloadType>>,
+    alertHandle: AlertDialog.Handle<AlertModifyPayloadType>,
 }
 
 const AlertModifySearch = ({alertHandle}: AlertModifySearchProps) => (

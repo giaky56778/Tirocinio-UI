@@ -1,16 +1,10 @@
-import {
-    useRef,
-    useState,
-    useCallback,
-    useMemo,
-    useEffect
-} from "react";
+import {useState, useEffect, useRef, useMemo, useCallback} from 'react';
 import toast from "react-hot-toast";
-import {highlightStore, useHighlightStoreContext} from "@/features/editor/store/highlightStore.tsx";
-import {actionType, stateType} from "@/features/editor/reducer/wordHighlightReducer.ts";
-import {colorMap, TextType} from "@/utils/settings.ts";
-import {SyncHighlightsType} from "@/features/double-editor/hook/useSyncHighlights.ts";
-import {TextIndexSchema} from "@/api/indexType.ts";
+import {useHighlightStore, useHighlightStoreContext} from "@/features/editor/store/useHighlightStore.tsx";
+import {type actionType, type stateType} from "@/features/editor/reducer/wordHighlightReducer.ts";
+import {colorMap, type TextType} from "@/utils/settings.ts";
+import {type SyncHighlightsType} from "@/features/double-editor/hook/useSyncHighlights.ts";
+import {type TextIndexSchema} from "@/api/indexType.ts";
 
 export type ToolBarType={
     toolBarVisibile:boolean
@@ -35,11 +29,11 @@ type EditorStateProps = {
 
 export function useEditorState({side, globalHighlight}: EditorStateProps) {
     const store = useHighlightStoreContext()
-    const state = highlightStore(state => state[side])
-    const color = highlightStore(state => state.colors)
-    const dispatch = highlightStore(state => state.dispatch)
-    const setSideToModify = highlightStore(state => state.setSideToModify)
-    const sideToModify = highlightStore(state => state.sideToModify)
+    const state = useHighlightStore(state => state[side])
+    const color = useHighlightStore(state => state.colors)
+    const dispatch = useHighlightStore(state => state.dispatch)
+    const setSideToModify = useHighlightStore(state => state.setSideToModify)
+    const sideToModify = useHighlightStore(state => state.sideToModify)
 
     const [isVisible, setToolBar] = useState<boolean>(false)
     const [highlightToModify, setHighlightToModify] = useState<string|null>(null)
@@ -78,7 +72,7 @@ export function useEditorState({side, globalHighlight}: EditorStateProps) {
         setSideToModify(side)
         setHighlightToModify(highlightId)
         setToolBar(true)
-    }, [setSideToModify, side, store,sideToModify])
+    }, [sideToModify, store, side, setSideToModify, highlightToModify])
 
     const saveCaller = useCallback((currentHighlightToModify: string | null) => {
         if(sideToModify!==side || currentHighlightToModify==null)

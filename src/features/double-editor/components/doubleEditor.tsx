@@ -1,15 +1,16 @@
-import {useEffect, useRef} from "react";
+import {useEffect} from 'react';
 import {AlertDialog} from "@base-ui/react/alert-dialog";
 import {Popover} from "@base-ui/react/popover";
 import HighlightEditorWindow from "@/features/editor/components/highlightEditorWindow.tsx";
 import useSyncHighlights from "@/features/double-editor/hook/useSyncHighlights.ts";
 import PreviewCardCustom from "@/features/double-editor/preview-card/previewCardCustom.tsx";
-import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import type {EditorTextType} from "@/features/double-editor/editorPage.tsx";
+import type {TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
-import {highlightStore} from "@/features/editor/store/highlightStore.tsx";
+import {useHighlightStore} from "@/features/editor/store/useHighlightStore.tsx";
+import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 import AlertConfirmDialog from "@/components/ui/common/alertConfirmDialog.tsx";
-import {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
+import type {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
 
 export type HighlightDouble = {
     color: string
@@ -54,17 +55,17 @@ export default function DoubleEditor({
     textOp
 }: Props) {
 
-    const initStore = highlightStore(state => state.init)
+    const initStore = useHighlightStore(state => state.init)
 
     useEffect(() => {
         initStore(highlightWords, text.historical.index, text.biblical.index)
-    }, [highlightWords, text.historical.index, text.biblical.index])
+    }, [highlightWords, text.historical.index, text.biblical.index, initStore])
 
     const globalHighlight = useSyncHighlights()
 
-    const deleteHandler = useRef(AlertDialog.createHandle<AlertModifyPayloadType>())
-    const blockSelectedRef = useRef<boolean>(false)
-    const previewCardHandler = useRef(Popover.createHandle<string>())
+    const deleteHandler = AlertDialog.createHandle<AlertModifyPayloadType>()
+    const previewCardHandler = Popover.createHandle<string>()
+    const setSelectionBlocked = useSelectionStore(s => s.setSelectionBlocked)
 
     const scrollHistoricalHook = useScrollDynamic()
     const scrollBiblicalHook = useScrollDynamic()
@@ -75,7 +76,7 @@ export default function DoubleEditor({
     }
 
     return (
-        <div className={"flex flex-row h-screen w-full"}>
+        <div className={"flex flex-row divide-x divide-gray-500 h-screen w-full"}>
             <HighlightEditorWindow
                 key={`biblical-${selectedText.biblical.items.id}`}
                 mode={"editor"}
@@ -91,9 +92,7 @@ export default function DoubleEditor({
                 }}
                 previewCardHandler={previewCardHandler}
                 alertDeleteHandler={deleteHandler}
-                blockSelectedRef={blockSelectedRef}
             />
-            <div className="border-l border-gray-500 h-full" />
             <HighlightEditorWindow
                 key={`historical-${selectedText.historical.items.id}`}
                 mode={"editor"}
@@ -109,13 +108,11 @@ export default function DoubleEditor({
                 }}
                 previewCardHandler={previewCardHandler}
                 alertDeleteHandler={deleteHandler}
-                blockSelectedRef={blockSelectedRef}
             />
 
             <PreviewCardCustom
                 oppositeScrolls={scroll}
                 previewCardHandler={previewCardHandler}
-                blockSelectedRef={blockSelectedRef}
                 texts={text}
             />
             <AlertConfirmDialog
@@ -124,7 +121,7 @@ export default function DoubleEditor({
                 description={"Attenzione! L'azione non sarà reversibile"}
                 confirmText={"Cancella"}
                 cancelText={"Annulla"}
-                onOpenChange={(open:boolean) => blockSelectedRef.current = open}
+                onOpenChange={(open:boolean) => setSelectionBlocked(open)}
             />
         </div>
     )

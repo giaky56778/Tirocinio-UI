@@ -1,6 +1,6 @@
 import {useNavigate, useSearchParams} from "react-router";
 import {Dialog} from "@base-ui/react/dialog";
-import SingleViewReadOnlyBiblical from "@/features/search/components/preview/singleViewReadOnlyBiblical.tsx";
+import SingleViewReadOnlyBiblical from "@/features/preview/preview/singleViewReadOnlyBiblical.tsx";
 import DialogPortalPreview from "@/components/ui/common/dialogPortalPreview.tsx";
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import {Suspense} from "react";

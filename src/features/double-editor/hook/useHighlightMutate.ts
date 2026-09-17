@@ -1,6 +1,6 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import {changeHighlight, deleteHighlight, SingleHighlightSchema} from "@/features/double-editor/api/doubleEditorApi.ts";
+import {changeHighlight, deleteHighlight, type SingleHighlightSchema} from "@/features/double-editor/api/doubleEditorApi.ts";
 
 export function useDeleteHighlightWords() {
     const queryClient = useQueryClient()

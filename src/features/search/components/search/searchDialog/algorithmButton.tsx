@@ -6,7 +6,6 @@ import {
 } from "@/features/search/components/search/searchDialog/searchOptionDialog.tsx";
 import {CheckIcon, InfoIcon} from "@/components/ui/icons";
 import {Tooltip} from "@base-ui/react/tooltip";
-import {RefObject} from "react";
 
 type Props = {
     itemKey: string,
@@ -14,7 +13,7 @@ type Props = {
     tooltipText: string,
     selected: boolean,
     onToggle: (key: string) => void,
-    tooltipHandle: RefObject<Tooltip.Handle<unknown>>
+    tooltipHandle: Tooltip.Handle<unknown>
 };
 
 const AlgorithmOptionItem = ({itemKey, label, tooltipText, selected, onToggle, tooltipHandle}: Props) => (
@@ -37,7 +36,7 @@ const AlgorithmOptionItem = ({itemKey, label, tooltipText, selected, onToggle, t
         <span className="text-sm text-left flex-1 flex items-center gap-2">
             {label}
             <Tooltip.Trigger
-                handle={tooltipHandle.current}
+                handle={tooltipHandle}
                 render={<label/>}
                 payload={{ text: tooltipText }}
             >

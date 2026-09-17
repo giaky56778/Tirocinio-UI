@@ -1,6 +1,6 @@
 import React from "react";
-import {ToolBarType} from "@/features/editor/hooks/useEditorState.ts";
-import { Toolbar } from "@base-ui/react";
+import {type ToolBarType} from "@/features/editor/hooks/useEditorState.ts";
+import {Toolbar} from "@base-ui/react";
 import {ArrowTurnLeftIcon, CheckIcon} from "@/components/ui/icons";
 
 const ToolBar = ({toolBar}: { toolBar: ToolBarType }) => (

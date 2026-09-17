@@ -1,8 +1,8 @@
 import {Dialog} from "@base-ui/react/dialog";
 import {ExpandIcon} from "@/components/ui/icons";
 import DialogPortalPreview from "@/components/ui/common/dialogPortalPreview.tsx";
-import SingleViewReadOnlyBiblical from "@/features/search/components/preview/singleViewReadOnlyBiblical.tsx";
-import {SingleSearchType} from "@/features/search/api/searchApiType.ts";
+import SingleViewReadOnlyBiblical from "@/features/preview/preview/singleViewReadOnlyBiblical.tsx";
+import {type SingleSearchType} from "@/features/search/api/searchApiType.ts";
 
 
 type Props={

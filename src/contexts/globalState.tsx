@@ -1,18 +1,7 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  useRef,
-  useCallback,
-  type Dispatch,
-  type ReactNode,
-  type SetStateAction,
-  type RefObject
-} from "react";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
-import {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
-import {TextType} from "@/utils/settings.ts";
+import { create } from 'zustand'
+import type {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import type {SearchType} from "@/features/editor/reducer/selectionReducer.ts";
+import type {TextType} from "@/utils/settings.ts";
 
 export type PageType = 'editor' | 'search' | 'view';
 
@@ -45,25 +34,24 @@ export type ViewPageType = {
 }
 
 export type GlobalStateType = {
-  editor: EditorPageType | undefined
-  search: SearchPageType | undefined
-  view: ViewPageType | undefined
+  editor: Partial<EditorPageType>
+  search: Partial<SearchPageType>
+  view: Partial<ViewPageType>
 }
 
-export type GlobalStateContextType = {
-  swapPage: {
-    state: GlobalStateType
-    setState: Dispatch<SetStateAction<GlobalStateType>>
-    getSelectedText: (page: PageType, side?: TextType) => {
-      text?: TextSelectedType
-      linePos?: number
-    } | undefined
-    setSelectedText: (page: PageType, side: TextType | undefined, newValue:TextSelectedType) => void
-    editorRef: RefObject<Partial<EditorPageType>>
-    searchRef: RefObject<Partial<SearchPageType>>
-    viewRef: RefObject<Partial<ViewPageType>>
-    confirmExit: () => void
-  }
+export type InitialPage = "editor" | "search" | "view" | "searchParams" | "readonly" | "doubleReadonly"
+
+export type GlobalStore = {
+  state: GlobalStateType
+  initialMount: Record<InitialPage, boolean>
+
+  setEditor: (updater: Partial<EditorPageType> | ((prev: Partial<EditorPageType>) => Partial<EditorPageType>)) => void
+  setSearch: (updater: Partial<SearchPageType> | ((prev: Partial<SearchPageType>) => Partial<SearchPageType>)) => void
+  setView: (updater: Partial<ViewPageType> | ((prev: Partial<ViewPageType>) => Partial<ViewPageType>)) => void
+
+  getSelectedText: (page: PageType, side?: TextType) => { text?: TextSelectedType, linePos?: number } | undefined
+  setSelectedText: (page: PageType, side: TextType | undefined, newValue: TextSelectedType) => void
+
   initPage: {
     resetInitialMount: (page: InitialPage) => void
     consumeInitialMount: (page: InitialPage) => void
@@ -71,137 +59,79 @@ export type GlobalStateContextType = {
   }
 }
 
-export type InitialPage = "editor" | "search" | "view" | "searchParams" | "readonly" | "doubleReadonly"
-
-const GlobalContext = createContext<GlobalStateContextType | undefined>(undefined);
-
-export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
-  const [state, setState] = useState<GlobalStateType>({
-    editor: undefined,
-    search: undefined,
-    view: undefined
-  })
-
-  const editorRef = useRef<Partial<EditorPageType>>({})
-  const searchRef = useRef<Partial<SearchPageType>>({})
-  const viewRef = useRef<Partial<ViewPageType>>({})
-
-  const initialMountRef = useRef<Record<InitialPage, boolean>>({
+export const useGlobalState = create<GlobalStore>((set, get) => ({
+  state: {
+    editor: {},
+    search: {},
+    view: {}
+  },
+  
+  initialMount: {
     editor: true,
     search: true,
     searchParams: true,
     view: true,
     readonly: true,
     doubleReadonly: true
-  })
+  },
 
-  const consumeInitialMount = useCallback((page: InitialPage) => {
-    initialMountRef.current[page] = false
-  }, [])
+  setEditor: (updater) => set((store) => ({
+    state: { ...store.state, editor: { ...store.state.editor, ...(typeof updater === 'function' ? updater(store.state.editor) : updater) } }
+  })),
 
-  const getIsInitialMount = useCallback((page: InitialPage) => {
-    return initialMountRef.current[page]
-  }, [])
+  setSearch: (updater) => set((store) => ({
+    state: { ...store.state, search: { ...store.state.search, ...(typeof updater === 'function' ? updater(store.state.search) : updater) } }
+  })),
 
-  const resetInitialMount = useCallback((page: InitialPage) => {
-    initialMountRef.current[page] = true
-  }, [])
+  setView: (updater) => set((store) => ({
+    state: { ...store.state, view: { ...store.state.view, ...(typeof updater === 'function' ? updater(store.state.view) : updater) } }
+  })),
 
-  const getSelectedText = useCallback((page: PageType, side: TextType = 'historical') => {
+  getSelectedText: (page: PageType, side: TextType = 'historical') => {
+    const state = get().state
     switch (page) {
       case 'editor':
         return {
-          text: (side === 'historical' ? editorRef.current.historical : editorRef.current.biblical) ?? state.editor?.[side],
-          linePos: editorRef.current.linePos?.[side] ?? state.editor?.linePos?.[side]
+          text: side === 'historical' ? state.editor.historical : state.editor.biblical,
+          linePos: state.editor.linePos?.[side]
         }
       case 'search':
         return {
-          text: searchRef.current.text ?? state.search?.text,
-          linePos: searchRef.current.linePos ?? state.search?.linePos
+          text: state.search.text,
+          linePos: state.search.linePos
         };
       case 'view':
         return {
-          text: viewRef.current.text ?? state.view?.text
+          text: state.view.text
         };
       default:
         return undefined;
     }
-  }, [state]);
+  },
 
-  const setSelectedText = useCallback((
-    page: PageType,
-    side: TextType = 'historical',
-    newValue: TextSelectedType
-  ) => {
-    const nextSelected = newValue
-
+  setSelectedText: (page: PageType, side: TextType = 'historical', newValue: TextSelectedType) => {
     switch (page) {
-      case 'editor':
-        if (!editorRef.current.linePos)
-            editorRef.current.linePos = {
-              historical: 0,
-              biblical: 0
-            }
+      case 'editor': {
+        const currentLinePos = get().state.editor.linePos || { historical: 0, biblical: 0 }
         if (side === 'historical') {
-          editorRef.current.historical = nextSelected
-          editorRef.current.linePos.historical = 0
+          get().setEditor({ historical: newValue, linePos: { ...currentLinePos, historical: 0 } })
         } else {
-          editorRef.current.biblical = nextSelected
-          editorRef.current.linePos.biblical = 0
+          get().setEditor({ biblical: newValue, linePos: { ...currentLinePos, biblical: 0 } })
         }
         break
+      }
       case 'search':
-        searchRef.current.text = nextSelected
-        searchRef.current.linePos = 0
+        get().setSearch({ text: newValue, linePos: 0 })
         break
       case 'view':
-        viewRef.current.text = nextSelected
+        get().setView({ text: newValue })
         break
     }
-  }, [state])
+  },
 
-  const confirmExit = useCallback(() => {
-    setState(prevState => ({
-      editor: {
-        ...prevState.editor,
-        ...editorRef.current
-      },
-      search: {
-        ...prevState.search,
-        ...searchRef.current,
-      },
-      view: {
-        ...prevState.view,
-        ...viewRef.current,
-      }
-    }))
-  }, [])
-
-  const value = useMemo(
-    () => ({
-      swapPage: {
-        state, setState,
-        getSelectedText, setSelectedText,
-        editorRef, searchRef, viewRef,
-        confirmExit
-      },
-      initPage: {
-        consumeInitialMount, getIsInitialMount,resetInitialMount
-      }
-    }),
-    [state, getSelectedText, setSelectedText, confirmExit, consumeInitialMount, getIsInitialMount, resetInitialMount]
-  )
-
-  return (
-      <GlobalContext.Provider value={value}>
-        {children}
-      </GlobalContext.Provider>
-  )
-}
-
-export const useGlobalState = () => {
-  const ctx = useContext(GlobalContext)
-  if (!ctx)
-    throw new Error("useGlobalState must be used within GlobalProvider")
-  return ctx
-}
+  initPage: {
+    consumeInitialMount: (page) => set(store => !store.initialMount[page] ? {} : ({ initialMount: { ...store.initialMount, [page]: false } } )),
+    getIsInitialMount: (page) => get().initialMount[page],
+    resetInitialMount: (page) => set(store => !store.initialMount[page] ? {} : ({ initialMount: { ...store.initialMount, [page]: true } } ))
+  }
+}))

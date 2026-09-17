@@ -1,13 +1,13 @@
-import {memo, RefObject, useMemo} from "react";
-import {HighlightBound, HighlightLine} from "@/features/editor/reducer/wordHighlightReducer.ts";
-import {Popover} from "@base-ui/react/popover";
-import {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
-import {ChapterTitleItem, TextLineItem, TitleTextItem} from "@/api/indexType.ts";
-import {WordGroup} from "@/utils/commonUtil.ts";
-import {CostumeContextType} from "@/features/editor/components/editor/contextMenuCustom.tsx";
+import {useMemo, memo} from 'react';
+import type {HighlightBound, HighlightLine} from "@/features/editor/reducer/wordHighlightReducer.ts";
+import {type Popover} from "@base-ui/react/popover";
+import type {HighlightStateType} from "@/features/editor/hooks/useEditorState.ts";
+import type {ChapterTitleItem, TextLineItem, TitleTextItem} from "@/api/indexType.ts";
+import type {WordGroup} from "@/utils/commonUtil.ts";
+import type {CostumeContextType} from "@/features/editor/components/editor/contextMenuCustom.tsx";
 import GroupRenderer from "./groupRender";
-import {SearchHighlight, SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
-import {TEXT_FONT_CLASS, TextType} from "@/utils/settings.ts";
+import type {SearchHighlight, SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
+import {TEXT_FONT_CLASS, type TextType} from "@/utils/settings.ts";
 import {composeTitle, createGroup} from "@/features/editor/lib/utils.ts";
 
 type Props = {
@@ -24,22 +24,23 @@ type Props = {
     searchHighlight: SearchHighlight | null,
     lineSelection: HighlightLine | SelectionRange | null,
     onClearSelection:()=> void
-    previewCardHandler?: RefObject<Popover.Handle<string>>,
+    previewCardHandler?: Popover.Handle<string>,
 }
 
 function HighlightRow({side, text, lineIndex, lineHighlights, highlightBounds, highlightState, colors, contextMenu, previewCardHandler, blinkHighlightId, toolBarVisible, searchHighlight, lineSelection, onClearSelection}: Props) {
-
-    if (text.type === "titleText")
-        return (<h1 key={side + '-title-' + lineIndex}>{composeTitle(text.text)}</h1>)
-    if (text.type === "chapterTitle")
-        return (<h2 key={side + '-chapter-' + lineIndex}>{composeTitle(text.text)}</h2>)
 
     const safeSelectionRange = lineSelection
     const safeSearchHighlight = searchHighlight?.side === side ? searchHighlight : null
 
     const groups: WordGroup[] = useMemo(() => {
+        if (text.type !== "text") return []
         return createGroup(text, lineHighlights, safeSelectionRange, safeSearchHighlight)
-    }, [text, lineHighlights, safeSelectionRange, searchHighlight?.start, searchHighlight?.end, searchHighlight?.colorId, side])
+    }, [text, lineHighlights, safeSelectionRange, safeSearchHighlight])
+
+    if (text.type === "titleText")
+        return (<h1 key={side + '-title-' + lineIndex}>{composeTitle(text.text)}</h1>)
+    if (text.type === "chapterTitle")
+        return (<h2 key={side + '-chapter-' + lineIndex}>{composeTitle(text.text)}</h2>)
 
     return (
         <div

@@ -1,17 +1,17 @@
-import {useCallback, useMemo, useRef} from "react";
-import {TextSelectedType} from "@/hook/useTextNameSelection.ts";
+import {useMemo, useCallback} from 'react';
+import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
-import {EditorTextType} from "@/features/double-editor/editorPage.tsx";
+import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
 import DoubleEditorSkeleton from "@/features/editor/components/skeleton/doubleEditorSkeleton.tsx";
 import SearchResultsSection from "@/features/search/components/search/searchResultsSection.tsx";
-import {TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
+import {type TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
 import SingleText from "@/features/search/components/search/singleText.tsx";
 import {AlertDialog} from "@base-ui/react/alert-dialog";
-import {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
-import {selectionStore} from "@/features/editor/store/selectionStore.tsx";
+import {type AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
+import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 import useInitSearch from "@/features/search/hooks/useInitSearch.ts";
 import {useSearchParams} from "react-router";
-import {SettingsType, TooltipType} from "@/features/search/api/searchApiType.ts";
+import {type SettingsType, type TooltipType} from "@/features/search/api/searchApiType.ts";
 
 type Props = {
     settings: SettingsType,
@@ -25,10 +25,10 @@ type Props = {
 export default function SearchPageEditor({settings, tooltip, text, selectedText, opTextHistorical, isLoading}: Props) {
 
     const [searchParams] = useSearchParams()
-    const searchElement = selectionStore(state => state.searchElement)
-    const setSearchElement = selectionStore(state => state.setSearchElement)
+    const searchElement = useSelectionStore(state => state.searchElement)
+    const setSearchElement = useSelectionStore(state => state.setSearchElement)
     const setBatchedParams = useBatchedSearchParams()
-    const searchHandle = useRef(AlertDialog.createHandle<AlertModifyPayloadType>())
+    const searchHandle = AlertDialog.createHandle<AlertModifyPayloadType>()
     useInitSearch(selectedText, text.text)
     
     const resetSearchElement = useCallback(() => {
@@ -46,7 +46,7 @@ export default function SearchPageEditor({settings, tooltip, text, selectedText,
 
     const selected = useCallback((newSelected: TextSelectedType)=>{
         if(searchElement?.selection){
-            searchHandle.current?.openWithPayload({
+            searchHandle?.openWithPayload({
                 onConfirm:()=>opTextHistorical.select(newSelected)
             })
             if(searchParams.has('start') && searchParams.has('end')){
