@@ -4,7 +4,7 @@ import SearchPage from "@/features/search/components/searchPage.tsx";
 import VisualizeHighlights from "@/features/view/components/visualizeHighlights.tsx";
 import PreviewDouble from "@/features/preview/previewDouble.tsx";
 import PreviewSingle from "@/features/preview/previewSingle.tsx";
-import LoginPage from "@/features/account/loginPage.tsx";
+import LoginPage from "@/features/account/components/loginPage.tsx";
 import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
 import NavSidebar from "@/components/layout/navBar.tsx";
 import ParamsProvider from "@/contexts/paramsProvider.tsx";

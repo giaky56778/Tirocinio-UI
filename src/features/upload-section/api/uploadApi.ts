@@ -28,7 +28,6 @@ export async function uploadHistoricalText({path, filename, file, text}: Props) 
     })
 
     if (!res.ok) {
-        console.log(res.status)
         switch (res.status) {
             case 409:
                 throw new Error(`Errore durante il caricamento: testo già presente`)

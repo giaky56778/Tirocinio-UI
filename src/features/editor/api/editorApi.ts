@@ -68,8 +68,6 @@ async function readTextPortion({textType,id, path, filename, line, lineNumber,wo
 
     const json = await res.json() as TextBundle
 
-    console.log(json)
-
     return {
         text: json.text,
         index: json.index,

@@ -10,6 +10,7 @@
 - [virtua](https://github.com/inokawa/virtua/)
 - [Base-UI](https://base-ui.com)
 - [react-hot-toast](https://react-hot-toast.com/)
+- [Fetch Event Source](https://github.com/Azure/fetch-event-source)
 
 ## Istruzioni per l'installazione e l'esecuzione
 
@@ -17,7 +18,7 @@ Per eseguire questo progetto è necessario avere [Node.js](https://nodejs.org/) 
 Successivamente, segui questi passaggi:
 1. Clona il repository:
    ```bash
-   git clone https://github.com/giaky56778/Tirocinio
+   git clone https://github.com/giaky56778/Tirocinio-UI.git
    cd ./Tirocinio-UI
    ```
 2. Installa le dipendenze:

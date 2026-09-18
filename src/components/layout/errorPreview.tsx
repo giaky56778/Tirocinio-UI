@@ -1,6 +1,5 @@
 import {TriangleExclamationIcon} from "@/components/ui/icons";
 
-
 type Props={
     error: Error
 }

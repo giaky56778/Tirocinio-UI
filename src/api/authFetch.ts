@@ -8,15 +8,8 @@ export async function authFetch(input: RequestInfo | URL, init?: RequestInit): P
     })
 
     if (res.status === 401){
-        try {
-            const body = await res.json()
-            const errorDetail = body.detail || ""
-            console.log("401 detail:", errorDetail)
-        } catch (e) {
-            console.log("Failed to parse 401 response as JSON", e)
-        }
         
-        toast.error("Sessione scaduta. Effettua nuovamente il login", {id: "unauthorized"})
+        toast.error("Sessione scaduta.\nEffettua nuovamente il login", {id: "unauthorized"})
 
         void router.navigate('/login', {
             replace: true, 
@@ -24,7 +17,7 @@ export async function authFetch(input: RequestInfo | URL, init?: RequestInit): P
                 from: window.location.pathname + window.location.search
             }
         })
-        throw new Error('UNAUTHORIZED');
+        throw new Error('UNAUTHORIZED')
     }
 
     return res
