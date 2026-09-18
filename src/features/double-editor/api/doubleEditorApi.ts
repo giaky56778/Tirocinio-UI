@@ -12,7 +12,7 @@ export type HighlightSchema = {
 }
 
 export async function changeHighlight(id: number | string, newHighlight: SingleHighlightSchema) {
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/updateQuote/${id}`, {
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/quote/updateQuote/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ export async function changeHighlight(id: number | string, newHighlight: SingleH
 }
 
 export async function deleteHighlight(id: number | string) {
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/deleteQuote/${id}`, {
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/quote/deleteQuote/${id}`, {
         method: 'DELETE',
     })
     if (!res.ok) {
@@ -42,7 +42,7 @@ export async function readHighlight(biblicalID: number, historicalID: number) {
         'historical_text_id': String(historicalID)
     })
 
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/getQuotes?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/quote/getQuotes?${params}`)
 
     if (!res.ok) {
         const errorData = await res.json()

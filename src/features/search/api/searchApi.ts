@@ -11,7 +11,7 @@ export async function settingsRetrive() {
 }
 
 export async function tooltipRetrive() {
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/info/getAlgoToolpit/`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/info/getAlgoToolpit/`)
 
     if (!res.ok)
         throw new Error("Errore: impossibile leggere le informazioni degli algoritmi")
@@ -40,7 +40,7 @@ export async function researchResultRetrive(
         })
     })
 
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchJson/?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/search/getSearchJson/?${params}`)
 
     if (!res.ok)
         throw new Error("Errore: impossibile leggere i risultati della ricerca hybrid")
@@ -49,7 +49,7 @@ export async function researchResultRetrive(
 }
 
 export async function addNewHighlight(addNewHighlightsType: NewHighlightType) {
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/saveQuote`, {
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/quote/saveQuote`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export async function searchXlsxExport(filename: string, opt?: {
             search_end: String(opt.search_end)
         })
     })
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/getSearchXlsx/?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/search/getSearchXlsx/?${params}`)
 
     if (!res.ok)
         throw new Error("Errore: impossibile generare il file XLSX")

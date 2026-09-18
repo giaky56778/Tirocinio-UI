@@ -77,7 +77,7 @@ export function SelectionStoreProvider({ children }: { children: ReactNode }) {
         const initialParams: Record<string, string | null> = {
             hline: searchParams.get('hline'),
             bline: searchParams.get('bline'),
-            start: searchParams.get('start'),
+            start: searchParams.get('start')
         }
         return createSelectionStore(initialParams)
     })

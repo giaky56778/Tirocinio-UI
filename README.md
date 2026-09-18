@@ -1,6 +1,6 @@
 # React + Vite
 
-## Tecnologie utilizzate
+## Librerie usate
 - [React](https://reactjs.org/)
 - [Vite](https://vitejs.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
@@ -29,4 +29,4 @@ Successivamente, segui questi passaggi:
    ```bash
    npm run dev # oppure pnpm dev
    ```
-4. Normalmente il servizio inizia sulla porta `5173`. Per cui apri il browser e visita `http://localhost:5173` per visualizzare il progetto.
+4. Normalmente il servizio inizia sulla porta `5173`. Per cui apri il browser e visita [http://localhost:5173](http://localhost:5173) per visualizzare il progetto.

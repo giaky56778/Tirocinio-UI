@@ -25,7 +25,7 @@ export async function readHighlightPortion(biblicalID: number, historicalID: num
         'lineH': String(lineH)
     })
 
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/quote/getQuotesPortion?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/quote/getQuotesPortion?${params}`)
 
     if (!res.ok) {
         const errorData = await res.json()
@@ -58,7 +58,7 @@ async function readTextPortion({textType,id, path, filename, line, lineNumber,wo
 
     const endpoint = textType === "historical" ? "getHistoricalTextPortion" : "getBiblicalTextPortion"
 
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/${endpoint}/?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/text/${endpoint}/?${params}`)
 
 
     if (!res.ok) {

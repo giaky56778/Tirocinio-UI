@@ -60,7 +60,7 @@ export default function useSSESearch({dialogHandle, initialResultFilename}: Prop
             params.append("sources", sourcesSelected.join(""))
             algoSelected.forEach((algo) => params.append("algoList", algo))
 
-            await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/hybridSearch?${params}`, {
+            await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/search/hybridSearch?${params}`, {
                 method: "GET",
                 headers: {"Content-Type": "application/json"},
             });
@@ -75,7 +75,7 @@ export default function useSSESearch({dialogHandle, initialResultFilename}: Prop
                 setIsLoading(false)
             }
 
-            await fetchEventSource(`${import.meta.env.VITE_SERVER_URL}/api/v1/search/hybridSearch?${params}`, {
+            await fetchEventSource(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/search/hybridSearch?${params}`, {
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",

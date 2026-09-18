@@ -6,7 +6,7 @@ export async function login ({ username, password }: { username: string; passwor
     const body = new URLSearchParams()
     body.append("username", username)
     body.append("password", password)
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/login`, {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/user/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -23,7 +23,7 @@ export async function login ({ username, password }: { username: string; passwor
 }
 
 export async function me(){
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/me`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/user/me`)
 
     if (!res.ok) {
         const errorData = await res.json()
@@ -34,7 +34,7 @@ export async function me(){
 }
 
 export async function logout(){
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/logout`, {
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/user/logout`, {
         method: 'POST'
     })
 
@@ -49,7 +49,7 @@ export async function pswChange({oldPassword, newPassword}:{oldPassword:string, 
     body.append("old_password", oldPassword)
     body.append("new_password", newPassword)
 
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/user/changePassword`, {
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/user/changePassword`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"

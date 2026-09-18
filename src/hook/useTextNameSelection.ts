@@ -126,8 +126,7 @@ export default function useTextNameSelection({names, initUrl, side, page}: Props
         globalState.setSelectedText(page, side, newSelected)
 
         const newParams: Record<string, string> = {
-            [paramKey]: `${newSelected.path}:${newSelected.items.filename}`,
-            [`${paramKey}line`]: '0'
+            [paramKey]: `${newSelected.path}:${newSelected.items.filename}`
         }
 
         setBatchedParams(newParams, origin)

@@ -22,7 +22,7 @@ export async function uploadHistoricalText({path, filename, file, text}: Props) 
     if (text !== undefined)
         formData.append('text', text)
 
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/upload`, {
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/text/upload`, {
         method: 'POST',
         body: formData,
     })

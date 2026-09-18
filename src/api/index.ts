@@ -26,7 +26,7 @@ async function readText({textType,id, path, filename}:Props){
         throw new Error('Errore: è necessario fornire un id oppure i parametri path/filename')
 
     const endpoint = textType === "historical" ? "getHistoricalText" : "getBiblicalText"
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/${endpoint}/?${params}`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/text/${endpoint}/?${params}`)
 
     if (!res.ok) {
         const errorData = await res.json()
@@ -52,7 +52,7 @@ export async function readBiblicalText({id, path, filename} :TextQuery) {
 }
 
 export async function getTextNameBiblical() {
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getBiblicalTextNames`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/text/getBiblicalTextNames`)
 
     if (!res.ok) {
         const errorData = await res.json()
@@ -63,7 +63,7 @@ export async function getTextNameBiblical() {
 }
 
 export async function getTextNameHistorical() {
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/getHistoricalTextNames`)
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/text/getHistoricalTextNames`)
 
     if (!res.ok) {
         const errorData = await res.json()
@@ -75,7 +75,7 @@ export async function getTextNameHistorical() {
 
 export async function deleteText(id:number) {
     const params = new URLSearchParams({id: String(id)})
-    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/api/v1/text/deleteHistoricalText?${params}`, {
+    const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/text/deleteHistoricalText?${params}`, {
         method: 'DELETE'
     })
 

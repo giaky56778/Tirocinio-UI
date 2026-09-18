@@ -72,7 +72,9 @@ function ShowResultSearch({filename, historicalText, confirmedSearch, isLoading}
                                            ${!confirmedSearch ? 'cursor-not-allowed' : ''}
                                `}
                             >
-                                <Switch.Thumb className="size-3 bg-neutral-400 rounded-full transition-[translate,background-color] duration-150 ease-[ease] data-checked:translate-x-3.5"/>
+                                <Switch.Thumb
+                                    // ignora questo warning: le due classi, se messe insieme, generano lo stesso identico stile al Thumb, che sia checked o meno
+                                    className="size-3 bg-neutral-400 data-checked:bg-white rounded-full transition-[translate,background-color] duration-150 ease-[ease] data-checked:translate-x-3.5"/>
                             </Switch.Root>
                             Solo validi
                         </Tooltip.Trigger>
