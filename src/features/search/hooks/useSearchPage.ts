@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from 'react';
 import {useSearchParams} from "react-router";
 import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
-import {useGlobalState} from "@/contexts/globalState.tsx";
+import {useGlobalState} from "@/store/globalStateStore.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {Dialog} from "@base-ui/react/dialog";

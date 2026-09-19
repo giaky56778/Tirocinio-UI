@@ -1,11 +1,16 @@
 import {Dialog, Menu} from "@base-ui/react";
 import {ArrowSvg, ExitIcon, SettingsIcon, UserIcon} from "@/components/ui/icons";
-import useAccount from "@/features/account/hook/useAccount.ts";
+import useAccount, {type AccountType} from "@/features/account/hook/useAccount.ts";
 import DialogChangePassword from "@/features/account/components/dialogChangePassword.tsx";
 
-export default function MenuAccount() {
-    const account = useAccount()
-    const changePasswordHandler = Dialog.createHandle<never>()
+type Props = {
+    account?: AccountType;
+};
+
+export default function MenuAccount({ account: accountProp }: Props) {
+    const fallbackAccount = useAccount();
+    const account = accountProp ?? fallbackAccount;
+    const changePasswordHandler = Dialog.createHandle<never>();
 
     return(
         <>

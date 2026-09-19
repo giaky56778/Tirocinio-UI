@@ -7,7 +7,7 @@ import {type HighlightBound} from "@/features/editor/reducer/wordHighlightReduce
 import {type SelectionPerSide, type SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
 import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {useSelectionStore} from '@/features/editor/store/useSelectionStore.tsx';
-import {useGlobalState} from "@/contexts/globalState.tsx";
+import {useGlobalState} from "@/store/globalStateStore.tsx";
 import {type TextIndexSchema, type TextSchema} from "@/api/indexType.ts";
 import {type TextType} from "@/utils/settings.ts";
 import {copyHighlightTextFromID} from "@/features/editor/lib/utils.ts";

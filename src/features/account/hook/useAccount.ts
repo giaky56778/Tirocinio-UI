@@ -1,37 +1,101 @@
-import {useMutation, useQueryClient, useSuspenseQuery} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useLocation, useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import {useLocation} from "react-router";
-import {useEffect} from "react";
-import {logout, me} from "@/features/account/api/userApi.ts";
+import {login as apiLogin, logout, me, pswChange} from "@/features/account/api/userApi.ts";
+import { useAuthStore } from "@/store/authStore.ts";
+import { useEffect } from "react";
+import type { MeSchema } from "@/api/indexType.ts";
 
-export default function useAccount(){
-    const {pathname} = useLocation()
-    const query = useQueryClient()
+export type AccountType = {
+    user: MeSchema | undefined;
+    getInfoUser: {
+        data: MeSchema | undefined;
+    };
+    isLoading: boolean;
+    logout: () => void;
+    login: ({ username, password }: { username: string; password: string }) => void;
+    isLoggingIn: boolean;
+    changePassword: ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) => void;
+    isChangingPassword: boolean;
+};
+
+export default function useAccount(): AccountType {
+    const navigate = useNavigate()
+    const location = useLocation()
+    const queryClient = useQueryClient()
+    const { setAuth, clearAuth } = useAuthStore()
+
+    const savedRedirect = sessionStorage.getItem("redirect_after_login")
+    const redirectTo= location.state?.from || savedRedirect || "/"
+
+    const userQuery = useQuery({
+        queryKey: ["account"],
+        queryFn: me,
+        retry: false
+    })
 
     useEffect(() => {
-        void query.invalidateQueries({queryKey: ['account']})
-    }, [pathname, query])
+        if (userQuery.data) {
+            setAuth(true, userQuery.data)
+        }
+    }, [userQuery.data, setAuth])
 
-    const logoutFunc=useMutation({
-        mutationFn:logout,
-        onSuccess:() => {
-            window.location.href="/login"
+    const loginMutation = useMutation({
+        mutationFn: apiLogin
+    })
+
+    const logoutMutation = useMutation({
+        mutationFn: logout,
+        onSuccess: () => {
+            clearAuth()
+            queryClient.clear()
+            window.location.replace("/login")
         },
-        onError:() => {
+        onError: () => {
             toast.error("Errore durante il logout")
         }
     })
 
-    const userQuery = useSuspenseQuery({
-        queryKey: ["account"],
-        queryFn: me
+    const changePasswordMutation = useMutation({
+        mutationFn: pswChange
     })
 
-    return{
+    function changePassword({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) {
+        void toast.promise(changePasswordMutation.mutateAsync({ oldPassword, newPassword }), {
+            loading: 'Cambio password in corso...',
+            success: () => "Password cambiata con successo",
+            error: (err) => err.message || 'Errore durante il cambio password'
+        })
+    }
+
+    function login({ username, password }: { username: string; password: string }) {
+        void toast.promise(loginMutation.mutateAsync({ username, password }),{
+            loading: 'Login in corso...',
+            success: ()=>{
+                sessionStorage.removeItem("redirect_after_login")
+                queryClient.clear()
+                setAuth(true)
+                if (redirectTo === "/login")
+                    navigate("/", { replace: true })
+                else
+                    navigate(redirectTo, { replace: true })
+
+                return "Login effettuato con successo"
+            },
+            error: (err) => err.message || 'Errore durante il login'
+        })
+    }
+
+    return {
         user: userQuery.data,
         getInfoUser: {
             data: userQuery.data,
         },
-        logout: ()=> logoutFunc.mutate()
+        isLoading: userQuery.isLoading,
+        logout: () => logoutMutation.mutate(),
+        login,
+        isLoggingIn: loginMutation.isPending,
+        changePassword,
+        isChangingPassword: changePasswordMutation.isPending
     }
 }

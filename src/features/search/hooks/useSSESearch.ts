@@ -1,6 +1,6 @@
 import {useCallback, useState} from "react";
 import {type Dialog} from "@base-ui/react/dialog";
-import {useGlobalState} from "@/contexts/globalState.tsx";
+import {useGlobalState} from "@/store/globalStateStore.tsx";
 import {fetchEventSource} from "@microsoft/fetch-event-source";
 import {authFetch} from "@/api/authFetch.ts";
 

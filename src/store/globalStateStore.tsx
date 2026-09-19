@@ -130,8 +130,24 @@ export const useGlobalState = create<GlobalStore>((set, get) => ({
   },
 
   initPage: {
-    consumeInitialMount: (page) => set(store => !store.initialMount[page] ? {} : ({ initialMount: { ...store.initialMount, [page]: false } } )),
+    consumeInitialMount: (page) => set(store => store.initialMount[page]
+        ? {
+            initialMount: {
+              ...store.initialMount,
+              [page]: false
+            }
+          }
+        : {}
+    ),
     getIsInitialMount: (page) => get().initialMount[page],
-    resetInitialMount: (page) => set(store => !store.initialMount[page] ? {} : ({ initialMount: { ...store.initialMount, [page]: true } } ))
+    resetInitialMount: (page) => set(store => store.initialMount[page]
+        ? {
+            initialMount: {
+              ...store.initialMount,
+              [page]: true
+            }
+          }
+        : {}
+    )
   }
 }))

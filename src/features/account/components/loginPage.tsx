@@ -2,11 +2,11 @@ import {Button} from "@base-ui/react";
 import {Form} from "@base-ui/react/form";
 import {LockClose, UserIcon} from "@/components/ui/icons";
 import FieldAccount from "@/features/account/components/fieldAccount.tsx";
-import useLogin from "@/features/account/hook/useLogin.ts";
+import useAccount from "@/features/account/hook/useAccount.ts";
 
 export default function LoginPage() {
 
-    const {login}= useLogin()
+    const { login } = useAccount()
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center p-4">

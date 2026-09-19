@@ -1,8 +1,8 @@
-import {router} from "@/utils/router.tsx";
 import toast, {type Toast} from "react-hot-toast";
-import {useGlobalState} from "@/contexts/globalState.tsx";
+import {useGlobalState} from "@/store/globalStateStore.tsx";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
 import {type AddType} from "@/features/search/hooks/useApiSearch.ts";
+import {useNavigate} from "react-router";
 
 interface ToastViewHighlightAddProps {
     toastParam: Toast
@@ -12,6 +12,7 @@ interface ToastViewHighlightAddProps {
 export default function ToastViewHighlightAdd({ toastParam, value }: ToastViewHighlightAddProps) {
     const t=toastParam
     const globalState= useGlobalState()
+    const navigate = useNavigate()
 
     return (
         <div
@@ -56,7 +57,7 @@ export default function ToastViewHighlightAdd({ toastParam, value }: ToastViewHi
                             }
                         })
 
-                        void router.navigate(`/`)
+                        navigate(`/`)
                     }}
                     className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors cursor-pointer"
                 >

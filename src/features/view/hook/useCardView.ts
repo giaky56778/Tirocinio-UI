@@ -2,7 +2,7 @@ import { showText } from "@/utils/commonUtil"
 import type {highlightBiblicalType, highlightTextType} from "@/features/view/api/viewApi.ts";
 import type {TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import type {TextListSchema} from "@/api/indexType.ts";
-import {useGlobalState} from "@/contexts/globalState.tsx";
+import {useGlobalState} from "@/store/globalStateStore.tsx";
 import {useNavigate} from "react-router";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
 

@@ -2,7 +2,7 @@ import {useEffect} from "react";
 import {useLocation, useSearchParams} from "react-router";
 import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {type TextSchema} from "@/api/indexType.ts";
-import {useGlobalState} from "@/contexts/globalState.tsx";
+import {useGlobalState} from "@/store/globalStateStore.tsx";
 import {copyHighlightText} from "@/utils/commonUtil.ts";
 import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";

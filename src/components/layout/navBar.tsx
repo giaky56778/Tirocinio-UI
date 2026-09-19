@@ -29,7 +29,9 @@ const links:Record<string, PageLabelType> = {
     },
 }
 
-export default function NavSidebar() {
+import type { AccountType } from "@/features/account/hook/useAccount.ts";
+
+export default function NavSidebar({ account }: { account?: AccountType }) {
     const {pathname} = useLocation()
 
     const isPreviewDouble = pathname === '/previewDouble' || pathname === '/previewSingle'
@@ -73,7 +75,7 @@ export default function NavSidebar() {
                     />
                 </Tooltip.Provider>
             </div>
-            <MenuAccount/>
+            <MenuAccount account={account}/>
         </div>
     )
 }

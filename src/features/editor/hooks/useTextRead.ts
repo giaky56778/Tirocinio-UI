@@ -3,7 +3,7 @@ import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
 import {READ_QUERY_DEFAULTS, type TextType} from "@/utils/settings.ts";
 import useTextNameSelection, {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {type TextBundle, type TextListSchema} from "@/api/indexType.ts";
-import {type PageType} from "@/contexts/globalState.tsx";
+import {type PageType} from "@/store/globalStateStore.tsx";
 import {type UrlPath} from "@/features/editor/lib/utils.ts";
 import {readBiblicalTextPortion, readHistoricalTextPortion} from "@/features/editor/api/editorApi.ts";
 

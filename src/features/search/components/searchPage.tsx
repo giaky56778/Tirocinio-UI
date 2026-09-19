@@ -4,7 +4,7 @@ import SearchPageSkeleton from "@/features/search/components/skeleton/searchSkel
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import ForceUploadDialog from "@/features/upload-section/components/forceUploadDialog.tsx";
 import {HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";
-import {useGlobalState} from "@/contexts/globalState.tsx";
+import {useGlobalState} from "@/store/globalStateStore.tsx";
 import {useReadSettingsSearch} from "@/features/search/hooks/useApiSearch.ts";
 import {useHistoricalTextRead} from "@/features/search/hooks/useHistoricalTextRead.ts";
 

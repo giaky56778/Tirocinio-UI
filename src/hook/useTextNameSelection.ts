@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import toast from "react-hot-toast";
-import {type PageType, useGlobalState} from "@/contexts/globalState.tsx";
+import {type PageType, useGlobalState} from "@/store/globalStateStore.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {type TextType} from "@/utils/settings.ts";
 import {type ContentItemText, type TextListSchema} from "@/api/indexType.ts";

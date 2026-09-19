@@ -1,7 +1,7 @@
 import {useEffect, useRef, useMemo, useCallback} from 'react';
 import {useSearchParams} from "react-router";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
-import {useGlobalState} from "@/contexts/globalState.tsx";
+import {useGlobalState} from "@/store/globalStateStore.tsx";
 import {type TextType} from "@/utils/settings.ts";
 import {type ModeType} from "@/features/editor/components/highlightEditorWindow.tsx";
 import {type ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
