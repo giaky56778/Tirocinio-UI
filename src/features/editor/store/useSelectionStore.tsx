@@ -4,7 +4,8 @@ import {createContext, type ReactNode, useContext, useState} from 'react'
 import {useSearchParams} from 'react-router'
 import {
     initialSelectionState,
-    type SearchType, type SelectionAction,
+    type SearchType,
+    type SelectionAction,
     type SelectionPerSide,
     type SelectionRange,
     selectionReducer
@@ -52,21 +53,29 @@ export const createSelectionStore = (initialParams: Record<string, string | null
         isSelectionBlocked: false
     }),
     
-    initialUrlParams: initialParams,
+    initialUrlParams: initialParams
+}))
+
+const defaultStore = createStore<SelectionStore>(() => ({
+    selectionState: initialSelectionState,
+    dispatchSelection: () => {},
+    clearSelection: () => {},
+    searchElement: undefined,
+    setSearchElement: () => {},
+    reset: () => {},
+    initialUrlParams: {},
+    isSelectionBlocked: false,
+    setSelectionBlocked: () => {}
 }))
 
 export function useSelectionStore<T>(selector: (state: SelectionStore) => T): T {
-    const store = useContext(SelectionStoreContext)
-    if (!store)
-        throw new Error('Missing SelectionStoreProvider in the component tree')
+    const store = useContext(SelectionStoreContext) ?? defaultStore
     return useStore(store, selector)
 }
 
+
 export function useSelectionStoreContext() {
-    const store = useContext(SelectionStoreContext)
-    if (!store)
-        throw new Error('Missing SelectionStoreProvider in the component tree')
-    return store
+    return useContext(SelectionStoreContext) ?? defaultStore
 }
 
 const SelectionStoreContext = createContext<ReturnType<typeof createSelectionStore> | null>(null)

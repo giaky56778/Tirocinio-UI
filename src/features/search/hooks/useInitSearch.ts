@@ -2,7 +2,7 @@ import {useEffect} from "react";
 import {useLocation, useSearchParams} from "react-router";
 import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {type TextSchema} from "@/api/indexType.ts";
-import {useGlobalState} from "@/store/globalStateStore.tsx";
+import {useGlobalState} from "@/store/globalStateStore.ts";
 import {copyHighlightText} from "@/utils/commonUtil.ts";
 import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
@@ -30,6 +30,8 @@ export default function useInitSearch(
                 ...targetSearch,
                 text: extractedText,
             })
+
+            return
         }
 
         const paramStart = searchParams.get('start')
@@ -57,7 +59,7 @@ export default function useInitSearch(
             }
 
             setSearchElement(searchObj)
-            globalState.setSearch({ confirmedSearch: searchObj })
+            //globalState.setSearch({ confirmedSearch: searchObj })
         }
     }
 
@@ -105,12 +107,17 @@ export default function useInitSearch(
             globalState.setSearch({ searchQuery: searchParams.get('q') ?? '' })
     }
 
-    function readSearchGlobalState(){
-        if(globalState.state?.search ) {
+    function readSearchGlobalState() {
+        if (globalState.state?.search?.search) {
+            const incomingSearch = globalState.state.search.search
             globalState.setSearch({ search: undefined })
-            return globalState.state?.search?.search
+            return incomingSearch
         }
-        return globalState.state?.search?.confirmedSearch
+        const globalConfirmedSearch = globalState.state?.search?.confirmedSearch
+        if (globalConfirmedSearch && globalConfirmedSearch.path === textHistoricalSelected?.path && globalConfirmedSearch.filename === textHistoricalSelected?.items.filename) {
+            return globalConfirmedSearch
+        }
+        return undefined
     }
 
     useEffect(() => {

@@ -4,7 +4,7 @@ import {type ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
 import {type HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";
 import {type TextSchema} from "@/api/indexType.ts";
 import {showText} from "@/utils/commonUtil.ts";
-import {ArrowSvg} from "@/components/ui/icons";
+import {ArrowSvg, XIcon} from "@/components/ui/icons";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
 import RenderPreviewCardText from "@/components/ui/common/renderPreviewCardText.tsx";
 import {useHighlightStore} from "@/features/editor/store/useHighlightStore.tsx";
@@ -89,10 +89,12 @@ export default function PreviewCardCustom({previewCardHandler, oppositeScrolls, 
                             side="bottom"
                             sideOffset={8}
                         >
-                            <Popover.Popup className="origin-(--transform-origin) rounded-xl bg-white text-gray-900 shadow-xl shadow-gray-300/40 ring-1 ring-gray-200 transition-[transform,scale,opacity] data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 ">
+                            <Popover.Popup className="origin-(--transform-origin) rounded-xl bg-white text-gray-900 shadow-xl shadow-gray-300/40 ring-1 ring-gray-200 transition-[transform,scale,opacity] data-ending-style:scale-95 data-ending-style:opacity-0 ">
                                 <div className="flex w-md flex-col overflow-hidden rounded-xl">
                                     <div className="border-b border-gray-100 px-4 pb-2.5 pt-3.5 ">
-                                        <span className="select-none text-xs font-medium text-gray-400 ">Riferimento a</span>
+                                        <span className="select-none text-xs font-medium text-gray-400 ">
+                                            Riferimento a
+                                        </span>
                                     </div>
                                     <RenderPreviewCardText
                                         text={textToShow(highlightId ?? '', bounds)}
@@ -100,21 +102,27 @@ export default function PreviewCardCustom({previewCardHandler, oppositeScrolls, 
                                     />
                                     <div className="px-4 pb-4">
                                         <button
-                                            className="flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-indigo-700 active:bg-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                            className="cursor-pointer flex w-full items-center justify-center rounded-lg bg-orange-700 hover:bg-orange-800 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                                             onClick={() => {
                                                 if (highlightId == null || hBound == null)
                                                     return
                                                 oppositeScroll.setScroll({lineIndex: hBound.lineStart-OFFSET_SCROLL, highlightId, mode:'start'})
                                             }}
                                         >
-                                            View in text
+                                            Vai al riferimento
                                         </button>
                                     </div>
                                 </div>
                                 <Popover.Arrow
-                                    className="data-[side=bottom]:-top-2 data-[side=left]:-right-3.25 data-[side=left]:rotate-90 data-[side=right]:-left-3.25 data-[side=right]:-rotate-90 data-[side=top]:-bottom-2 data-[side=top]:rotate-180"
+                                    className="data-[side=bottom]:-top-2 data-[side=left]:-right-3.25 data-[side=right]:-left-3.25 data-[side=right]:-rotate-90 data-[side=top]:-bottom-2"
                                     render={ArrowSvg}
                                 />
+                                <Popover.Close
+                                    className="absolute right-3 top-3 rounded p-1 hover:bg-slate-100 cursor-pointer"
+                                    aria-label="Close"
+                                >
+                                    <XIcon className="size-4"/>
+                                </Popover.Close>
                             </Popover.Popup>
                         </Popover.Positioner>
                     </Popover.Portal>

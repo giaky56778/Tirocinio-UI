@@ -23,12 +23,12 @@ export const SEARCH_RESULTS_CONTAINER_CLASS = "relative flex-1 min-h-0"
 type SearchResultsSectionProps = {
     settings: SettingsType,
     tooltip: TooltipType,
-    searchElement: SearchType | undefined,
     resetSearchElement: () => void,
     historicalText: EditorTextType,
     selectedText: TextSelectedType,
     isTextLoading: boolean,
-    searchHandle: AlertDialog.Handle<AlertModifyPayloadType>
+    searchHandle: AlertDialog.Handle<AlertModifyPayloadType>,
+    searchElement?: SearchType
 }
 
 function SearchResultsSection({settings, tooltip, searchElement, resetSearchElement, historicalText, selectedText, isTextLoading, searchHandle}: SearchResultsSectionProps) {
@@ -106,7 +106,7 @@ function SearchResultsSection({settings, tooltip, searchElement, resetSearchElem
                                         <LockClose className={"size-6"}/>
                                     </button>
                                 }
-                                {searchQuery !== '' &&
+                                {(searchQuery) !== '' &&
                                     <button
                                         type={"button"}
                                         className={"flex items-center justify-center shrink-0 w-6 h-6 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"}

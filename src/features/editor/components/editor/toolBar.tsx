@@ -10,16 +10,18 @@ const ToolBar = ({toolBar}: { toolBar: ToolBarType }) => (
             aria-label="Formatting options"
         >
             <Toolbar.Button
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 transition-all duration-100 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-1"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-orange-700 hover:bg-orange-800 text-white active:scale-95 transition-all duration-100 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-1"
                 onClick={toolBar.save}
             >
-                <CheckIcon className="w-3.5 h-3.5"/> Save
+                <CheckIcon className="w-3.5 h-3.5"/>
+                Salva
             </Toolbar.Button>
             <Toolbar.Button
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-800 active:scale-95 transition-all duration-100 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-1"
                 onClick={toolBar.restore}
             >
-                <ArrowTurnLeftIcon className="w-3.5 h-3.5"/> Restore
+                <ArrowTurnLeftIcon className="w-3.5 h-3.5"/>
+                Annulla
             </Toolbar.Button>
         </Toolbar.Root>
     </div>

@@ -1,25 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import {login as apiLogin, logout, me, pswChange} from "@/features/account/api/userApi.ts";
+import {login as apiLogin, logoutApi, me, pswChange} from "@/features/account/api/userApi.ts";
 import { useAuthStore } from "@/store/authStore.ts";
 import { useEffect } from "react";
 import type { MeSchema } from "@/api/indexType.ts";
 
 export type AccountType = {
-    user: MeSchema | undefined;
-    getInfoUser: {
-        data: MeSchema | undefined;
-    };
-    isLoading: boolean;
-    logout: () => void;
-    login: ({ username, password }: { username: string; password: string }) => void;
-    isLoggingIn: boolean;
-    changePassword: ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) => void;
-    isChangingPassword: boolean;
-};
+    user: MeSchema | undefined
+    getInfoUser: { data: MeSchema | undefined }
+    isLoading: boolean
+    logout: () => void
+    login: ({ username, password }: { username: string; password: string }) => void
+    changePassword: ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) => void
+}
 
-export default function useAccount(): AccountType {
+export default function
+    useAccount(): AccountType {
     const navigate = useNavigate()
     const location = useLocation()
     const queryClient = useQueryClient()
@@ -41,22 +38,31 @@ export default function useAccount(): AccountType {
     }, [userQuery.data, setAuth])
 
     const loginMutation = useMutation({
+        mutationKey: ["login"],
         mutationFn: apiLogin
     })
 
     const logoutMutation = useMutation({
-        mutationFn: logout,
-        onSuccess: () => {
-            clearAuth()
-            queryClient.clear()
-            window.location.replace("/login")
-        },
-        onError: () => {
-            toast.error("Errore durante il logout")
-        }
+        mutationKey: ["logout"],
+        mutationFn: logoutApi
     })
 
+    function logout() {
+        void toast.promise(logoutMutation.mutateAsync(), {
+            loading: 'Logout in corso...',
+            success: () => {
+                clearAuth()
+                queryClient.clear()
+                //window.location.replace("/login")
+
+                return "Logout effettuato con successo"
+            },
+            error: 'Errore durante il logout'
+        })
+    }
+
     const changePasswordMutation = useMutation({
+        mutationKey: ["changePassword"],
         mutationFn: pswChange
     })
 
@@ -64,7 +70,7 @@ export default function useAccount(): AccountType {
         void toast.promise(changePasswordMutation.mutateAsync({ oldPassword, newPassword }), {
             loading: 'Cambio password in corso...',
             success: () => "Password cambiata con successo",
-            error: (err) => err.message || 'Errore durante il cambio password'
+            error: 'Errore durante il cambio password'
         })
     }
 
@@ -82,7 +88,7 @@ export default function useAccount(): AccountType {
 
                 return "Login effettuato con successo"
             },
-            error: (err) => err.message || 'Errore durante il login'
+            error: 'Errore durante il login'
         })
     }
 
@@ -92,10 +98,8 @@ export default function useAccount(): AccountType {
             data: userQuery.data,
         },
         isLoading: userQuery.isLoading,
-        logout: () => logoutMutation.mutate(),
+        logout,
         login,
-        isLoggingIn: loginMutation.isPending,
-        changePassword,
-        isChangingPassword: changePasswordMutation.isPending
+        changePassword
     }
 }

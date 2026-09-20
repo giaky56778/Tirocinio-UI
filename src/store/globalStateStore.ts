@@ -76,15 +76,32 @@ export const useGlobalState = create<GlobalStore>((set, get) => ({
   },
 
   setEditor: (updater) => set((store) => ({
-    state: { ...store.state, editor: { ...store.state.editor, ...(typeof updater === 'function' ? updater(store.state.editor) : updater) } }
+    state: {
+      ...store.state,
+      editor: {
+        ...store.state.editor,
+        ...(typeof updater === 'function' ? updater(store.state.editor) : updater)
+      }
+    }
   })),
 
   setSearch: (updater) => set((store) => ({
-    state: { ...store.state, search: { ...store.state.search, ...(typeof updater === 'function' ? updater(store.state.search) : updater) } }
+    state: {
+      ...store.state,
+      search: {
+        ...store.state.search,
+        ...(typeof updater === 'function' ? updater(store.state.search) : updater)
+      }
+    }
   })),
 
   setView: (updater) => set((store) => ({
-    state: { ...store.state, view: { ...store.state.view, ...(typeof updater === 'function' ? updater(store.state.view) : updater) } }
+    state: {
+      ...store.state,
+      view: { ...store.state.view,
+        ...(typeof updater === 'function' ? updater(store.state.view) : updater)
+      }
+    }
   })),
 
   getSelectedText: (page: PageType, side: TextType = 'historical') => {
@@ -114,14 +131,29 @@ export const useGlobalState = create<GlobalStore>((set, get) => ({
       case 'editor': {
         const currentLinePos = get().state.editor.linePos || { historical: 0, biblical: 0 }
         if (side === 'historical') {
-          get().setEditor({ historical: newValue, linePos: { ...currentLinePos, historical: 0 } })
+          get().setEditor({
+            historical: newValue,
+            linePos: {
+              ...currentLinePos,
+              historical: 0
+            }
+          })
         } else {
-          get().setEditor({ biblical: newValue, linePos: { ...currentLinePos, biblical: 0 } })
+          get().setEditor({
+            biblical: newValue,
+            linePos: {
+              ...currentLinePos,
+              biblical: 0
+            }
+          })
         }
         break
       }
       case 'search':
-        get().setSearch({ text: newValue, linePos: 0 })
+        get().setSearch({
+          text: newValue,
+          linePos: 0
+        })
         break
       case 'view':
         get().setView({ text: newValue })
@@ -140,14 +172,11 @@ export const useGlobalState = create<GlobalStore>((set, get) => ({
         : {}
     ),
     getIsInitialMount: (page) => get().initialMount[page],
-    resetInitialMount: (page) => set(store => store.initialMount[page]
-        ? {
-            initialMount: {
-              ...store.initialMount,
-              [page]: true
-            }
-          }
-        : {}
-    )
+    resetInitialMount: (page) => set(store => ({
+      initialMount: {
+        ...store.initialMount,
+        [page]: true
+      }
+    }))
   }
 }))

@@ -1,13 +1,14 @@
 import {useCallback, useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import toast from "react-hot-toast";
-import {type PageType, useGlobalState} from "@/store/globalStateStore.tsx";
+import {type PageType, useGlobalState} from "@/store/globalStateStore.ts";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {type TextType} from "@/utils/settings.ts";
 import {type ContentItemText, type TextListSchema} from "@/api/indexType.ts";
-import {useDeleteHistoricalText} from "@/hook/useDeleteText.ts";
 import {type UrlPath} from "@/features/editor/lib/utils.ts";
 import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {deleteTextApi} from "@/api";
 
 export type TextSelectedType = {
     path: string
@@ -88,10 +89,16 @@ export default function useTextNameSelection({names, initUrl, side, page}: Props
     const origin = page === 'editor' ? '/' : page === 'search' ? '/search' : '/viewHighlights'
 
     const [searchParams] = useSearchParams()
-    const useDelete=useDeleteHistoricalText()
     const globalState = useGlobalState()
     const setBatchedParams = useBatchedSearchParams()
     const setSearchElement = useSelectionStore(state => state.setSearchElement)
+    const queryClient = useQueryClient()
+
+    const deleteMutation =useMutation({
+        mutationKey: ["deleteText"],
+        mutationFn: ({id}: {id: number}) => deleteTextApi(id)
+    })
+
 
     const [selected, setSelectedState] = useState<TextSelectedType | undefined>(() => {
         if (names.length === 0)
@@ -147,9 +154,22 @@ export default function useTextNameSelection({names, initUrl, side, page}: Props
             }
             setSelected(firstRemainingItem)
         }
-        useDelete.mutate({id})
 
-    }, [selected?.items.id, useDelete, setSelected, names])
+        void toast.promise(
+            deleteMutation.mutateAsync({id}),
+            {
+                loading: "Cancellazione in corso...",
+                success: ()=>{
+                    void queryClient.invalidateQueries({queryKey: ["historicalText"]})
+                    return "Testo cancellato con successo"
+
+                },
+                error: "Errore durante la cancellazione del testo"
+            }
+        )
+        deleteMutation.mutate({id})
+
+    }, [selected?.items.id, deleteMutation, setSelected, names, queryClient])
 
     useEffect(() => {
         const urlString = searchParams.get(paramKey)

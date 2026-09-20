@@ -62,6 +62,7 @@ export function useUploadText({onTextChange, dialogHandle}: Props) {
     }
 
     const uploadMutation = useMutation({
+        mutationKey: ["uploadHistoricalText"],
         mutationFn: uploadHistoricalText,
         onSuccess(data) {
             toast.success('Testo caricato con successo')

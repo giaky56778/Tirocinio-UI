@@ -13,7 +13,7 @@ export default function Protected() {
             <div className="h-screen w-screen flex items-center justify-center bg-white">
                 <LoadingSpinner className="size-8 text-orange-600 animate-spin" />
             </div>
-        );
+        )
     }
 
     if (isAuthenticated === false) {
@@ -25,9 +25,9 @@ export default function Protected() {
                     from: location.pathname + location.search
                 }}
             />
-        );
+        )
     }
 
-    return <Outlet context={account} />;
+    return <Outlet context={account} />
 }
 

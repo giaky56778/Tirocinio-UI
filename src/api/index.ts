@@ -73,7 +73,7 @@ export async function getTextNameHistorical() {
     return await res.json() as TextListSchema
 }
 
-export async function deleteText(id:number) {
+export async function deleteTextApi(id:number) {
     const params = new URLSearchParams({id: String(id)})
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/text/deleteHistoricalText?${params}`, {
         method: 'DELETE'

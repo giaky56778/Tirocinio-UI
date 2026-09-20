@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from 'react';
 import {useSearchParams} from "react-router";
 import {type SearchType} from "@/features/editor/reducer/selectionReducer.ts";
-import {useGlobalState} from "@/store/globalStateStore.tsx";
+import {useGlobalState} from "@/store/globalStateStore.ts";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {Dialog} from "@base-ui/react/dialog";
@@ -11,7 +11,7 @@ import {type SettingsType} from "@/features/search/api/searchApiType.ts";
 type Props={
     settings: SettingsType,
     selectedText: TextSelectedType
-    searchElement: SearchType | undefined
+    searchElement?: SearchType
     isTextLoading: boolean
     resetSearchElement: () => void
 }

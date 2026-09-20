@@ -1,4 +1,4 @@
-import {type PageType} from "@/store/globalStateStore.tsx";
+import {type PageType} from "@/store/globalStateStore.ts";
 import {getTextNameHistorical, readHistoricalText} from "@/api";
 import {useTextReadBase} from "@/features/editor/hooks/useTextRead.ts";
 

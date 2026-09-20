@@ -8,7 +8,7 @@ export async function authFetch(input: RequestInfo | URL, init?: RequestInit): P
     })
 
     if (res.status === 401) {
-        const { isAuthenticated, clearAuth } = useAuthStore.getState();
+        const { isAuthenticated, clearAuth } = useAuthStore.getState()
 
         if (isAuthenticated === true) {
             toast.error("Sessione scaduta.\nEffettua nuovamente il login", { id: "unauthorized" })

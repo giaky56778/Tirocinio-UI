@@ -5,6 +5,7 @@ import {Form} from "@base-ui/react/form";
 import {useRef} from "react";
 import FieldAccount from "@/features/account/components/fieldAccount.tsx";
 import useAccount from "@/features/account/hook/useAccount.ts";
+import DialogCloseCostume from "@/components/ui/common/dialogCloseCostume.tsx";
 
 type Props={
     changePasswordHandler: Dialog.Handle<never>
@@ -20,6 +21,7 @@ export default function DialogChangePassword({changePasswordHandler}:Props){
             <Dialog.Portal>
                 <Dialog.Backdrop className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity data-ending-style:opacity-0 z-50"/>
                 <Dialog.Popup className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden p-6 z-50">
+                    <DialogCloseCostume/>
                     <Dialog.Title className="text-lg font-bold text-slate-800">Cambia password</Dialog.Title>
                     <Dialog.Description className="text-sm text-slate-500 mt-1">Modifica la tua password</Dialog.Description>
                     <Form

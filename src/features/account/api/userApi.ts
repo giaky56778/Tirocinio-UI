@@ -33,7 +33,7 @@ export async function me(){
     return await res.json() as MeSchema
 }
 
-export async function logout(){
+export async function logoutApi(){
     const res = await authFetch(`${import.meta.env.VITE_SERVER_URL}/${import.meta.env.VITE_API_VERSION}/user/logout`, {
         method: 'POST'
     })

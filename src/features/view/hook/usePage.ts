@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
-import {useGlobalState} from "@/store/globalStateStore.tsx";
+import {useGlobalState} from "@/store/globalStateStore.ts";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 

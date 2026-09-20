@@ -76,40 +76,43 @@ export default function DoubleEditor({
     }
 
     return (
-        <div className={"flex flex-row divide-x divide-gray-500 h-screen w-full"}>
-            <HighlightEditorWindow
-                key={`biblical-${selectedText.biblical.items.id}`}
-                mode={"editor"}
-                text={text['biblical']}
-                chapterIndex={text.biblical.chapter}
-                textOp={textOp.biblical}
-                selectedText={selectedText.biblical}
-                globalHighlight={globalHighlight}
-                side={"biblical"}
-                scroll={{
-                    selfScroll: scrollBiblicalHook,
-                    otherScroll: scrollHistoricalHook
-                }}
-                previewCardHandler={previewCardHandler}
-                alertDeleteHandler={deleteHandler}
-            />
-            <HighlightEditorWindow
-                key={`historical-${selectedText.historical.items.id}`}
-                mode={"editor"}
-                text={text['historical']}
-                chapterIndex={text.historical.chapter}
-                selectedText={selectedText.historical}
-                textOp={textOp.historical}
-                globalHighlight={globalHighlight}
-                side={"historical"}
-                scroll={{
-                    selfScroll: scrollHistoricalHook,
-                    otherScroll: scrollBiblicalHook
-                }}
-                previewCardHandler={previewCardHandler}
-                alertDeleteHandler={deleteHandler}
-            />
+        <>
+            <div className={"flex flex-row divide-x divide-gray-500 h-screen w-full"}>
+                <HighlightEditorWindow
+                    key={`biblical-${selectedText.biblical.items.id}`}
+                    mode={"editor"}
+                    text={text['biblical']}
+                    chapterIndex={text.biblical.chapter}
+                    textOp={textOp.biblical}
+                    selectedText={selectedText.biblical}
+                    globalHighlight={globalHighlight}
+                    side={"biblical"}
+                    scroll={{
+                        selfScroll: scrollBiblicalHook,
+                        otherScroll: scrollHistoricalHook
+                    }}
+                    previewCardHandler={previewCardHandler}
+                    alertDeleteHandler={deleteHandler}
+                />
+                <HighlightEditorWindow
+                    key={`historical-${selectedText.historical.items.id}`}
+                    mode={"editor"}
+                    text={text['historical']}
+                    chapterIndex={text.historical.chapter}
+                    selectedText={selectedText.historical}
+                    textOp={textOp.historical}
+                    globalHighlight={globalHighlight}
+                    side={"historical"}
+                    scroll={{
+                        selfScroll: scrollHistoricalHook,
+                        otherScroll: scrollBiblicalHook
+                    }}
+                    previewCardHandler={previewCardHandler}
+                    alertDeleteHandler={deleteHandler}
+                />
 
+                
+            </div>
             <PreviewCardCustom
                 oppositeScrolls={scroll}
                 previewCardHandler={previewCardHandler}
@@ -123,6 +126,6 @@ export default function DoubleEditor({
                 cancelText={"Annulla"}
                 onOpenChange={(open:boolean) => setSelectionBlocked(open)}
             />
-        </div>
+        </>
     )
 }

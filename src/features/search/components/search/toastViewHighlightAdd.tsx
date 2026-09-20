@@ -1,5 +1,5 @@
 import toast, {type Toast} from "react-hot-toast";
-import {useGlobalState} from "@/store/globalStateStore.tsx";
+import {useGlobalState} from "@/store/globalStateStore.ts";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";
 import {type AddType} from "@/features/search/hooks/useApiSearch.ts";
 import {useNavigate} from "react-router";

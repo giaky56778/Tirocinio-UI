@@ -4,7 +4,7 @@ import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
 import {type TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
 import {memo, useEffect, useMemo} from "react";
-import {useGlobalState} from "@/store/globalStateStore.tsx";
+import {useGlobalState} from "@/store/globalStateStore.ts";
 import {useSearchParams} from "react-router";
 import {findLineIdByWordId} from "@/utils/commonUtil.ts";
 import {OFFSET_SCROLL} from "@/utils/settings.ts";

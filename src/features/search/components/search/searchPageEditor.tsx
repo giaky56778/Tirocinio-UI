@@ -44,7 +44,7 @@ export default function SearchPageEditor({settings, tooltip, text, selectedText,
             } : null
     ), [searchElement])
 
-    const selected = useCallback((newSelected: TextSelectedType)=>{
+    function selected(newSelected: TextSelectedType){
         if(searchElement?.selection){
             searchHandle?.openWithPayload({
                 onConfirm:()=>opTextHistorical.select(newSelected)
@@ -59,7 +59,7 @@ export default function SearchPageEditor({settings, tooltip, text, selectedText,
         }else{
             opTextHistorical.select(newSelected)
         }
-    }, [opTextHistorical, searchElement, searchParams, setBatchedParams])
+    }
 
     return (
         <div className={"flex flex-row divide-x divide-gray-500 h-screen w-full"}>

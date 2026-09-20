@@ -40,7 +40,7 @@ const ContextMenuCustom = ({
     deleteHighlight
 }: Props) => {
 
-    const itemCls = "mx-1 rounded-md outline-none cursor-pointer select-none py-1.5 pl-3 pr-6 flex items-center gap-2 text-sm font-medium leading-5 transition-colors duration-100 data-[highlighted]:bg-indigo-600 data-[highlighted]:text-white"
+    const itemCls = "mx-1 rounded-md outline-none cursor-pointer select-none py-1.5 pl-3 pr-6 flex items-center gap-2 text-sm font-medium leading-5 transition-colors duration-100 data-[highlighted]:bg-gray-200 "
     const itemDestructiveCls = "mx-1 rounded-md outline-none cursor-pointer select-none py-1.5 pl-3 pr-6 flex items-center gap-2 text-sm font-medium leading-5 text-red-600 transition-colors duration-100 data-[highlighted]:bg-red-600 data-[highlighted]:text-white"
     const disabledCls = "opacity-40 cursor-not-allowed pointer-events-none"
     const swatchCls = "block w-[1.375rem] h-[1.375rem] p-0 rounded-full outline outline-2 outline-transparent outline-offset-1 cursor-pointer shadow-[inset_0_0_0_1px_rgb(0_0_0/0.1)] transition-all duration-[120ms] data-[highlighted]:outline-gray-500 data-[highlighted]:scale-[1.18] data-[disabled]:opacity-45 data-[disabled]:cursor-not-allowed"

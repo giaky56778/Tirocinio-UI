@@ -7,7 +7,7 @@ import {type HighlightBound} from "@/features/editor/reducer/wordHighlightReduce
 import {type SelectionPerSide, type SelectionRange} from "@/features/editor/reducer/selectionReducer.ts";
 import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {useSelectionStore} from '@/features/editor/store/useSelectionStore.tsx';
-import {useGlobalState} from "@/store/globalStateStore.tsx";
+import {useGlobalState} from "@/store/globalStateStore.ts";
 import {type TextIndexSchema, type TextSchema} from "@/api/indexType.ts";
 import {type TextType} from "@/utils/settings.ts";
 import {copyHighlightTextFromID} from "@/features/editor/lib/utils.ts";
@@ -152,6 +152,7 @@ export default function useCustomSelection({side, text, index, selectedText }: P
                         text: selectedText,
                         linePos: res
                     })
+
                     navigate("/search")
                     return
                 }

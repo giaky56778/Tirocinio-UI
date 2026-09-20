@@ -8,6 +8,7 @@ import {LoadingSpinner} from "@/components/ui/icons";
 import ForceUploadDialog from "@/features/upload-section/components/forceUploadDialog.tsx";
 
 import {useHighlightRead} from "@/features/double-editor/hook/useHighlightRead.ts";
+import {SelectionStoreProvider} from "@/features/editor/store/useSelectionStore.tsx";
 
 export type EditorTextType={
     text: TextSchema,
@@ -77,7 +78,7 @@ function EditorPageContent() {
     }
 
     return (
-        <>
+        <SelectionStoreProvider key={`${historicalSelectedText.items.id}-${biblicalSelectedText.items.id}`}>
             {(isUpdating) && (
                 <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px]">
                     <LoadingSpinner className="size-6 text-orange-600"/>
@@ -103,7 +104,7 @@ function EditorPageContent() {
                 }}
                 />
             </HighlightStoreProvider>
-        </>
+        </SelectionStoreProvider>
     )
 }
 

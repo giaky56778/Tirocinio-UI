@@ -1,9 +1,10 @@
+import {type JSX} from "react";
 import {Link, useLocation} from "react-router";
 import {DocumentIcon, OrderListIcon, SearchIcon} from "@/components/ui/icons";
 import {Tooltip} from "@base-ui/react/tooltip";
 import CommonTooltip from "@/features/search/components/search/commonTooltip.tsx";
-import {type JSX} from "react";
 import MenuAccount from "@/features/account/components/menuAccount.tsx";
+import type {AccountType} from "@/features/account/hook/useAccount.ts";
 
 type PageLabelType = {
     label: string
@@ -29,8 +30,6 @@ const links:Record<string, PageLabelType> = {
     },
 }
 
-import type { AccountType } from "@/features/account/hook/useAccount.ts";
-
 export default function NavSidebar({ account }: { account?: AccountType }) {
     const {pathname} = useLocation()
 
@@ -42,33 +41,33 @@ export default function NavSidebar({ account }: { account?: AccountType }) {
         <div className="w-16 flex flex-col h-full border-r border-slate-300 bg-slate-50">
             <div className={"flex flex-col items-center gap-3 pt-6 border-slate-300 mb-15"}>
                 <Tooltip.Provider>
-                    {Object.entries(links).map(([to, item]) => {
-                        return (
-                            <Tooltip.Trigger
-                                key={to}
-                                handle={tooltipHandler}
-                                payload={{text: item.info}}
-                                render={
-                                    <Link
-                                        to={to}
-                                        className={`w-4/5 flex items-center justify-center rounded py-2 font-medium cursor-pointer
-                                                ${activeLink === to
+                    {Object.entries(links).map(([to, item]) => (
+                        <Tooltip.Trigger
+                            key={to}
+                            handle={tooltipHandler}
+                            payload={{text: item.info}}
+                            render={
+                                <Link
+                                    to={to}
+                                    className={`w-4/5 flex items-center justify-center rounded py-2 font-medium cursor-pointer
+                                        ${activeLink === to
                                             ? 'bg-orange-700 text-white font-bold border border-transparent'
                                             : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-100'
-                                        }`}
-                                        onClick={(e) => {
-                                            if (activeLink === to) {
-                                                e.preventDefault()
-                                                return
-                                            }
-                                        }}
-                                    />
-                                }
-                            >
-                                {item.icon}
-                            </Tooltip.Trigger>
+                                        }
+                                    `}
+                                    onClick={(e) => {
+                                        if (activeLink === to) {
+                                            e.preventDefault()
+                                            return
+                                        }
+                                    }}
+                                />
+                            }
+                        >
+                            {item.icon}
+                        </Tooltip.Trigger>
                         )
-                    })}
+                    )}
                     <CommonTooltip
                         handle={tooltipHandler}
                         position="right"
