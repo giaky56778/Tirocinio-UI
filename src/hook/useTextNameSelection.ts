@@ -167,7 +167,6 @@ export default function useTextNameSelection({names, initUrl, side, page}: Props
                 error: "Errore durante la cancellazione del testo"
             }
         )
-        deleteMutation.mutate({id})
 
     }, [selected?.items.id, deleteMutation, setSelected, names, queryClient])
 
