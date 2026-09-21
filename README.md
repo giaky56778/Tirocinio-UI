@@ -7,10 +7,11 @@
 - [Tailwind CSS](https://tailwindcss.com/)
 - [React Router](https://reactrouter.com/)
 - [React Query](https://tanstack.com/query/v4)
+- [zustand](https://zustand.site/en/)
+- [Fetch Event Source](https://github.com/Azure/fetch-event-source)
 - [virtua](https://github.com/inokawa/virtua/)
 - [Base-UI](https://base-ui.com)
 - [react-hot-toast](https://react-hot-toast.com/)
-- [Fetch Event Source](https://github.com/Azure/fetch-event-source)
 
 ## Istruzioni per l'installazione e l'esecuzione
 
