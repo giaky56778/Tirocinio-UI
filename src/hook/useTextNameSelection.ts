@@ -6,7 +6,6 @@ import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {type TextType} from "@/utils/settings.ts";
 import {type ContentItemText, type TextListSchema} from "@/api/indexType.ts";
 import {type UrlPath} from "@/features/editor/lib/utils.ts";
-import {useSelectionStore} from "@/features/editor/store/useSelectionStore.tsx";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {deleteTextApi} from "@/api";
 
@@ -91,7 +90,6 @@ export default function useTextNameSelection({names, initUrl, side, page}: Props
     const [searchParams] = useSearchParams()
     const globalState = useGlobalState()
     const setBatchedParams = useBatchedSearchParams()
-    const setSearchElement = useSelectionStore(state => state.setSearchElement)
     const queryClient = useQueryClient()
 
     const deleteMutation =useMutation({
@@ -128,7 +126,6 @@ export default function useTextNameSelection({names, initUrl, side, page}: Props
             return
         }
 
-        setSearchElement(undefined) //cancella la selezione confermata per la sezione search
         setSelectedState(newSelected)
         globalState.setSelectedText(page, side, newSelected)
 
@@ -137,7 +134,7 @@ export default function useTextNameSelection({names, initUrl, side, page}: Props
         }
 
         setBatchedParams(newParams, origin)
-    }, [setSearchElement, globalState, page, side, paramKey, setBatchedParams, origin])
+    }, [globalState, page, side, paramKey, setBatchedParams, origin])
 
     const deleteText = useCallback((id: number) => {
         if (selected?.items.id === id) {
