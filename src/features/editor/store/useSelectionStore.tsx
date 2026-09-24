@@ -73,6 +73,11 @@ export function useSelectionStore<T>(selector: (state: SelectionStore) => T): T 
     return useStore(store, selector)
 }
 
+
+export function useSelectionStoreContext() {
+    return useContext(SelectionStoreContext) ?? defaultStore
+}
+
 const SelectionStoreContext = createContext<ReturnType<typeof createSelectionStore> | null>(null)
 
 export function SelectionStoreProvider({ children }: { children: ReactNode }) {
