@@ -1,4 +1,4 @@
-import DoubleEditorSkeleton from "@/features/editor/components/skeleton/doubleEditorSkeleton.tsx";
+import DoubleEditorSkeleton from "@/features/editor/components/skeleton/singleEditorSkeleton.tsx";
 import SearchResultsSectionSkeleton from "@/features/search/components/skeleton/searchResultsSectionSkeleton.tsx";
 
 const SearchPageSkeleton = () => (

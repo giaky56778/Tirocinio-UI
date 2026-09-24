@@ -2,7 +2,7 @@ import {useMemo, useCallback} from 'react';
 import {type TextSelectedType} from "@/hook/useTextNameSelection.ts";
 import {useBatchedSearchParams} from "@/contexts/paramsProvider.tsx";
 import {type EditorTextType} from "@/features/double-editor/editorPage.tsx";
-import DoubleEditorSkeleton from "@/features/editor/components/skeleton/doubleEditorSkeleton.tsx";
+import DoubleEditorSkeleton from "@/features/editor/components/skeleton/singleEditorSkeleton.tsx";
 import SearchResultsSection from "@/features/search/components/search/searchResultsSection.tsx";
 import {type TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
 import SingleText from "@/features/search/components/search/singleText.tsx";

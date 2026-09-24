@@ -1,6 +1,6 @@
 import {Dialog} from "@base-ui/react/dialog";
 import type {ReactNode} from "react";
-import DialogCloseCostume from "@/components/ui/common/dialogCloseCostume.tsx";
+import DialogCloseCustom from "@/components/ui/common/dialogCloseCustom.tsx";
 
 type Props={
     children: ReactNode
@@ -12,7 +12,7 @@ const DialogPortalPreview=({children,previewText}:Props)=>(
         <Dialog.Backdrop className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity duration-200 data-starting-style:opacity-0"/>
         <Dialog.Viewport className="fixed inset-0 flex items-center justify-center p-6 pointer-events-none">
             <Dialog.Popup className="pointer-events-auto relative grid grid-rows-[auto_1fr] w-full max-w-5xl h-[88vh] bg-white rounded-xl shadow-2xl ring-1 ring-black/8 overflow-hidden transition-[opacity,transform] duration-200 ease-out motion-reduce:transition-none data-starting-style:opacity-0 data-starting-style:scale-95 data-ending-style:opacity-0 data-ending-style:scale-95">
-                <DialogCloseCostume/>
+                <DialogCloseCustom/>
                 <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 bg-gray-50">
                     <span className="text-sm font-medium text-gray-700 truncate">
                         Anteprima

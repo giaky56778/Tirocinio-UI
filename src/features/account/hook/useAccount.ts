@@ -69,7 +69,7 @@ export default function
     function changePassword({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) {
         void toast.promise(changePasswordMutation.mutateAsync({ oldPassword, newPassword }), {
             loading: 'Cambio password in corso...',
-            success: () => "Password cambiata con successo",
+            success: "Password cambiata con successo",
             error: 'Errore durante il cambio password'
         })
     }

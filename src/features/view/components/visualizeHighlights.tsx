@@ -7,7 +7,7 @@ import CardHighlight from "@/features/view/components/view/cardHighlight.tsx";
 import ErrorBoundary from "@/components/layout/errorBoundary.tsx";
 import NoTextView from "@/features/view/components/no-element/noTextView.tsx";
 import NoHighlightsShow from "@/features/view/components/no-element/noHighlightsShow.tsx";
-import {useVisualizeAllHighlight} from "@/features/view/hook/useVisualizeAllHighlgiht.ts";
+import {useVisualizeAllHighlight} from "@/features/view/hook/useVisualizeAllHighlight.ts";
 import usePage from "@/features/view/hook/usePage.ts";
 
 export const VISUALIZE_CONTAINER_CLASS = "flex flex-col h-screen bg-slate-50/30"

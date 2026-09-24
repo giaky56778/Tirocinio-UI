@@ -1,5 +1,5 @@
 import {Suspense, useEffect} from "react";
-import DoubleEditorSkeleton from "@/features/editor/components/skeleton/doubleEditorSkeleton.tsx";
+import DoubleEditorSkeleton from "@/features/editor/components/skeleton/singleEditorSkeleton.tsx";
 import useScrollDynamic from "@/features/editor/hooks/useScrollDynamic.ts";
 import {useStaticBiblicalTextRead} from "@/features/editor/hooks/useTextRead.ts";
 import {useHighlightStore, HighlightStoreProvider} from "@/features/editor/store/useHighlightStore.tsx";

@@ -1,10 +1,10 @@
 import {XIcon} from "@/components/ui/icons";
 import {Dialog} from "@base-ui/react/dialog";
 
-export const DialogCloseCostume = () => (
+export const DialogCloseCustom = () => (
     <Dialog.Close className="absolute right-3 top-3 rounded p-1 hover:bg-slate-100">
         <XIcon className="size-5" />
     </Dialog.Close>
 )
 
-export default DialogCloseCostume
+export default DialogCloseCustom

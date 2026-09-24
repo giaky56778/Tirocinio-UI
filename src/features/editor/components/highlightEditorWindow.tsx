@@ -22,7 +22,7 @@ import ContextMenuCostume from "@/features/editor/components/editor/contextMenuC
 import type {TextType} from "@/utils/settings.ts";
 import type {ChapterIndexSchema, TextIndexSchema, TextListSchema, TextSchema} from "@/api/indexType.ts";
 import type {SyncHighlightsType} from "@/features/double-editor/hook/useSyncHighlights.ts";
-import DialogCloseCostume from "@/components/ui/common/dialogCloseCostume.tsx";
+import DialogCloseCustom from "@/components/ui/common/dialogCloseCustom.tsx";
 import type {TextOperationType} from "@/features/double-editor/components/doubleEditor.tsx";
 import type {AlertModifyPayloadType} from "@/features/search/components/search/alertModifySearch.tsx";
 import useVList from "@/features/editor/hooks/useVList.ts";
@@ -300,7 +300,7 @@ export default function HighlightEditorWindow({
                             className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-200 data-ending-style:opacity-0"/>
                         <Dialog.Popup
                             className="z-100 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded-lg border border-gray-300 transition-opacity duration-200 data-ending-style:opacity-0">
-                            <DialogCloseCostume/>
+                            <DialogCloseCustom/>
                             <UploadTextForm
                                 onTextChange={textOp.select}
                                 dialogHandle={uploadDialog}

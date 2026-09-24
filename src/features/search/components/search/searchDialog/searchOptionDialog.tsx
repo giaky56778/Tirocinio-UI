@@ -4,7 +4,7 @@ import {Dialog} from "@base-ui/react/dialog";
 import toast from "react-hot-toast";
 import AlgorithmOptionItem from "@/features/search/components/search/searchDialog/algorithmButton.tsx";
 import CommonTooltip from "@/features/search/components/search/commonTooltip.tsx";
-import DialogCloseCostume from "@/components/ui/common/dialogCloseCostume.tsx";
+import DialogCloseCustom from "@/components/ui/common/dialogCloseCustom.tsx";
 import {CheckIcon, InfoIcon, MinusIcon, SettingsIcon, TriangleExclamationIcon} from "@/components/ui/icons";
 import {type SettingsType, type TooltipType} from "@/features/search/api/searchApiType.ts";
 
@@ -43,7 +43,7 @@ export default function SearchOptionDialog({settings, tooltip, algoSelected,setA
                 <Dialog.Portal style={{userSelect:'none'}}>
                     <Dialog.Backdrop className="fixed inset-0 bg-black/20"/>
                     <Dialog.Popup className="rounded-md border border-slate-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex w-187.5 max-w-[calc(100vw-3rem)] flex-col gap-4 bg-white p-6">
-                        <DialogCloseCostume/>
+                        <DialogCloseCustom/>
                         <div className="flex items-center justify-between">
                             <div>
                                 <Dialog.Title className="text-lg font-semibold">
