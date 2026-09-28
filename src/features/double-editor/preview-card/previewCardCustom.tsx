@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import {useMemo, useState} from 'react';
 import {Popover} from "@base-ui/react"
 import {type ScrollType} from "@/features/editor/hooks/useScrollDynamic.ts";
 import {type HighlightBound} from "@/features/editor/reducer/wordHighlightReducer.ts";

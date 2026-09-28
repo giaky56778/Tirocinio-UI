@@ -1,18 +1,15 @@
 import {Dialog, Menu} from "@base-ui/react";
 import {ArrowSvg, ExitIcon, SettingsIcon, UserIcon} from "@/components/ui/icons";
-import useAccount, {type AccountType} from "@/features/account/hook/useAccount.ts";
+import {useAuthStore} from "@/store/authStore.ts";
+import useAccountFunction from "@/features/account/hook/useAccountFunction.ts";
 import DialogChangePassword from "@/features/account/components/dialogChangePassword.tsx";
 
-type Props = {
-    account?: AccountType;
-};
+export default function MenuAccount() {
+    const user = useAuthStore((state) => state.user)
+    const { logout } = useAccountFunction()
+    const changePasswordHandler = Dialog.createHandle<never>()
 
-export default function MenuAccount({ account: accountProp }: Props) {
-    const fallbackAccount = useAccount();
-    const account = accountProp ?? fallbackAccount;
-    const changePasswordHandler = Dialog.createHandle<never>();
-
-    return(
+    return (
         <>
             <Menu.Root>
                 <Menu.Trigger className={"mt-auto mx-auto mb-4 p-2 w-4/5 flex items-center justify-center rounded py-2 transition-colors text-gray-700 hover:bg-gray-100 cursor-pointer"}>
@@ -27,7 +24,7 @@ export default function MenuAccount({ account: accountProp }: Props) {
                         <Menu.Popup className={"w-48 bg-white shadow-lg rounded-md py-1 border border-slate-200 text-base outline-none"}>
                             <div className="px-3 py-2 border-b border-slate-100">
                                 <p className="text-xs text-gray-400 font-medium">Utente:</p>
-                                <p className="text-sm font-semibold text-slate-800 truncate">{account.getInfoUser.data?.username}</p>
+                                <p className="text-sm font-semibold text-slate-800 truncate">{user?.username}</p>
                             </div>
                             <Dialog.Trigger
                                 handle={changePasswordHandler}
@@ -42,14 +39,14 @@ export default function MenuAccount({ account: accountProp }: Props) {
                             <Menu.Separator className={"my-1 border-t border-gray-200"}/>
                             <Menu.Item
                                 className={"flex items-center gap-2 px-3 py-1.5 hover:bg-red-50 text-red-600 cursor-pointer outline-none"}
-                                onClick={account.logout}
+                                onClick={logout}
                             >
                                 <ExitIcon className={"size-4"} />
                                 Logout
                             </Menu.Item>
                         </Menu.Popup>
                         <Menu.Arrow
-                            className="data-[side=bottom]:-top-2 data-[side=left]:-right-3.25 data-[side=left]:rotate-90 data-[side=right]:-left-3.25 data-[side=right]:-rotate-90 data-[side=top]:-bottom-2 data-[side=top]:rotate-180"
+                            className="data-[side=top]:-bottom-2 data-[side=top]:rotate-180"
                             render={ArrowSvg}
                         />
                     </Menu.Positioner>

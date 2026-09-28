@@ -4,7 +4,6 @@ import {DocumentIcon, OrderListIcon, SearchIcon} from "@/components/ui/icons";
 import {Tooltip} from "@base-ui/react/tooltip";
 import CommonTooltip from "@/features/search/components/search/commonTooltip.tsx";
 import MenuAccount from "@/features/account/components/menuAccount.tsx";
-import type {AccountType} from "@/features/account/hook/useAccount.ts";
 
 type PageLabelType = {
     label: string
@@ -30,7 +29,7 @@ const links:Record<string, PageLabelType> = {
     },
 }
 
-export default function NavSidebar({ account }: { account?: AccountType }) {
+export default function NavSidebar() {
     const {pathname} = useLocation()
 
     const isPreviewDouble = pathname === '/previewDouble' || pathname === '/previewSingle'
@@ -74,7 +73,7 @@ export default function NavSidebar({ account }: { account?: AccountType }) {
                     />
                 </Tooltip.Provider>
             </div>
-            <MenuAccount account={account}/>
+            <MenuAccount />
         </div>
     )
 }

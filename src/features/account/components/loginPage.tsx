@@ -1,12 +1,39 @@
+import {useState} from "react";
 import {Button} from "@base-ui/react";
 import {Form} from "@base-ui/react/form";
-import {LockClose, UserIcon} from "@/components/ui/icons";
+import {LoadingSpinner, LockClose, UserIcon} from "@/components/ui/icons";
 import FieldAccount from "@/features/account/components/fieldAccount.tsx";
-import useAccount from "@/features/account/hook/useAccount.ts";
+import useAccountFunction from "@/features/account/hook/useAccountFunction.ts";
+import {useAuthStore} from "@/store/authStore.ts";
+import {Navigate} from "react-router";
+import toast from "react-hot-toast";
+import {useQuery} from "@tanstack/react-query";
+import {me} from "@/features/account/api/userApi.ts";
 
 export default function LoginPage() {
+    const [isLoggingIn, setIsLoggingIn] = useState(false)
+    const {login} = useAccountFunction()
+    const { isAuthenticated, setAuth } = useAuthStore()
 
-    const {login} = useAccount()
+    const checkIsLogged = useQuery({
+        queryKey: ["account"],
+        queryFn: me
+    })
+
+    if(checkIsLogged.isLoading)
+        return(
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px]">
+                <LoadingSpinner className="size-6 text-orange-600"/>
+            </div>
+        )
+
+    if ((isAuthenticated && !isLoggingIn) || (checkIsLogged.data && !isLoggingIn)) {
+        toast.error("Sei già autenticato, verrai reindirizzato all'editor",{id:"already_authenticated"})
+        setAuth(true, checkIsLogged.data)
+        return (
+            <Navigate to={ "/" } replace/>
+        )
+    }
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center p-4">
@@ -20,6 +47,7 @@ export default function LoginPage() {
                 <Form
                     onSubmit={(e) => {
                         e.preventDefault()
+                        setIsLoggingIn(true)
                         const formData = new FormData(e.target)
                         const username = formData.get('username') as string
                         const password = formData.get('password') as string

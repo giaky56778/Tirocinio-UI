@@ -4,7 +4,7 @@ import {Separator} from "@base-ui/react/separator";
 import {Form} from "@base-ui/react/form";
 import {useRef} from "react";
 import FieldAccount from "@/features/account/components/fieldAccount.tsx";
-import useAccount from "@/features/account/hook/useAccount.ts";
+import useAccountFunction from "@/features/account/hook/useAccountFunction.ts";
 import DialogCloseCustom from "@/components/ui/common/dialogCloseCustom.tsx";
 
 type Props={
@@ -14,7 +14,7 @@ type Props={
 export default function DialogChangePassword({changePasswordHandler}:Props){
     const showMismatchRef = useRef(false)
     const confirmActionsRef = useRef<{ validate: () => void } | null>(null)
-    const { changePassword } = useAccount()
+    const { changePassword } = useAccountFunction()
     
     return (
         <Dialog.Root handle={changePasswordHandler}>
