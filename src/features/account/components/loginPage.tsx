@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Button} from "@base-ui/react";
 import {Form} from "@base-ui/react/form";
-import {LoadingSpinner, LockClose, UserIcon} from "@/components/ui/icons";
+import {LockClose, UserIcon} from "@/components/ui/icons";
 import FieldAccount from "@/features/account/components/fieldAccount.tsx";
 import useAccountFunction from "@/features/account/hook/useAccountFunction.ts";
 import {useAuthStore} from "@/store/authStore.ts";
@@ -19,13 +19,6 @@ export default function LoginPage() {
         queryKey: ["account"],
         queryFn: me
     })
-
-    if(checkIsLogged.isLoading)
-        return(
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px]">
-                <LoadingSpinner className="size-6 text-orange-600"/>
-            </div>
-        )
 
     if ((isAuthenticated && !isLoggingIn) || (checkIsLogged.data && !isLoggingIn)) {
         toast.error("Sei già autenticato, verrai reindirizzato all'editor",{id:"already_authenticated"})

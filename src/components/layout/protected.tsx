@@ -1,6 +1,5 @@
 import {Navigate, Outlet, useLocation} from "react-router";
 import {useAuthStore} from "@/store/authStore.ts";
-import {LoadingSpinner} from "@/components/ui/icons";
 import NavSidebar from "@/components/layout/navBar.tsx";
 import ParamsProvider from "@/contexts/paramsProvider.tsx";
 import {useQuery} from "@tanstack/react-query";
@@ -14,14 +13,6 @@ export default function Protected() {
         queryKey: ["account"],
         queryFn: me
     })
-
-    if ((isAuthenticated === null && !checkIsLogged.data) || checkIsLogged.isLoading) {
-        return (
-            <div className="h-screen w-screen flex items-center justify-center bg-white">
-                <LoadingSpinner className="size-8 text-orange-600 animate-spin" />
-            </div>
-        )
-    }
 
     if ((!isAuthenticated && !checkIsLogged.data) || checkIsLogged.isError) {
         return (
