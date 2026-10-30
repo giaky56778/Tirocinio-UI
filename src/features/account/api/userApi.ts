@@ -1,5 +1,6 @@
 import {authFetch} from "@/api/authFetch.ts";
 import type {MeSchema} from "@/api/indexType.ts";
+import {useAuthStore} from "@/store/authStore.ts";
 
 export async function login ({ username, password }: { username: string; password: string }) {
 
@@ -30,7 +31,9 @@ export async function me(){
         throw new Error(errorData.detail || "Errore: impossibile trovare le informazioni dell'utente")
     }
 
-    return await res.json() as MeSchema
+    const data = await res.json() as MeSchema
+    useAuthStore.getState().setAuth(true, data)
+    return data
 }
 
 export async function logoutApi(){

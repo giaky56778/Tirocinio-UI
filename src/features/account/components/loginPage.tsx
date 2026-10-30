@@ -1,7 +1,7 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Button} from "@base-ui/react";
 import {Form} from "@base-ui/react/form";
-import {LockClose, UserIcon} from "@/components/ui/icons";
+import {LoadingSpinner, LockClose, UserIcon} from "@/components/ui/icons";
 import FieldAccount from "@/features/account/components/fieldAccount.tsx";
 import useAccountFunction from "@/features/account/hook/useAccountFunction.ts";
 import {useAuthStore} from "@/store/authStore.ts";
@@ -13,16 +13,30 @@ import {me} from "@/features/account/api/userApi.ts";
 export default function LoginPage() {
     const [isLoggingIn, setIsLoggingIn] = useState(false)
     const {login} = useAccountFunction()
-    const { isAuthenticated, setAuth } = useAuthStore()
+    const { isAuthenticated } = useAuthStore()
 
     const checkIsLogged = useQuery({
         queryKey: ["account"],
-        queryFn: me
+        queryFn: me,
+        enabled: isAuthenticated === null,
+        retry: false
     })
 
-    if ((isAuthenticated && !isLoggingIn) || (checkIsLogged.data && !isLoggingIn)) {
-        toast.error("Sei già autenticato, verrai reindirizzato all'editor",{id:"already_authenticated"})
-        setAuth(true, checkIsLogged.data)
+    useEffect(() => {
+        if (isAuthenticated && !isLoggingIn) {
+            toast.error("Sei già autenticato, verrai reindirizzato all'editor", { id: "already_authenticated" })
+        }
+    }, [isAuthenticated, isLoggingIn])
+
+    if (isAuthenticated === null && !checkIsLogged.isError) {
+        return (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-[1px]">
+                <LoadingSpinner className="size-6 text-orange-600 animate-spin"/>
+            </div>
+        )
+    }
+
+    if (isAuthenticated && !isLoggingIn) {
         return (
             <Navigate to={ "/" } replace/>
         )

@@ -11,6 +11,7 @@ export async function authFetch(input: RequestInfo | URL, init?: RequestInit): P
         const { isAuthenticated, clearAuth, setRedirectUrl } = useAuthStore.getState()
 
         if (isAuthenticated === true) {
+            toast.dismiss()
             toast.error("Sessione scaduta!\nEffettua nuovamente il login", { id: "unauthorized" })
             setRedirectUrl(window.location.pathname + window.location.search)
         }
